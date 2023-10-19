@@ -5,6 +5,7 @@ import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import React, { useState } from 'react';
 
+
 export default function Home() {
   const [data, setData] = useState([]);
   const [inputCount, setInputCount] = useState(1);
@@ -69,6 +70,23 @@ export default function Home() {
     newInputValues[index] = event.target.value;
     setInputValues2(newInputValues);
   };
+
+  const handleButtonClick = async (val) => {
+    const response = await fetch('http://localhost:3000/api/submit', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(val),
+    });
+    if (response.ok) {
+      const data = await response.json();
+      console.log(data);
+    } else {
+      throw new Error('Request failed');
+    }
+
+  }
 
   return (
     <Stack
@@ -145,14 +163,21 @@ export default function Home() {
           onChange={(e)=>setComments(e.target.value)}
         />
       <Button variant="contained" sx={{mt:2}} onClick={()=>{
-        let ica = inputValues.map((y,i)=>{
+        const ica = inputValues.map((y,i)=>{
           return [y,inputValues2[i]]
         })
-        console.log(data)
-        console.log(name)
-        console.log(ica)
-        console.log(comments)
-        console.log(getCurrentSeason())
+        const currentSeason = getCurrentSeason()
+
+        let mySchedule = {
+          schedule:data,
+          name: name,
+          ica: ica,
+          comments: comments,
+          currtentSession: currentSeason,
+          aproval: "pending"
+        }
+        console.log(mySchedule)
+        handleButtonClick(mySchedule)
         }}>Submit</Button>
 
     </Stack>
