@@ -103,7 +103,7 @@ export default function Home() {
     {inputValues.map((value, index) => (
             <Box
             component="form"
-            key={index}
+            key={index+value}
             sx={{
               '& > :not(style)': { m: 1, width: '25ch' },
             }}
@@ -141,6 +141,7 @@ export default function Home() {
             <option value="N/A"></option>
             <option value="In-Person">In-Person</option>
             <option value="Remote">Remote</option>
+            <option value="PRU">PFU</option>
             <option value="Break">Break</option>
             </select> 
           )
@@ -174,7 +175,7 @@ export default function Home() {
           ica: ica,
           comments: comments,
           currtentSession: currentSeason,
-          aproval: "pending"
+          approval: "pending"
         }
         console.log(mySchedule)
         handleButtonClick(mySchedule)
