@@ -208,8 +208,7 @@ export default function Home() {
           currtentSession: getCurrentSeason(),
           approval: "pending"
         }
-        console.log(mySchedule)
-        //handleButtonClick(mySchedule)
+        handleButtonClick(mySchedule)
       }}>Submit</Button>
 
     </Stack>
