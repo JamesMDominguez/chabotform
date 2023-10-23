@@ -66,7 +66,7 @@ export default function Admin() {
   useEffect(() => {
     async function getData() {
       try {
-        const res = await fetch('http://localhost:3000/api/submit');
+        const res = await fetch(process.env.NEXT_PUBLIC_ADMIN);
 
         if (!res.ok) {
           throw new Error(`Request failed with status: ${res.status}`);
