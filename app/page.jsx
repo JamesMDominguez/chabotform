@@ -4,6 +4,8 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation'
+import Image from 'next/image';
 
 
 export default function Home() {
@@ -15,10 +17,11 @@ export default function Home() {
   const [name, setName] = useState('');
   let timeRange = ["8:00am", "8:30am", "9:00am", "9:30am", "10:00am", "10:30am", "11:00am", "11:30am", "12:00pm", "12:30pm", "1:00pm", "1:30pm", "2:00pm", "2:30pm", "3:00pm", "3:30pm", "4:00pm", "4:30pm", "5:00pm", "5:30pm", "6:00pm", "6:30pm", "7:00pm"]
   let days = ["Mon", "Tus", "Wed", "Thurs", "Fri"]
+  const router = useRouter()
 
   const handleSelectChange = (e) => {
     let myData = [...data]
-    let [day,time] = e.target.name.split('_');
+    let [day, time] = e.target.name.split('_');
     myData.push({
       day: day,
       time: time,
@@ -86,13 +89,13 @@ export default function Home() {
     });
     if (response.ok) {
       const data = await response.json();
-      console.log(data);
+      router.push('/finished')
     } else {
       throw new Error('Request failed');
     }
 
   }
-  
+
   function roundToNearestDecimal(number, decimalPlaces) {
     const multiplier = 10 ** decimalPlaces;
     return Math.round(number * multiplier) / multiplier;
@@ -100,22 +103,28 @@ export default function Home() {
 
   const getTotalHrs = () => {
     let hrs = 0;
-    inputValues2.forEach((val)=>{
+    inputValues2.forEach((val) => {
       hrs = hrs + Number(val)
     })
-    return roundToNearestDecimal(hrs/0.54545,1)
+    return roundToNearestDecimal(hrs / 0.54545, 1)
   }
-  
-  
+
+
   return (
     <Stack
       direction="column"
       justifyContent="center"
       alignItems="center"
     >
-      <img style={{ position: 'absolute', top: 0, left: 0, width: "100px", padding: "10px" }} src='https://static.wixstatic.com/media/5d5779_352eaa2c4edc497a9143e995091f41a9~mv2.jpg/v1/fill/w_250,h_334,al_c,q_80,usm_0.66_1.00_0.01,enc_auto/5d5779_352eaa2c4edc497a9143e995091f41a9~mv2.jpg' />
-      <h2 style={{ textAlign: "center" }}>General Counseling Division <br /> In-Load Proposed Schedule - Full-Time Counselors</h2>
-
+      <Image
+        src='https://static.wixstatic.com/media/5d5779_352eaa2c4edc497a9143e995091f41a9~mv2.jpg/v1/fill/w_250,h_334,al_c,q_80,usm_0.66_1.00_0.01,enc_auto/5d5779_352eaa2c4edc497a9143e995091f41a9~mv2.jpg'
+        width={100}
+        height={134}
+        sx={{ position: 'absolute', top: 0, left: 0, width: "100px", padding: "10px" }}
+        alt="Image Description"
+      />
+      <h2 style={{ textAlign: "center" }}>General Counseling Division</h2>
+      <h2>In-Load Proposed Schedule - Full-Time Counselors</h2>
       <TextField value={name} onChange={(e) => setName(e.target.value)} id="filled-basic" label="Counselor Name" variant="outlined" sx={{ mb: "20px" }} />
 
       <p style={{ textAlign: "center" }}>Instruction / Coord / Assign (ICA)</p>
@@ -134,16 +143,16 @@ export default function Home() {
             value={inputValues[index]}
             onChange={(event) => handleInputChange(index, event)}
             key={`input-field-${index}`}
-          />            
-          <TextField 
-            id="outlined-basic" 
+          />
+          <TextField
+            id="outlined-basic"
             label="CAH (A-hr)"
-            type="number" 
-            variant="outlined" 
+            type="number"
+            variant="outlined"
             key={`input-field2-${index}`}
-            value={inputValues2[index]} 
-            onChange={(event) => 
-            handleInputChange2(index, event)} />
+            value={inputValues2[index]}
+            onChange={(event) =>
+              handleInputChange2(index, event)} />
         </Box>
       ))}
       <Stack direction={'row'} spacing={3} sx={{ mb: 1 }} >
@@ -156,7 +165,7 @@ export default function Home() {
           <p style={{ margin: "0", fontSize: "13.3px", borderStyle: "solid", textAlign: "center" }} >Time</p>
           {timeRange.map((i) => {
             return (
-              <p style={{ margin: "0", fontSize: "13.8px", borderStyle: "solid", borderWidth: "thin", textAlign: "center" }} key={"Weekly"+i}>{i}</p>
+              <p style={{ margin: "0", fontSize: "13.8px", borderStyle: "solid", borderWidth: "thin", textAlign: "center" }} key={"Weekly" + i}>{i}</p>
             )
           })
           }
@@ -169,7 +178,7 @@ export default function Home() {
                 <p style={{ margin: "0", fontSize: "13.3px", borderStyle: "solid", textAlign: "center", color: "red" }} >{day}</p>
                 {timeRange.map((i) => {
                   return (
-                    <select name={day + "_" + i} onChange={handleSelectChange} key={"timerange" + i} style={{ maxWidth: 80}}>
+                    <select name={day + "_" + i} onChange={handleSelectChange} key={"timerange" + i} style={{ maxWidth: 80 }}>
                       <option value="N/A"></option>
                       <option value="In-Person">In-Person</option>
                       <option value="ICA">ICA</option>
@@ -185,7 +194,7 @@ export default function Home() {
           })}
         </Stack>
       </Stack>
-      <p>Sum of "My Daily Hours" appears as wkly total here <b style={{borderStyle:'solid',borderColor:'red',padding:'5px'}}>{data.length/2 + getTotalHrs()}</b></p>
+      <p>Sum of My Daily Hours appears as wkly total here <b style={{ borderStyle: 'solid', borderColor: 'red', padding: '5px' }}>{data.length / 2 + getTotalHrs()}</b></p>
       <TextField
         id="outlined-multiline-static"
         value={comments}
