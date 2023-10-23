@@ -167,19 +167,23 @@ export default function Admin() {
                       <Table aria-label="simple table">
                         <TableHead>
                           <TableRow>
-                            <TableCell align="center"><b>Proposed Schedule</b></TableCell>
+                            <TableCell align="center"><b>Day</b></TableCell>
+                            <TableCell align="center"><b>Time</b></TableCell>
+                            <TableCell align="center"><b>Option</b></TableCell>
                           </TableRow>
                         </TableHead>
                         <TableBody>
-                          {selecteChip?.schedule.map((chip) => (
+                          {selecteChip?.schedule.map((chip:any,index) => {
+                            return(
                             <TableRow
-                              key={chip}
+                              key={'chip'+index}
                               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                             >
-
-                              <TableCell align="center">{chip}</TableCell>
+                              <TableCell align="center">{chip.day}</TableCell>
+                              <TableCell align="center">{chip.time}</TableCell>
+                              <TableCell align="center">{chip.option}</TableCell>
                             </TableRow>
-                          ))}
+                          )})}
                         </TableBody>
                       </Table>
                     </TableContainer>

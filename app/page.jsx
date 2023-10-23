@@ -18,7 +18,12 @@ export default function Home() {
 
   const handleSelectChange = (e) => {
     let myData = [...data]
-    myData.push(e.target.name + "_" + e.target.value)
+    let [day,time] = e.target.name.split('_');
+    myData.push({
+      day: day,
+      time: time,
+      option: e.target.value
+    });
     setData(myData)
   }
 
@@ -87,7 +92,21 @@ export default function Home() {
     }
 
   }
+  
+  function roundToNearestDecimal(number, decimalPlaces) {
+    const multiplier = 10 ** decimalPlaces;
+    return Math.round(number * multiplier) / multiplier;
+  }
 
+  const getTotalHrs = () => {
+    let hrs = 0;
+    inputValues2.forEach((val)=>{
+      hrs = hrs + Number(val)
+    })
+    return roundToNearestDecimal(hrs/0.54545,1)
+  }
+  
+  
   return (
     <Stack
       direction="column"
@@ -137,7 +156,7 @@ export default function Home() {
           <p style={{ margin: "0", fontSize: "13.3px", borderStyle: "solid", textAlign: "center" }} >Time</p>
           {timeRange.map((i) => {
             return (
-              <p style={{ margin: "0", fontSize: "13.8px", borderStyle: "solid", borderWidth: "thin", textAlign: "center" }} key={i}>{i}</p>
+              <p style={{ margin: "0", fontSize: "13.8px", borderStyle: "solid", borderWidth: "thin", textAlign: "center" }} key={"Weekly"+i}>{i}</p>
             )
           })
           }
@@ -146,11 +165,11 @@ export default function Home() {
         <Stack direction={"row"}>
           {days.map((day) => {
             return (
-              <Stack key={day + day} spacing={0} sx={{ maxWidth: 120 }}>
+              <Stack key={"urDay" + day} spacing={0} sx={{ maxWidth: 120 }}>
                 <p style={{ margin: "0", fontSize: "13.3px", borderStyle: "solid", textAlign: "center", color: "red" }} >{day}</p>
                 {timeRange.map((i) => {
                   return (
-                    <select name={day + "_" + i} onChange={handleSelectChange} key={day + i} style={{ maxWidth: 80 }}>
+                    <select name={day + "_" + i} onChange={handleSelectChange} key={"timerange" + i} style={{ maxWidth: 80}}>
                       <option value="N/A"></option>
                       <option value="In-Person">In-Person</option>
                       <option value="ICA">ICA</option>
@@ -166,7 +185,7 @@ export default function Home() {
           })}
         </Stack>
       </Stack>
-
+      <p>Sum of "My Daily Hours" appears as wkly total here <b style={{borderStyle:'solid',borderColor:'red',padding:'5px'}}>{data.length/2 + getTotalHrs()}</b></p>
       <TextField
         id="outlined-multiline-static"
         value={comments}
@@ -181,18 +200,16 @@ export default function Home() {
         const ica = inputValues.map((y, i) => {
           return [y, inputValues2[i]]
         })
-        const currentSeason = getCurrentSeason()
-
         let mySchedule = {
           schedule: data,
           name: name,
           ica: ica,
           comments: comments,
-          currtentSession: currentSeason,
+          currtentSession: getCurrentSeason(),
           approval: "pending"
         }
         console.log(mySchedule)
-        handleButtonClick(mySchedule)
+        //handleButtonClick(mySchedule)
       }}>Submit</Button>
 
     </Stack>
