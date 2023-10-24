@@ -5,7 +5,6 @@ import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation'
-import Image from 'next/image';
 
 
 export default function Home() {
@@ -116,11 +115,11 @@ export default function Home() {
       justifyContent="center"
       alignItems="center"
     >
-      <Image
+      <img
         src='https://static.wixstatic.com/media/5d5779_352eaa2c4edc497a9143e995091f41a9~mv2.jpg/v1/fill/w_250,h_334,al_c,q_80,usm_0.66_1.00_0.01,enc_auto/5d5779_352eaa2c4edc497a9143e995091f41a9~mv2.jpg'
         width={100}
         height={134}
-        sx={{ position: 'absolute', top: 0, left: 0, width: "100px", padding: "10px" }}
+        style={{ position: 'absolute', top: 0, left: 0, width: "100px", padding: "10px" }}
         alt="Image Description"
       />
       <h2 style={{ textAlign: "center" }}>General Counseling Division</h2>
