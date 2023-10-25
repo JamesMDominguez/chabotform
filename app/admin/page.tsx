@@ -20,14 +20,6 @@ import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
 import ErrorIcon from '@mui/icons-material/Error';
 
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-
 const drawerWidth = 240;
 
 const style = {
@@ -35,7 +27,7 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 400,
+  width: "55%",
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
@@ -66,28 +58,19 @@ export default function Admin() {
   useEffect(() => {
     async function getData() {
       try {
-        const res = await fetch(process.env.NEXT_PUBLIC_ADMIN  as string);
-
+        const res = await fetch(process.env.NEXT_PUBLIC_ADMIN as string);
         if (!res.ok) {
           throw new Error(`Request failed with status: ${res.status}`);
         }
-
         const jsonData = await res.json();
         setData(jsonData);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     }
-
     getData();
   }, []);
 
-  // Move the console.log statement here to log the data when it's available.
-  useEffect(() => {
-    if (data) {
-      console.log(data[0]);
-    }
-  }, [data]);
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -150,62 +133,125 @@ export default function Admin() {
         sx={{ flexGrow: 1, bgcolor: 'background.default', p: 3 }}
       >
         <Toolbar />
-          {data && (
-            <>
-              <Modal
-                open={open}
-                onClose={handleClose}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-              >
-                <Box sx={style}>
-                  <Typography id="modal-modal-title" variant="h6" component="h2">
-                    {selecteChip?.name + " " + selecteChip?.currtentSession}
-                  </Typography>
+        {data && (
+          <>
+            <Modal
+              open={open}
+              onClose={handleClose}
+              aria-labelledby="modal-modal-title"
+              aria-describedby="modal-modal-description"
+            >
+              <Box sx={style}>
+                <Typography id="modal-modal-title" variant="h6" component="h2">
+                  {selecteChip?.name + " " + selecteChip?.currtentSession}
+                </Typography>
+                <Stack direction={'row'} gap={2}>
+                  <table>
+                    <tr>Monday</tr>
+                    <tr>
+                      <th>Time</th>
+                      <th>Option</th>
+                    </tr>
+                    {selecteChip?.schedule.map((chip: any, index) => {
+                      
+                      if (chip.day == 'Mon')
+                        return (
+                          <tr key={'chip' + index}>
+                            <td align="center">{chip.time}</td>
+                            <td align="center">{chip.option}</td>
+                          </tr>
+                        )
+                    })}
+                  </table>
 
-                    <TableContainer component={Paper}>
-                      <Table aria-label="simple table">
-                        <TableHead>
-                          <TableRow>
-                            <TableCell align="center"><b>Day</b></TableCell>
-                            <TableCell align="center"><b>Time</b></TableCell>
-                            <TableCell align="center"><b>Option</b></TableCell>
-                          </TableRow>
-                        </TableHead>
-                        <TableBody>
-                          {selecteChip?.schedule.map((chip:any,index) => {
-                            return(
-                            <TableRow
-                              key={'chip'+index}
-                              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                            >
-                              <TableCell align="center">{chip.day}</TableCell>
-                              <TableCell align="center">{chip.time}</TableCell>
-                              <TableCell align="center">{chip.option}</TableCell>
-                            </TableRow>
-                          )})}
-                        </TableBody>
-                      </Table>
-                    </TableContainer>
+                  <table>
+                    <tr>
+                      Tuesday
+                    </tr>
+                    <tr>
+                      <th>Time</th>
+                      <th>Option</th>
+                    </tr>
+                    {selecteChip?.schedule.map((chip: any, index) => {
+                      if (chip.day == 'Tus')
+                        return (
+                          <tr key={'chip' + index}>
+                            <td align="center">{chip.time}</td>
+                            <td align="center">{chip.option}</td>
+                          </tr>
+                        )
+                    })}
+                  </table>
 
-                    <p style={{margin:0}}><b>Comments</b></p>
-                    <p style={{margin:0}}>{selecteChip?.comments}</p>
+                  <table>
+                    <tr>Wednesday</tr>
+                    <tr>
+                      <th>Time</th>
+                      <th>Option</th>
+                    </tr>
+                    {selecteChip?.schedule.map((chip: any, index) => {
+                      if (chip.day == 'Wed')
+                        return (
+                          <tr key={'chip' + index}>
+                            <td align="center">{chip.time}</td>
+                            <td align="center">{chip.option}</td>
+                          </tr>
+                        )
+                    })}
+                  </table>
 
-                  <Stack direction={"row"} justifyContent="space-between" sx={{mt:2}}>
-                    <Button variant="contained">Accept</Button>
-                    <Button color="error">Reject</Button>
-                  </Stack>
-                </Box>
-              </Modal>
+                  <table>
+                    <tr>Thursday</tr>
+                    <tr>
+                      <th>Time</th>
+                      <th>Option</th>
+                    </tr>
+                    {selecteChip?.schedule.map((chip: any, index) => {
+                      if (chip.day == 'Thurs')
+                        return (
+                          <tr key={'chip' + index}>
+                            <td align="center">{chip.time}</td>
+                            <td align="center">{chip.option}</td>
+                          </tr>
+                        )
+                    })}
+                  </table>
+                  <table>
+                    <tr>Friday</tr>
+                    <tr>
+                      <th>Time</th>
+                      <th>Option</th>
+                    </tr>
+                    {selecteChip?.schedule.map((chip: any, index) => {
+                      if (chip.day == 'Fri')
+                        return (
+                          <tr key={'chip' + index}>
+                            <td align="center">{chip.time}</td>
+                            <td align="center">{chip.option}</td>
+                          </tr>
+                        )
+                    })}
+                  </table>
+                </Stack>
 
-              <Stack direction={"column"} spacing={2}>
-                {data.filter((person) => person.approval == selecteTab.toLowerCase()).map((i,index) => (
-                  <Chip sx={{ width: '300px' }} key={i.name+index} label={i.name + " " + i.currtentSession} onClick={() => { handleOpen(i) }} />
-                ))}
-              </Stack>
+                <p style={{ margin: 0 }}><b>Comments</b></p>
+                <p style={{ margin: 0 }}>{selecteChip?.comments}</p>
 
-            </>
-          )}
+                <Stack direction={"row"} justifyContent="space-between" sx={{ mt: 2 }}>
+                  <Button variant="contained">Accept</Button>
+                  <Button color="error">Reject</Button>
+                </Stack>
+              </Box>
+            </Modal>
+
+            <Stack direction={"column"} spacing={2}>
+              {data.filter((person) => person.approval == selecteTab.toLowerCase()).map((i, index) => (
+                <Chip sx={{ width: '300px' }} key={i.name + index} label={i.name + " " + i.currtentSession} onClick={() => { handleOpen(i) }} />
+              ))}
+            </Stack>
+
+          </>
+        )}
       </Box>
     </Box>
   );

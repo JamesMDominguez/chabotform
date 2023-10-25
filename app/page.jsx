@@ -24,7 +24,7 @@ export default function Home() {
     myData.push({
       day: day,
       time: time,
-      option: e.target.value
+      option: e.target.name
     });
     setData(myData)
   }
@@ -180,9 +180,8 @@ export default function Home() {
                     <select name={day + "_" + i} onChange={handleSelectChange} key={"timerange" + i} style={{ maxWidth: 80 }}>
                       <option value="N/A"></option>
                       <option value="In-Person">In-Person</option>
-                      <option value="ICA">ICA</option>
                       <option value="Remote">Remote</option>
-                      <option value="PRU">PFU</option>
+                      <option value="PRU">Proactive Follow Up</option>
                       <option value="Break">Break</option>
                     </select>
                   )
