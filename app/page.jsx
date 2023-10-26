@@ -2,9 +2,19 @@
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation'
+import Paper from '@mui/material/Paper';
+import { styled } from '@mui/material/styles';
+
+
+const Item = styled(Paper)(({ theme }) => ({
+  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: 'center',
+  color: theme.palette.text.secondary,
+}));
 
 
 export default function Home() {
@@ -14,6 +24,7 @@ export default function Home() {
   const [inputValues2, setInputValues2] = useState(['']); // Store input values in an array
   const [comments, setComments] = useState('');
   const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
   let timeRange = ["8:00am", "8:30am", "9:00am", "9:30am", "10:00am", "10:30am", "11:00am", "11:30am", "12:00pm", "12:30pm", "1:00pm", "1:30pm", "2:00pm", "2:30pm", "3:00pm", "3:30pm", "4:00pm", "4:30pm", "5:00pm", "5:30pm", "6:00pm", "6:30pm", "7:00pm"]
   let days = ["Mon", "Tus", "Wed", "Thurs", "Fri"]
   const router = useRouter()
@@ -124,16 +135,19 @@ export default function Home() {
       />
       <h2 style={{ textAlign: "center" }}>General Counseling Division</h2>
       <h2>In-Load Proposed Schedule - Full-Time Counselors</h2>
+      <p style={{ textAlign: "center" }}>Contact details</p> 
+      <Stack direction={"row"} gap={2}>
       <TextField value={name} onChange={(e) => setName(e.target.value)} id="filled-basic" label="Counselor Name" variant="outlined" sx={{ mb: "20px" }} />
+      <TextField value={email} onChange={(e) => setEmail(e.target.value)} id="filled-basic" label="Email" variant="outlined" sx={{ mb: "20px" }} />
+      </Stack>
 
       <p style={{ textAlign: "center" }}>Instruction / Coord / Assign (ICA)</p>
       {inputValues.map((value, index) => (
-        <Box
+        <Stack
           key={`input-field-box-${index}`}
-          sx={{
-            '& > :not(style)': { m: 1, width: '25ch' },
-          }}
-          noValidate
+          direction={'row'}
+          gap={2}
+          mb={2}
         >
           <TextField
             id={`outlined-basic-${index}`}
@@ -152,13 +166,16 @@ export default function Home() {
             value={inputValues2[index]}
             onChange={(event) =>
               handleInputChange2(index, event)} />
-        </Box>
+              <Item>D-Hours {roundToNearestDecimal(inputValues2[index] / 0.54545, 1)}</Item>
+        </Stack>
       ))}
       <Stack direction={'row'} spacing={3} sx={{ mb: 1 }} >
         <Button variant="contained" size='small' onClick={addInputField}>Add Input</Button>
         <Button variant="contained" size='small' color="error" onClick={removeInputField} disabled={inputValues.length === 1}>Remove Input</Button>
       </Stack>
-      <p>Proposed Weekly Schedule</p>
+      <p>Remaining weekly hours <b style={{ borderStyle: 'solid', borderColor: 'red', padding: '5px' }}>{27.5-getTotalHrs()}</b></p>
+
+      <h3>Proposed Weekly Schedule</h3>
       <Stack direction={"row"}>
         <Stack spacing={0} sx={{ width: 100 }}>
           <p style={{ margin: "0", fontSize: "13.3px", borderStyle: "solid", textAlign: "center" }} >Time</p>
@@ -210,6 +227,7 @@ export default function Home() {
         let mySchedule = {
           schedule: data,
           name: name,
+          email: email,
           ica: ica,
           comments: comments,
           currtentSession: getCurrentSeason(),
