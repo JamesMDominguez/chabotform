@@ -6,7 +6,12 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation'
 import Paper from '@mui/material/Paper';
 import { styled } from '@mui/material/styles';
-
+import InputLabel from '@mui/material/InputLabel';
+import InputAdornment from '@mui/material/InputAdornment';
+import Input from '@mui/material/Input';
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import FormControl from '@mui/material/FormControl';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -89,6 +94,12 @@ export default function Home() {
     setInputValues2(newInputValues);
   };
 
+  const handleInputChange3 = (index, event) => {
+    const newInputValues = [...inputValues2];
+    newInputValues[index] = event.target.value * 0.54545;
+    setInputValues2(newInputValues);
+  };
+
   const handleButtonClick = async (val) => {
     const response = await fetch(process.env.NEXT_PUBLIC_ADMIN, {
       method: 'POST',
@@ -107,6 +118,7 @@ export default function Home() {
   }
 
   function roundToNearestDecimal(number, decimalPlaces) {
+    if (number == 0) return ''
     const multiplier = 10 ** decimalPlaces;
     return Math.round(number * multiplier) / multiplier;
   }
@@ -135,10 +147,10 @@ export default function Home() {
       />
       <h2 style={{ textAlign: "center" }}>General Counseling Division</h2>
       <h2>In-Load Proposed Schedule - Full-Time Counselors</h2>
-      <p style={{ textAlign: "center" }}>Contact details</p> 
+      <p style={{ textAlign: "center" }}>Contact details</p>
       <Stack direction={"row"} gap={2}>
-      <TextField value={name} onChange={(e) => setName(e.target.value)} id="filled-basic" label="Counselor Name" variant="outlined" sx={{ mb: "20px" }} />
-      <TextField value={email} onChange={(e) => setEmail(e.target.value)} id="filled-basic" label="Email" variant="outlined" sx={{ mb: "20px" }} />
+        <TextField value={name} onChange={(e) => setName(e.target.value)} id="filled-basic" label="Counselor Name" variant="outlined" sx={{ mb: "20px" }} />
+        <TextField value={email} onChange={(e) => setEmail(e.target.value)} id="filled-basic" label="Email" variant="outlined" sx={{ mb: "20px" }} />
       </Stack>
 
       <p style={{ textAlign: "center" }}>Instruction / Coord / Assign (ICA)</p>
@@ -155,25 +167,54 @@ export default function Home() {
             variant="outlined"
             value={inputValues[index]}
             onChange={(event) => handleInputChange(index, event)}
+            onFocus={()=>console.log("39393")}
             key={`input-field-${index}`}
           />
-          <TextField
+
+        <FormControl variant="standard">
+          <InputLabel htmlFor="input-with-icon-adornment">
+            A-Hour
+          </InputLabel>
+          <Input
             id="outlined-basic"
             label="CAH (A-hr)"
-            type="number"
             variant="outlined"
             key={`input-field2-${index}`}
             value={inputValues2[index]}
-            onChange={(event) =>
-              handleInputChange2(index, event)} />
-              <Item>D-Hours {roundToNearestDecimal(inputValues2[index] / 0.54545, 1)}</Item>
+            onChange={(event) => handleInputChange2(index, event)} 
+            startAdornment={
+              <InputAdornment position="start">
+                <AccessTimeIcon />
+              </InputAdornment>
+            }
+            />
+          </FormControl>
+
+          <FormControl variant="standard">
+          <InputLabel htmlFor="input-with-icon-adornment">
+            D-Hour
+          </InputLabel>
+          <Input
+            id="outlined-basic"
+            variant="outlined"
+            key={`input-field99-${index}`}
+            value={roundToNearestDecimal(inputValues2[index] / 0.54545, 1)}
+            onChange={(event) => handleInputChange3(index, event)}
+            startAdornment={
+              <InputAdornment position="start">
+                <AccessTimeIcon />
+              </InputAdornment>
+            }
+            />
+          </FormControl>
+
         </Stack>
       ))}
       <Stack direction={'row'} spacing={3} sx={{ mb: 1 }} >
         <Button variant="contained" size='small' onClick={addInputField}>Add Input</Button>
         <Button variant="contained" size='small' color="error" onClick={removeInputField} disabled={inputValues.length === 1}>Remove Input</Button>
       </Stack>
-      <p>Remaining weekly hours <b style={{ borderStyle: 'solid', borderColor: 'red', padding: '5px' }}>{27.5-getTotalHrs()}</b></p>
+      <p>Remaining weekly hours <b style={{ borderStyle: 'solid', borderColor: 'red', padding: '5px' }}>{27.5 - getTotalHrs()}</b></p>
 
       <h3>Proposed Weekly Schedule</h3>
       <Stack direction={"row"}>
