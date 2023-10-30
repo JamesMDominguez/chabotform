@@ -10,6 +10,7 @@ const isConnected = async () => {
         useUnifiedTopology: true,
       });
       db = mongoose.connection.db;
+      console.log("Mongo connected")
     } catch (error) {
       console.error('MongoDB connection error:', error);
       throw error; // Re-throw the error to propagate it

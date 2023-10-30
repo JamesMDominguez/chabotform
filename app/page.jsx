@@ -9,6 +9,8 @@ import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import SchoolIcon from '@mui/icons-material/School';
+import Chip from '@mui/material/Chip';
+import Paper from '@mui/material/Paper';
 
 let timeRange = ["8:00am", "8:30am", "9:00am", "9:30am", "10:00am", "10:30am", "11:00am", "11:30am", "12:00pm", "12:30pm", "1:00pm", "1:30pm", "2:00pm", "2:30pm", "3:00pm", "3:30pm", "4:00pm", "4:30pm", "5:00pm", "5:30pm", "6:00pm", "6:30pm", "7:00pm"]
 let days = ["Mon", "Tus", "Wed", "Thurs", "Fri"]
@@ -34,6 +36,15 @@ export default function Home() {
       });
       setData(myData)
     }
+  }
+
+  const updateData = (day,time) => {
+    let myData2 = [...data]
+    let myData = data.filter((date)=>{
+      if(date.day == day && date.time == time){
+        return true
+      }
+    })
   }
 
   function getCurrentSeason() {
@@ -101,6 +112,17 @@ export default function Home() {
     });
     if (response.ok) {
       const data = await response.json();
+      const url = process.env.NEXT_PUBLIC_EMAIL; 
+
+      const requestOptions = {
+        method: "POST",
+        headers: {
+          name: name,
+          email: email,
+          data: data
+        }
+      };
+      const response2 = await fetch(url, requestOptions);
       router.push('/finished')
     } else {
       throw new Error('Request failed');
@@ -122,6 +144,30 @@ export default function Home() {
     return roundToNearestDecimal(hrs / 0.54545, 1)
   }
 
+  function grayOutBox(day,index){
+    if(index < 2){
+      return true;
+    }
+
+    if(day== "Mon" && index > 17){
+      return true;
+    }
+    
+
+    if( day== "Wed" && index > 9 && index < 14){
+      return true;
+    }
+
+    if(day== "Thurs" && index > 17){
+      return true;
+    }
+
+    if( day== "Fri" && index > 7 ){
+      return true;
+    }
+
+    return false;
+  }
 
   return (
     <Stack
@@ -162,10 +208,8 @@ export default function Home() {
             variant="outlined"
             value={inputValues[index]}
             onChange={(event) => handleInputICA(index, event)}
-            onFocus={()=>console.log("39393")}
             key={`input-field-${index}`}
             InputProps={{startAdornment:<InputAdornment position="start"><SchoolIcon /> </InputAdornment>}}
-
           />
 
           <TextField
@@ -198,15 +242,15 @@ export default function Home() {
         <Button variant="contained" size='small' onClick={addInputField}>Add Input</Button>
         <Button variant="contained" size='small' color="error" onClick={removeInputField} disabled={inputValues.length === 1}>Remove Input</Button>
       </Stack>
-      <p>Remaining weekly hours <b style={{ borderStyle: 'solid', borderColor: 'red', padding: '5px' }}>{27.5 - getTotalHrs()}</b></p>
 
-      <h3>Proposed Weekly Schedule</h3>
+      <p style={{ textAlign: "center" }}>Proposed Weekly Schedule</p>
+
       <Stack direction={"row"}>
         <Stack spacing={0} sx={{ width: 100 }}>
           <p style={{ margin: "0", fontSize: "13.3px", borderStyle: "solid", textAlign: "center" }} >Time</p>
           {timeRange.map((i) => {
             return (
-              <p style={{ margin: "0", fontSize: "14px", borderStyle: "solid", borderWidth: "thin", textAlign: "center" }} key={"Weekly" + i}>{i}</p>
+              <p style={{ margin: "0",padding:'2px',color:'#5d5e5e', fontSize: "14px", borderStyle: "solid", borderWidth: "thin", textAlign: "center" }} key={"Weekly" + i}>{i}</p>
             )
           })
           }
@@ -216,10 +260,10 @@ export default function Home() {
           {days.map((day) => {
             return (
               <Stack key={"urDay" + day} spacing={0} sx={{ maxWidth: 120 }}>
-                <p style={{ margin: "0", fontSize: "14px", borderStyle: "solid", textAlign: "center", color: "red" }} >{day}</p>
-                {timeRange.map((i) => {
+                <p style={{ margin: "0", fontSize: "14px", borderStyle: "solid", borderColor:"gray",textAlign: "center"}} >{day}</p>
+                {timeRange.map((i,index) => {
                   return (
-                    <select name={day + "_" + i} onChange={handleTimeSelect} key={"timerange" + i} style={{ maxWidth: 80 }}>
+                    <select name={day + "_" + i} onChange={handleTimeSelect} key={"timerange" + i} style={{ maxWidth: 90,width:80,height:23 , backgroundColor:grayOutBox(day,index)?'#c3c4c7':'' }}>
                       <option value="N/A"></option>
                       <option value="In-Person">In-Person</option>
                       <option value="Remote">Remote</option>
@@ -234,7 +278,6 @@ export default function Home() {
           })}
         </Stack>
       </Stack>
-      <p>Sum of My Daily Hours appears as wkly total here <b style={{ borderStyle: 'solid', borderColor: 'red', padding: '5px' }}>{data.length / 2 + getTotalHrs()}</b></p>
       <TextField
         id="outlined-multiline-static"
         value={comments}
@@ -245,7 +288,7 @@ export default function Home() {
         sx={{ maxWidth: "500px", mt: 2 }}
         onChange={(e) => setComments(e.target.value)}
       />
-      <Button variant="contained" sx={{ mt: 2 }} onClick={() => {
+      <Button variant="contained" sx={{ mt: 2,mb:10 }} onClick={() => {
         const ica = inputValues.map((y, i) => {
           return [y, inputValues2[i]]
         })
@@ -261,6 +304,14 @@ export default function Home() {
         handleButtonClick(mySchedule)
       }}>Submit</Button>
 
+    <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
+    <Stack direction={'row'} spacing={1} sx={{padding:2}}>
+    <p style={{marginTop:'5px'}}>Total Week hours</p>
+      <Chip color="primary" label={data.length / 2 + getTotalHrs()} />
+      <p style={{marginTop:'5px'}}>Direct Weekly Counseling Hours </p>
+      <Chip color="primary" label={27.5 - getTotalHrs()} />
+      </Stack>
+    </Paper>
     </Stack>
   )
 }
