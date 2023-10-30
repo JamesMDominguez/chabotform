@@ -4,23 +4,14 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation'
-import Paper from '@mui/material/Paper';
-import { styled } from '@mui/material/styles';
-import InputLabel from '@mui/material/InputLabel';
 import InputAdornment from '@mui/material/InputAdornment';
-import Input from '@mui/material/Input';
-import AccountCircle from '@mui/icons-material/AccountCircle';
-import FormControl from '@mui/material/FormControl';
+import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
+import SchoolIcon from '@mui/icons-material/School';
 
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  textAlign: 'center',
-  color: theme.palette.text.secondary,
-}));
-
+let timeRange = ["8:00am", "8:30am", "9:00am", "9:30am", "10:00am", "10:30am", "11:00am", "11:30am", "12:00pm", "12:30pm", "1:00pm", "1:30pm", "2:00pm", "2:30pm", "3:00pm", "3:30pm", "4:00pm", "4:30pm", "5:00pm", "5:30pm", "6:00pm", "6:30pm", "7:00pm"]
+let days = ["Mon", "Tus", "Wed", "Thurs", "Fri"]
 
 export default function Home() {
   const [data, setData] = useState([]);
@@ -30,19 +21,19 @@ export default function Home() {
   const [comments, setComments] = useState('');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  let timeRange = ["8:00am", "8:30am", "9:00am", "9:30am", "10:00am", "10:30am", "11:00am", "11:30am", "12:00pm", "12:30pm", "1:00pm", "1:30pm", "2:00pm", "2:30pm", "3:00pm", "3:30pm", "4:00pm", "4:30pm", "5:00pm", "5:30pm", "6:00pm", "6:30pm", "7:00pm"]
-  let days = ["Mon", "Tus", "Wed", "Thurs", "Fri"]
   const router = useRouter()
 
-  const handleSelectChange = (e) => {
+  const handleTimeSelect = (e) => {
     let myData = [...data]
     let [day, time] = e.target.name.split('_');
-    myData.push({
-      day: day,
-      time: time,
-      option: e.target.name
-    });
-    setData(myData)
+    if(e.target.value != "Break" && e.target.value != "N/A"){
+      myData.push({
+        day: day,
+        time: time,
+        option: e.target.value
+      });
+      setData(myData)
+    }
   }
 
   function getCurrentSeason() {
@@ -82,19 +73,19 @@ export default function Home() {
     setInputValues2(newInputValues2);
   };
 
-  const handleInputChange = (index, event) => {
+  const handleInputICA = (index, event) => {
     const newInputValues = [...inputValues];
     newInputValues[index] = event.target.value;
     setInputValues(newInputValues);
   };
 
-  const handleInputChange2 = (index, event) => {
+  const handleInputAhour = (index, event) => {
     const newInputValues = [...inputValues2];
     newInputValues[index] = event.target.value;
     setInputValues2(newInputValues);
   };
 
-  const handleInputChange3 = (index, event) => {
+  const handleInputDhour = (index, event) => {
     const newInputValues = [...inputValues2];
     newInputValues[index] = event.target.value * 0.54545;
     setInputValues2(newInputValues);
@@ -145,12 +136,16 @@ export default function Home() {
         style={{ position: 'absolute', top: 0, left: 0, width: "100px", padding: "10px" }}
         alt="Image Description"
       />
-      <h2 style={{ textAlign: "center" }}>General Counseling Division</h2>
-      <h2>In-Load Proposed Schedule - Full-Time Counselors</h2>
+      <h3 style={{ textAlign: "center" }}>General Counseling Division</h3>
+      <h3>In-Load Proposed Schedule - Full-Time Counselors</h3>
       <p style={{ textAlign: "center" }}>Contact details</p>
       <Stack direction={"row"} gap={2}>
-        <TextField value={name} onChange={(e) => setName(e.target.value)} id="filled-basic" label="Counselor Name" variant="outlined" sx={{ mb: "20px" }} />
-        <TextField value={email} onChange={(e) => setEmail(e.target.value)} id="filled-basic" label="Email" variant="outlined" sx={{ mb: "20px" }} />
+        <TextField value={name} onChange={(e) => setName(e.target.value)} id="filled-basic" label="Counselor Name" variant="outlined" sx={{ mb: "20px" }}
+        InputProps={{startAdornment:<InputAdornment position="start"><PersonOutlineIcon /> </InputAdornment>}}
+         />
+        <TextField value={email} onChange={(e) => setEmail(e.target.value)} id="filled-basic" label="Email" variant="outlined" sx={{ mb: "20px" }} 
+          InputProps={{startAdornment:<InputAdornment position="start"><MailOutlineIcon /> </InputAdornment>}}
+        />
       </Stack>
 
       <p style={{ textAlign: "center" }}>Instruction / Coord / Assign (ICA)</p>
@@ -166,47 +161,36 @@ export default function Home() {
             label="ICA Name"
             variant="outlined"
             value={inputValues[index]}
-            onChange={(event) => handleInputChange(index, event)}
+            onChange={(event) => handleInputICA(index, event)}
             onFocus={()=>console.log("39393")}
             key={`input-field-${index}`}
+            InputProps={{startAdornment:<InputAdornment position="start"><SchoolIcon /> </InputAdornment>}}
+
           />
 
-        <FormControl variant="standard">
-          <InputLabel htmlFor="input-with-icon-adornment">
-            A-Hour
-          </InputLabel>
-          <Input
+          <TextField
+            sx={{width:110}}
             id="outlined-basic"
             label="CAH (A-hr)"
             variant="outlined"
+            type={'number'}
             key={`input-field2-${index}`}
             value={inputValues2[index]}
-            onChange={(event) => handleInputChange2(index, event)} 
-            startAdornment={
-              <InputAdornment position="start">
-                <AccessTimeIcon />
-              </InputAdornment>
-            }
+            onChange={(event) => handleInputAhour(index, event)} 
+            InputProps={{startAdornment:<InputAdornment position="start"><AccessTimeIcon /> </InputAdornment>}}
             />
-          </FormControl>
 
-          <FormControl variant="standard">
-          <InputLabel htmlFor="input-with-icon-adornment">
-            D-Hour
-          </InputLabel>
-          <Input
+          <TextField
+            sx={{width:110}}
+            type={'number'}
+            label='D-Hour'
             id="outlined-basic"
             variant="outlined"
             key={`input-field99-${index}`}
             value={roundToNearestDecimal(inputValues2[index] / 0.54545, 1)}
-            onChange={(event) => handleInputChange3(index, event)}
-            startAdornment={
-              <InputAdornment position="start">
-                <AccessTimeIcon />
-              </InputAdornment>
-            }
+            onChange={(event) => handleInputDhour(index, event)}
+            InputProps={{startAdornment:<InputAdornment position="start"><AccessTimeIcon /> </InputAdornment>}}
             />
-          </FormControl>
 
         </Stack>
       ))}
@@ -222,7 +206,7 @@ export default function Home() {
           <p style={{ margin: "0", fontSize: "13.3px", borderStyle: "solid", textAlign: "center" }} >Time</p>
           {timeRange.map((i) => {
             return (
-              <p style={{ margin: "0", fontSize: "13.8px", borderStyle: "solid", borderWidth: "thin", textAlign: "center" }} key={"Weekly" + i}>{i}</p>
+              <p style={{ margin: "0", fontSize: "14px", borderStyle: "solid", borderWidth: "thin", textAlign: "center" }} key={"Weekly" + i}>{i}</p>
             )
           })
           }
@@ -232,14 +216,14 @@ export default function Home() {
           {days.map((day) => {
             return (
               <Stack key={"urDay" + day} spacing={0} sx={{ maxWidth: 120 }}>
-                <p style={{ margin: "0", fontSize: "13.3px", borderStyle: "solid", textAlign: "center", color: "red" }} >{day}</p>
+                <p style={{ margin: "0", fontSize: "14px", borderStyle: "solid", textAlign: "center", color: "red" }} >{day}</p>
                 {timeRange.map((i) => {
                   return (
-                    <select name={day + "_" + i} onChange={handleSelectChange} key={"timerange" + i} style={{ maxWidth: 80 }}>
+                    <select name={day + "_" + i} onChange={handleTimeSelect} key={"timerange" + i} style={{ maxWidth: 80 }}>
                       <option value="N/A"></option>
                       <option value="In-Person">In-Person</option>
                       <option value="Remote">Remote</option>
-                      <option value="PRU">Proactive Follow Up</option>
+                      <option value="PRU">PFU</option>
                       <option value="Break">Break</option>
                     </select>
                   )
