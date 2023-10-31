@@ -14,11 +14,15 @@ import Chip from '@mui/material/Chip';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
-import InboxIcon from '@mui/icons-material/Inbox';
-import DraftsIcon from '@mui/icons-material/Drafts';
+
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/Menu';
 
 let timeRange = ["8:00am", "8:30am", "9:00am", "9:30am", "10:00am", "10:30am", "11:00am", "11:30am", "12:00pm", "12:30pm", "1:00pm", "1:30pm", "2:00pm", "2:30pm", "3:00pm", "3:30pm", "4:00pm", "4:30pm", "5:00pm", "5:30pm", "6:00pm", "6:30pm", "7:00pm"]
 let days = ["Mon", "Tus", "Wed", "Thurs", "Fri"]
@@ -38,7 +42,7 @@ export default function Home() {
     let myData = data.map((date) => {
       if (date.day == day && date.time == time) {
         updated = false
-        if(value == "N/A"){
+        if (value == "N/A") {
           return null
         }
         return { ...date, option: value };
@@ -121,7 +125,7 @@ export default function Home() {
     setInputValues2(newInputValues);
   };
 
-  const handleButtonClick = async (val) => {
+  const handleSubmitForm = async (val) => {
     const response = await fetch(process.env.NEXT_PUBLIC_ADMIN, {
       method: 'POST',
       headers: {
@@ -142,7 +146,7 @@ export default function Home() {
         },
         body: JSON.stringify(val)
       };
-      const response2 = await fetch(url, requestOptions);
+      await fetch(url, requestOptions);
       router.push('/finished')
     } else {
       throw new Error('Request failed');
@@ -179,16 +183,20 @@ export default function Home() {
       justifyContent="center"
       alignItems="center"
     >
-      <img
-        src='https://static.wixstatic.com/media/5d5779_352eaa2c4edc497a9143e995091f41a9~mv2.jpg/v1/fill/w_250,h_334,al_c,q_80,usm_0.66_1.00_0.01,enc_auto/5d5779_352eaa2c4edc497a9143e995091f41a9~mv2.jpg'
-        width={100}
-        height={134}
-        style={{ position: 'absolute', top: 0, left: 0, width: "100px", padding: "10px" }}
-        alt="Image Description"
-      />
-      <h3 style={{ textAlign: "center" }}>General Counseling Division</h3>
-      <h3>In-Load Proposed Schedule - Full-Time Counselors</h3>
-      <Stack direction={"row"} gap={2}>
+      <AppBar position="static" color='transparent'>
+        <Toolbar>
+          <img
+            src='https://districtazure.clpccd.org/prmg/files/docs/styles-logos/cc-logo-horizontal-1c.jpg'
+            height={50}
+            alt="Image Description"
+          />
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            In-Load Proposed Schedule Full-Time Counselors
+          </Typography>
+        </Toolbar>
+      </AppBar>
+
+      <Stack direction={"row"} gap={2} mt={4}>
         <div>
           <p style={{ textAlign: "center" }}>Contact details</p>
           <Stack direction={"row"} gap={2}>
@@ -261,34 +269,33 @@ export default function Home() {
           />
 
           <List>
-          <ListItem disablePadding>
-            <ListItemButton>
-              <ListItemText primary="Total Week hours" />
-            <Chip color="primary" label={data.length / 2 + getTotalHrs()} />
+            <ListItem disablePadding>
+              <ListItemButton>
+                <ListItemText primary="Total Week hours" />
+                <Chip color="primary" label={data.length / 2 + getTotalHrs()} />
 
-            </ListItemButton>
-          </ListItem>
-          <Divider />
-          <ListItem disablePadding>
-            <ListItemButton component="a" href="#simple-list">
-              <ListItemText primary="Direct Weekly Counseling Hours" />
-              <Chip color="primary" label={27.5 - getTotalHrs()} />
-            </ListItemButton>
-          </ListItem>
-        </List>
+              </ListItemButton>
+            </ListItem>
+            <Divider />
+            <ListItem disablePadding>
+              <ListItemButton component="a" href="#simple-list">
+                <ListItemText primary="Direct Weekly Counseling Hours" />
+                <Chip color="primary" label={27.5 - getTotalHrs()} />
+              </ListItemButton>
+            </ListItem>
+          </List>
         </div>
-
         <div>
           <p style={{ textAlign: "center" }}>Proposed Weekly Schedule</p>
 
           <Stack direction={"row"}>
             <Stack sx={{ width: 80 }}>
-              <div style={{ borderStyle: "solid", height: '1.4rem', borderWidth: "thin",borderTopLeftRadius: '10px' }}>
+              <div style={{ borderStyle: "solid", height: '1.4rem', borderWidth: "thin", borderTopLeftRadius: '10px' }}>
                 <p style={{ fontSize: "14px", textAlign: "center", margin: 0 }}>Time</p>
               </div>
               {timeRange.map((i) => {
                 return (
-                  <div key={"Weekly" + i} style={{borderBottomLeftRadius:i=='7:00pm'?'10px':0, color: '#5d5e5e', fontSize: "14px", borderStyle: "solid", borderWidth: "thin", textAlign: "center", height: '1.3rem' }} >
+                  <div key={"Weekly" + i} style={{ borderBottomLeftRadius: i == '7:00pm' ? '10px' : 0, color: '#5d5e5e', fontSize: "14px", borderStyle: "solid", borderWidth: "thin", textAlign: "center", height: '1.3rem' }} >
                     <p style={{ fontSize: "14px", textAlign: "center", margin: 0 }}>{i}</p>
                   </div>
                 )
@@ -300,12 +307,12 @@ export default function Home() {
               {days.map((day) => {
                 return (
                   <Stack key={"urDay" + day} sx={{ maxWidth: 120 }}>
-                    <div style={{ borderStyle: "solid", height: '1.4rem', borderWidth: "thin",borderTopRightRadius: day=='Fri'?'10px':0 }}>
+                    <div style={{ borderStyle: "solid", height: '1.4rem', borderWidth: "thin", borderTopRightRadius: day == 'Fri' ? '10px' : 0 }}>
                       <p style={{ margin: "0", fontSize: "14px", textAlign: "center" }} >{day}</p>
                     </div>
                     {timeRange.map((i, index) => {
                       return (
-                        <select name={day + "_" + i} onChange={handleTimeSelect} key={"timerange" + i} style={{borderBottomRightRadius:i=='7:00pm'&&day=='Fri'?'10px':0, maxWidth: 90, width: 80, height: '1.425rem', backgroundColor: grayOutBox(day, index) ? '#c3c4c7' : '' }}>
+                        <select name={day + "_" + i} onChange={handleTimeSelect} key={"timerange" + i} style={{ borderBottomRightRadius: i == '7:00pm' && day == 'Fri' ? '10px' : 0, maxWidth: 90, width: 80, height: '1.425rem', backgroundColor: grayOutBox(day, index) ? '#c3c4c7' : '' }}>
                           <option value="N/A"></option>
                           <option value="In-Person">In-Person</option>
                           <option value="Remote">Remote</option>
@@ -323,7 +330,7 @@ export default function Home() {
         </div>
       </Stack>
 
-      <Button variant="contained" sx={{ mt: 2, mb: 10, maxWidth:'58%' }} fullWidth onClick={() => {
+      <Button variant="contained" sx={{ mt: 2, mb: 10, maxWidth: '58%' }} fullWidth onClick={() => {
         const ica = inputValues.map((y, i) => {
           return [y, inputValues2[i]]
         })
@@ -336,7 +343,7 @@ export default function Home() {
           currtentSession: getCurrentSeason(),
           approval: "pending"
         }
-        handleButtonClick(mySchedule)
+        handleSubmitForm(mySchedule)
       }}>Submit</Button>
 
     </Stack>
