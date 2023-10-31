@@ -10,7 +10,15 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import SchoolIcon from '@mui/icons-material/School';
 import Chip from '@mui/material/Chip';
-import Paper from '@mui/material/Paper';
+
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Divider from '@mui/material/Divider';
+import InboxIcon from '@mui/icons-material/Inbox';
+import DraftsIcon from '@mui/icons-material/Drafts';
 
 let timeRange = ["8:00am", "8:30am", "9:00am", "9:30am", "10:00am", "10:30am", "11:00am", "11:30am", "12:00pm", "12:30pm", "1:00pm", "1:30pm", "2:00pm", "2:30pm", "3:00pm", "3:30pm", "4:00pm", "4:30pm", "5:00pm", "5:30pm", "6:00pm", "6:30pm", "7:00pm"]
 let days = ["Mon", "Tus", "Wed", "Thurs", "Fri"]
@@ -25,14 +33,14 @@ export default function Home() {
   const [email, setEmail] = useState('');
   const router = useRouter()
 
-  const updateData = (day,time,value) => {
+  const updateData = (day, time, value) => {
     let updated = true
-    let myData = data.map((date)=>{
-      if(date.day == day && date.time == time){
+    let myData = data.map((date) => {
+      if (date.day == day && date.time == time) {
         updated = false
         return { ...date, option: value };
       }
-      return date; 
+      return date;
     })
     setData(myData)
     return updated
@@ -41,7 +49,7 @@ export default function Home() {
   const handleTimeSelect = (e) => {
     let myData = [...data]
     let [day, time] = e.target.name.split('_');
-    if(e.target.value != "Break" && e.target.value != "N/A" && updateData(day,time,e.target.value)){
+    if (e.target.value != "Break" && e.target.value != "N/A" && updateData(day, time, e.target.value)) {
       myData.push({
         day: day,
         time: time,
@@ -118,7 +126,7 @@ export default function Home() {
     });
     if (response.ok) {
       const data = await response.json();
-      const url = process.env.NEXT_PUBLIC_EMAIL; 
+      const url = process.env.NEXT_PUBLIC_EMAIL;
 
       const requestOptions = {
         method: "POST",
@@ -150,12 +158,12 @@ export default function Home() {
     return roundToNearestDecimal(hrs / 0.54545, 1)
   }
 
-  function grayOutBox(day,index){
-    if(index < 2)return true;
-    if(day== "Mon" && index > 17)return true;
-    if( day== "Wed" && index > 9 && index < 14)return true;
-    if(day== "Thurs" && index > 17)return true;
-    if( day== "Fri" && index > 7 )return true;
+  function grayOutBox(day, index) {
+    if (index < 2) return true;
+    if (day == "Mon" && index > 17) return true;
+    if (day == "Wed" && index > 9 && index < 14) return true;
+    if (day == "Thurs" && index > 17) return true;
+    if (day == "Fri" && index > 7) return true;
     return false;
   }
 
@@ -174,112 +182,142 @@ export default function Home() {
       />
       <h3 style={{ textAlign: "center" }}>General Counseling Division</h3>
       <h3>In-Load Proposed Schedule - Full-Time Counselors</h3>
-      <p style={{ textAlign: "center" }}>Contact details</p>
       <Stack direction={"row"} gap={2}>
-        <TextField value={name} onChange={(e) => setName(e.target.value)} id="filled-basic" label="Counselor Name" variant="outlined" sx={{ mb: "20px" }}
-        InputProps={{startAdornment:<InputAdornment position="start"><PersonOutlineIcon /> </InputAdornment>}}
-         />
-        <TextField value={email} onChange={(e) => setEmail(e.target.value)} id="filled-basic" label="Email" variant="outlined" sx={{ mb: "20px" }} 
-          InputProps={{startAdornment:<InputAdornment position="start"><MailOutlineIcon /> </InputAdornment>}}
-        />
-      </Stack>
+        <div>
+          <p style={{ textAlign: "center" }}>Contact details</p>
+          <Stack direction={"row"} gap={2}>
+            <TextField value={name} onChange={(e) => setName(e.target.value)} id="filled-basic" label="Counselor Name" variant="outlined" sx={{ mb: "20px" }}
+              InputProps={{ startAdornment: <InputAdornment position="start"><PersonOutlineIcon /> </InputAdornment> }}
+            />
+            <TextField value={email} onChange={(e) => setEmail(e.target.value)} id="filled-basic" label="Email" variant="outlined" sx={{ mb: "20px" }}
+              InputProps={{ startAdornment: <InputAdornment position="start"><MailOutlineIcon /> </InputAdornment> }}
+            />
+          </Stack>
 
-      <p style={{ textAlign: "center" }}>Instruction / Coord / Assign (ICA)</p>
-      {inputValues.map((value, index) => (
-        <Stack
-          key={`input-field-box-${index}`}
-          direction={'row'}
-          gap={2}
-          mb={2}
-        >
+          <p style={{ textAlign: "center" }}>Instruction / Coord / Assign (ICA)</p>
+          {inputValues.map((value, index) => (
+            <Stack
+              key={`input-field-box-${index}`}
+              direction={'row'}
+              gap={2}
+              mb={2}
+            >
+              <TextField
+                id={`outlined-basic-${index}`}
+                label="ICA Name"
+                variant="outlined"
+                value={inputValues[index]}
+                onChange={(event) => handleInputICA(index, event)}
+                key={`input-field-${index}`}
+                InputProps={{ startAdornment: <InputAdornment position="start"><SchoolIcon /> </InputAdornment> }}
+              />
+
+              <TextField
+                sx={{ width: 110 }}
+                id="outlined-basic"
+                label="CAH (A-hr)"
+                variant="outlined"
+                type={'number'}
+                key={`input-field2-${index}`}
+                value={inputValues2[index]}
+                onChange={(event) => handleInputAhour(index, event)}
+                InputProps={{ startAdornment: <InputAdornment position="start"><AccessTimeIcon /> </InputAdornment> }}
+              />
+
+              <TextField
+                sx={{ width: 110 }}
+                type={'number'}
+                label='D-Hour'
+                id="outlined-basic"
+                variant="outlined"
+                key={`input-field99-${index}`}
+                value={roundToNearestDecimal(inputValues2[index] / 0.54545, 1)}
+                onChange={(event) => handleInputDhour(index, event)}
+                InputProps={{ startAdornment: <InputAdornment position="start"><AccessTimeIcon /> </InputAdornment> }}
+              />
+
+            </Stack>
+          ))}
+          <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} sx={{ mb: 1 }}>
+            <Button variant="contained" size='small' onClick={addInputField}>Add Input</Button>
+            <Button variant="contained" size='small' color="error" onClick={removeInputField} disabled={inputValues.length === 1}>Remove Input</Button>
+          </Stack>
+
           <TextField
-            id={`outlined-basic-${index}`}
-            label="ICA Name"
-            variant="outlined"
-            value={inputValues[index]}
-            onChange={(event) => handleInputICA(index, event)}
-            key={`input-field-${index}`}
-            InputProps={{startAdornment:<InputAdornment position="start"><SchoolIcon /> </InputAdornment>}}
+            id="outlined-multiline-static"
+            value={comments}
+            label="Comments"
+            multiline
+            rows={2}
+            fullWidth
+            sx={{ maxWidth: "500px", mt: 2 }}
+            onChange={(e) => setComments(e.target.value)}
           />
 
-          <TextField
-            sx={{width:110}}
-            id="outlined-basic"
-            label="CAH (A-hr)"
-            variant="outlined"
-            type={'number'}
-            key={`input-field2-${index}`}
-            value={inputValues2[index]}
-            onChange={(event) => handleInputAhour(index, event)} 
-            InputProps={{startAdornment:<InputAdornment position="start"><AccessTimeIcon /> </InputAdornment>}}
-            />
+          <List>
+          <ListItem disablePadding>
+            <ListItemButton>
+              <ListItemText primary="Total Week hours" />
+            <Chip color="primary" label={data.length / 2 + getTotalHrs()} />
 
-          <TextField
-            sx={{width:110}}
-            type={'number'}
-            label='D-Hour'
-            id="outlined-basic"
-            variant="outlined"
-            key={`input-field99-${index}`}
-            value={roundToNearestDecimal(inputValues2[index] / 0.54545, 1)}
-            onChange={(event) => handleInputDhour(index, event)}
-            InputProps={{startAdornment:<InputAdornment position="start"><AccessTimeIcon /> </InputAdornment>}}
-            />
+            </ListItemButton>
+          </ListItem>
+          <Divider />
+          <ListItem disablePadding>
+            <ListItemButton component="a" href="#simple-list">
+              <ListItemText primary="Direct Weekly Counseling Hours" />
+              <Chip color="primary" label={27.5 - getTotalHrs()} />
+            </ListItemButton>
+          </ListItem>
+        </List>
+        </div>
 
-        </Stack>
-      ))}
-      <Stack direction={'row'} spacing={3} sx={{ mb: 1 }} >
-        <Button variant="contained" size='small' onClick={addInputField}>Add Input</Button>
-        <Button variant="contained" size='small' color="error" onClick={removeInputField} disabled={inputValues.length === 1}>Remove Input</Button>
+        <div>
+          <p style={{ textAlign: "center" }}>Proposed Weekly Schedule</p>
+
+          <Stack direction={"row"}>
+            <Stack sx={{ width: 80 }}>
+              <div style={{ borderStyle: "solid", height: '1.4rem', borderWidth: "thin" }}>
+                <p style={{ fontSize: "14px", textAlign: "center", margin: 0 }}>Time</p>
+              </div>
+              {timeRange.map((i) => {
+                return (
+                  <div key={"Weekly" + i} style={{ color: '#5d5e5e', fontSize: "14px", borderStyle: "solid", borderWidth: "thin", textAlign: "center", height: '1.3rem' }} >
+                    <p style={{ fontSize: "14px", textAlign: "center", margin: 0 }}>{i}</p>
+                  </div>
+                )
+              })
+              }
+            </Stack>
+
+            <Stack direction={"row"}>
+              {days.map((day) => {
+                return (
+                  <Stack key={"urDay" + day} sx={{ maxWidth: 120 }}>
+                    <div style={{ borderStyle: "solid", height: '1.4rem', borderWidth: "thin" }}>
+                      <p style={{ margin: "0", fontSize: "14px", textAlign: "center" }} >{day}</p>
+                    </div>
+                    {timeRange.map((i, index) => {
+                      return (
+                        <select name={day + "_" + i} onChange={handleTimeSelect} key={"timerange" + i} style={{ maxWidth: 90, width: 80, height: '1.425rem', backgroundColor: grayOutBox(day, index) ? '#c3c4c7' : '' }}>
+                          <option value="N/A"></option>
+                          <option value="In-Person">In-Person</option>
+                          <option value="Remote">Remote</option>
+                          <option value="PRU">PFU</option>
+                          <option value="Break">Break</option>
+                        </select>
+                      )
+                    })
+                    }
+                  </Stack>
+                )
+              })}
+            </Stack>
+          </Stack>
+        </div>
       </Stack>
 
-      <p style={{ textAlign: "center" }}>Proposed Weekly Schedule</p>
-
-      <Stack direction={"row"}>
-        <Stack spacing={0} sx={{ width: 100 }}>
-          <p style={{ margin: "0", fontSize: "13.3px", borderStyle: "solid", textAlign: "center" }} >Time</p>
-          {timeRange.map((i) => {
-            return (
-              <p style={{ margin: "0",padding:'2px',color:'#5d5e5e', fontSize: "14px", borderStyle: "solid", borderWidth: "thin", textAlign: "center" }} key={"Weekly" + i}>{i}</p>
-            )
-          })
-          }
-        </Stack>
-
-        <Stack direction={"row"}>
-          {days.map((day) => {
-            return (
-              <Stack key={"urDay" + day} spacing={0} sx={{ maxWidth: 120 }}>
-                <p style={{ margin: "0", fontSize: "14px", borderStyle: "solid", borderColor:"gray",textAlign: "center"}} >{day}</p>
-                {timeRange.map((i,index) => {
-                  return (
-                    <select name={day + "_" + i} onChange={handleTimeSelect} key={"timerange" + i} style={{ maxWidth: 90,width:80,height:23 , backgroundColor:grayOutBox(day,index)?'#c3c4c7':'' }}>
-                      <option value="N/A"></option>
-                      <option value="In-Person">In-Person</option>
-                      <option value="Remote">Remote</option>
-                      <option value="PRU">PFU</option>
-                      <option value="Break">Break</option>
-                    </select>
-                  )
-                })
-                }
-              </Stack>
-            )
-          })}
-        </Stack>
-      </Stack>
-      <TextField
-        id="outlined-multiline-static"
-        value={comments}
-        label="Comments"
-        multiline
-        rows={2}
-        fullWidth
-        sx={{ maxWidth: "500px", mt: 2 }}
-        onChange={(e) => setComments(e.target.value)}
-      />
-
-      <Button variant="contained" sx={{ mt: 2,mb:10 }} onClick={() => {
+      <Button variant="contained" sx={{ mt: 2, mb: 10 }} onClick={() => {
         const ica = inputValues.map((y, i) => {
           return [y, inputValues2[i]]
         })
@@ -295,15 +333,6 @@ export default function Home() {
         handleButtonClick(mySchedule)
       }}>Submit</Button>
 
-
-    <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
-    <Stack direction={'row'} spacing={1} sx={{padding:2}}>
-    <p style={{marginTop:'5px'}}>Total Week hours</p>
-      <Chip color="primary" label={data.length / 2 + getTotalHrs()} />
-      <p style={{marginTop:'5px'}}>Direct Weekly Counseling Hours </p>
-      <Chip color="primary" label={27.5 - getTotalHrs()} />
-      </Stack>
-    </Paper>
     </Stack>
   )
 }
