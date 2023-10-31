@@ -25,10 +25,23 @@ export default function Home() {
   const [email, setEmail] = useState('');
   const router = useRouter()
 
+  const updateData = (day,time,value) => {
+    let updated = true
+    let myData = data.map((date)=>{
+      if(date.day == day && date.time == time){
+        updated = false
+        return { ...date, option: value };
+      }
+      return date; 
+    })
+    setData(myData)
+    return updated
+  }
+
   const handleTimeSelect = (e) => {
     let myData = [...data]
     let [day, time] = e.target.name.split('_');
-    if(e.target.value != "Break" && e.target.value != "N/A"){
+    if(e.target.value != "Break" && e.target.value != "N/A" && updateData(day,time,e.target.value)){
       myData.push({
         day: day,
         time: time,
@@ -38,14 +51,7 @@ export default function Home() {
     }
   }
 
-  const updateData = (day,time) => {
-    let myData2 = [...data]
-    let myData = data.filter((date)=>{
-      if(date.day == day && date.time == time){
-        return true
-      }
-    })
-  }
+
 
   function getCurrentSeason() {
     const currentDate = new Date();
@@ -145,27 +151,11 @@ export default function Home() {
   }
 
   function grayOutBox(day,index){
-    if(index < 2){
-      return true;
-    }
-
-    if(day== "Mon" && index > 17){
-      return true;
-    }
-    
-
-    if( day== "Wed" && index > 9 && index < 14){
-      return true;
-    }
-
-    if(day== "Thurs" && index > 17){
-      return true;
-    }
-
-    if( day== "Fri" && index > 7 ){
-      return true;
-    }
-
+    if(index < 2)return true;
+    if(day== "Mon" && index > 17)return true;
+    if( day== "Wed" && index > 9 && index < 14)return true;
+    if(day== "Thurs" && index > 17)return true;
+    if( day== "Fri" && index > 7 )return true;
     return false;
   }
 
@@ -288,6 +278,7 @@ export default function Home() {
         sx={{ maxWidth: "500px", mt: 2 }}
         onChange={(e) => setComments(e.target.value)}
       />
+
       <Button variant="contained" sx={{ mt: 2,mb:10 }} onClick={() => {
         const ica = inputValues.map((y, i) => {
           return [y, inputValues2[i]]
@@ -303,6 +294,7 @@ export default function Home() {
         }
         handleButtonClick(mySchedule)
       }}>Submit</Button>
+
 
     <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
     <Stack direction={'row'} spacing={1} sx={{padding:2}}>
