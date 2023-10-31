@@ -323,7 +323,7 @@ export default function Home() {
         </div>
       </Stack>
 
-      <Button variant="contained" sx={{ mt: 2, mb: 10 }} onClick={() => {
+      <Button variant="contained" sx={{ mt: 2, mb: 10, maxWidth:'58%' }} fullWidth onClick={() => {
         const ica = inputValues.map((y, i) => {
           return [y, inputValues2[i]]
         })
