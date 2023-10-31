@@ -134,7 +134,8 @@ export default function Home() {
           name: name,
           email: email,
           data: data
-        }
+        },
+        body: JSON.stringify(val)
       };
       const response2 = await fetch(url, requestOptions);
       router.push('/finished')
