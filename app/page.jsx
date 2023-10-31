@@ -38,18 +38,23 @@ export default function Home() {
     let myData = data.map((date) => {
       if (date.day == day && date.time == time) {
         updated = false
+        if(value == "N/A"){
+          return null
+        }
         return { ...date, option: value };
       }
       return date;
     })
-    setData(myData)
+    const filteredArray = myData.filter((item) => item !== null);
+
+    setData(filteredArray)
     return updated
   }
 
   const handleTimeSelect = (e) => {
     let myData = [...data]
     let [day, time] = e.target.name.split('_');
-    if (e.target.value != "Break" && e.target.value != "N/A" && updateData(day, time, e.target.value)) {
+    if (updateData(day, time, e.target.value) && e.target.value != "Break" && e.target.value != "N/A") {
       myData.push({
         day: day,
         time: time,
