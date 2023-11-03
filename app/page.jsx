@@ -22,19 +22,31 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Schedule from '../components/schedule';
 
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import Select from '@mui/material/Select';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+
 const timeRange = ["8:00am", "8:30am", "9:00am", "9:30am", "10:00am", "10:30am", "11:00am", "11:30am", "12:00pm", "12:30pm", "1:00pm", "1:30pm", "2:00pm", "2:30pm", "3:00pm", "3:30pm", "4:00pm", "4:30pm", "5:00pm", "5:30pm", "6:00pm", "6:30pm", "7:00pm"]
 const days = ["Mon", "Tus", "Wed", "Thurs", "Fri"]
 
 export default function Home() {
   const [data, setData] = useState([]);
   const [inputCount, setInputCount] = useState(1);
-  const [icaName, setIcaName] = useState(['']); 
+  const [icaName, setIcaName] = useState(['']);
   const [icaHours, setIcaHours] = useState(['']);
   const [comments, setComments] = useState('');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const router = useRouter()
 
+  const [semester, setSemester] = useState('');
+  const [year, setYear] = useState('');
+
+  const handleChange = (event) => {
+    setAge(event.target.value);
+  };
   const updateData = (day, time, value) => {
     let updated = true
     let myData = data.map((date) => {
@@ -98,8 +110,8 @@ export default function Home() {
     const newInputValues = [...icaName];
     const newicaHours = [...icaHours];
 
-    newInputValues.pop(); 
-    newicaHours.pop(); 
+    newInputValues.pop();
+    newicaHours.pop();
 
     setIcaName(newInputValues);
     setIcaHours(newicaHours);
@@ -198,6 +210,15 @@ export default function Home() {
             />
           </Stack>
 
+          <Stack direction={"row"} gap={2}>
+            <TextField value={semester} onChange={(e) => setSemester(e.target.value)} id="filled-basic" label="Semester" variant="outlined" sx={{ mb: "20px" }}
+              InputProps={{ startAdornment: <InputAdornment position="start"><CalendarMonthIcon /> </InputAdornment> }}
+            />
+            <TextField value={year} onChange={(e) => setYear(e.target.value)} id="filled-basic" label="Year" variant="outlined" sx={{ mb: "20px" }}
+              InputProps={{ startAdornment: <InputAdornment position="start"><CalendarMonthIcon /> </InputAdornment> }}
+            />
+          </Stack>
+
           <p style={{ textAlign: "center" }}>Instruction / Coord / Assign (ICA)</p>
           {icaName.map((value, index) => (
             <Stack
@@ -261,7 +282,7 @@ export default function Home() {
           <List>
             <ListItem disablePadding>
               <ListItemButton>
-                <ListItemText primary="Total Week hours" />
+                <ListItemText primary="Total Weekly hours" />
                 <Chip color="primary" label={data.length / 2 + getTotalHrs()} />
 
               </ListItemButton>
@@ -277,14 +298,13 @@ export default function Home() {
         </div>
         <div>
           <p style={{ textAlign: "center" }}>Proposed Weekly Schedule</p>
-
-          <Schedule days={days} timeRange={timeRange} handleTimeSelect={handleTimeSelect}/>
+          <Schedule days={days} timeRange={timeRange} handleTimeSelect={handleTimeSelect} />
         </div>
       </Stack>
 
       <Button variant="contained" sx={{ mt: 2, mb: 10, maxWidth: '58%' }} fullWidth onClick={() => {
         const ica = icaName.map((y, i) => {
-          return {name:y, time:icaHours[i]}
+          return { name: y, time: icaHours[i] }
         })
         let mySchedule = {
           schedule: data,
@@ -293,7 +313,9 @@ export default function Home() {
           ica: ica,
           comments: comments,
           currtentSession: getCurrentSeason(),
-          approval: "pending"
+          approval: "pending",
+          year:year,
+          semester:semester
         }
         handleSubmitForm(mySchedule)
       }}>Submit</Button>
