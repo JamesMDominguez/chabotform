@@ -18,20 +18,18 @@ import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
 
 import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
+import Schedule from '../components/schedule';
 
-let timeRange = ["8:00am", "8:30am", "9:00am", "9:30am", "10:00am", "10:30am", "11:00am", "11:30am", "12:00pm", "12:30pm", "1:00pm", "1:30pm", "2:00pm", "2:30pm", "3:00pm", "3:30pm", "4:00pm", "4:30pm", "5:00pm", "5:30pm", "6:00pm", "6:30pm", "7:00pm"]
-let days = ["Mon", "Tus", "Wed", "Thurs", "Fri"]
+const timeRange = ["8:00am", "8:30am", "9:00am", "9:30am", "10:00am", "10:30am", "11:00am", "11:30am", "12:00pm", "12:30pm", "1:00pm", "1:30pm", "2:00pm", "2:30pm", "3:00pm", "3:30pm", "4:00pm", "4:30pm", "5:00pm", "5:30pm", "6:00pm", "6:30pm", "7:00pm"]
+const days = ["Mon", "Tus", "Wed", "Thurs", "Fri"]
 
 export default function Home() {
   const [data, setData] = useState([]);
   const [inputCount, setInputCount] = useState(1);
-  const [inputValues, setInputValues] = useState(['']); // Store input values in an array
-  const [inputValues2, setInputValues2] = useState(['']); // Store input values in an array
+  const [icaName, setIcaName] = useState(['']); 
+  const [icaHours, setIcaHours] = useState(['']);
   const [comments, setComments] = useState('');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -92,37 +90,37 @@ export default function Home() {
 
   const addInputField = () => {
     setInputCount(inputCount + 1);
-    setInputValues([...inputValues, '']); // Add an empty string to the inputValues array
-    setInputValues2([...inputValues2, '']); // Add an empty string to the inputValues array
+    setIcaName([...icaName, '']);
+    setIcaHours([...icaHours, '']);
   };
 
   const removeInputField = () => {
-    const newInputValues = [...inputValues];
-    const newInputValues2 = [...inputValues2];
+    const newInputValues = [...icaName];
+    const newicaHours = [...icaHours];
 
-    newInputValues.pop(); // Remove the corresponding value
-    newInputValues2.pop(); // Remove the corresponding value
+    newInputValues.pop(); 
+    newicaHours.pop(); 
 
-    setInputValues(newInputValues);
-    setInputValues2(newInputValues2);
+    setIcaName(newInputValues);
+    setIcaHours(newicaHours);
   };
 
   const handleInputICA = (index, event) => {
-    const newInputValues = [...inputValues];
+    const newInputValues = [...icaName];
     newInputValues[index] = event.target.value;
-    setInputValues(newInputValues);
+    setIcaName(newInputValues);
   };
 
   const handleInputAhour = (index, event) => {
-    const newInputValues = [...inputValues2];
+    const newInputValues = [...icaHours];
     newInputValues[index] = event.target.value;
-    setInputValues2(newInputValues);
+    setIcaHours(newInputValues);
   };
 
   const handleInputDhour = (index, event) => {
-    const newInputValues = [...inputValues2];
+    const newInputValues = [...icaHours];
     newInputValues[index] = event.target.value * 0.54545;
-    setInputValues2(newInputValues);
+    setIcaHours(newInputValues);
   };
 
   const handleSubmitForm = async (val) => {
@@ -162,20 +160,12 @@ export default function Home() {
 
   const getTotalHrs = () => {
     let hrs = 0;
-    inputValues2.forEach((val) => {
+    icaHours.forEach((val) => {
       hrs = hrs + Number(val)
     })
     return roundToNearestDecimal(hrs / 0.54545, 1)
   }
 
-  function grayOutBox(day, index) {
-    if (index < 2) return true;
-    if (day == "Mon" && index > 17) return true;
-    if (day == "Wed" && index > 9 && index < 14) return true;
-    if (day == "Thurs" && index > 17) return true;
-    if (day == "Fri" && index > 7) return true;
-    return false;
-  }
 
   return (
     <Stack
@@ -203,13 +193,13 @@ export default function Home() {
             <TextField value={name} onChange={(e) => setName(e.target.value)} id="filled-basic" label="Counselor Name" variant="outlined" sx={{ mb: "20px" }}
               InputProps={{ startAdornment: <InputAdornment position="start"><PersonOutlineIcon /> </InputAdornment> }}
             />
-            <TextField value={email} onChange={(e) => setEmail(e.target.value)} id="filled-basic" label="Email" variant="outlined" sx={{ mb: "20px" }}
+            <TextField value={email} onChange={(e) => setEmail(e.target.value)} id="filled-basic" label="Chabot Email" variant="outlined" sx={{ mb: "20px" }}
               InputProps={{ startAdornment: <InputAdornment position="start"><MailOutlineIcon /> </InputAdornment> }}
             />
           </Stack>
 
           <p style={{ textAlign: "center" }}>Instruction / Coord / Assign (ICA)</p>
-          {inputValues.map((value, index) => (
+          {icaName.map((value, index) => (
             <Stack
               key={`input-field-box-${index}`}
               direction={'row'}
@@ -220,7 +210,7 @@ export default function Home() {
                 id={`outlined-basic-${index}`}
                 label="ICA Name"
                 variant="outlined"
-                value={inputValues[index]}
+                value={icaName[index]}
                 onChange={(event) => handleInputICA(index, event)}
                 key={`input-field-${index}`}
                 InputProps={{ startAdornment: <InputAdornment position="start"><SchoolIcon /> </InputAdornment> }}
@@ -233,7 +223,7 @@ export default function Home() {
                 variant="outlined"
                 type={'number'}
                 key={`input-field2-${index}`}
-                value={inputValues2[index]}
+                value={icaHours[index]}
                 onChange={(event) => handleInputAhour(index, event)}
                 InputProps={{ startAdornment: <InputAdornment position="start"><AccessTimeIcon /> </InputAdornment> }}
               />
@@ -245,7 +235,7 @@ export default function Home() {
                 id="outlined-basic"
                 variant="outlined"
                 key={`input-field99-${index}`}
-                value={roundToNearestDecimal(inputValues2[index] / 0.54545, 1)}
+                value={roundToNearestDecimal(icaHours[index] / 0.54545, 1)}
                 onChange={(event) => handleInputDhour(index, event)}
                 InputProps={{ startAdornment: <InputAdornment position="start"><AccessTimeIcon /> </InputAdornment> }}
               />
@@ -254,7 +244,7 @@ export default function Home() {
           ))}
           <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} sx={{ mb: 1 }}>
             <Button variant="contained" size='small' onClick={addInputField}>Add Input</Button>
-            <Button variant="contained" size='small' color="error" onClick={removeInputField} disabled={inputValues.length === 1}>Remove Input</Button>
+            <Button variant="contained" size='small' color="error" onClick={removeInputField} disabled={icaName.length === 1}>Remove Input</Button>
           </Stack>
 
           <TextField
@@ -288,51 +278,13 @@ export default function Home() {
         <div>
           <p style={{ textAlign: "center" }}>Proposed Weekly Schedule</p>
 
-          <Stack direction={"row"}>
-            <Stack sx={{ width: 80 }}>
-              <div style={{ borderStyle: "solid", height: '1.4rem', borderWidth: "thin", borderTopLeftRadius: '10px' }}>
-                <p style={{ fontSize: "14px", textAlign: "center", margin: 0 }}>Time</p>
-              </div>
-              {timeRange.map((i) => {
-                return (
-                  <div key={"Weekly" + i} style={{ borderBottomLeftRadius: i == '7:00pm' ? '10px' : 0, color: '#5d5e5e', fontSize: "14px", borderStyle: "solid", borderWidth: "thin", textAlign: "center", height: '1.3rem' }} >
-                    <p style={{ fontSize: "14px", textAlign: "center", margin: 0 }}>{i}</p>
-                  </div>
-                )
-              })
-              }
-            </Stack>
-
-            <Stack direction={"row"}>
-              {days.map((day) => {
-                return (
-                  <Stack key={"urDay" + day} sx={{ maxWidth: 120 }}>
-                    <div style={{ borderStyle: "solid", height: '1.4rem', borderWidth: "thin", borderTopRightRadius: day == 'Fri' ? '10px' : 0 }}>
-                      <p style={{ margin: "0", fontSize: "14px", textAlign: "center" }} >{day}</p>
-                    </div>
-                    {timeRange.map((i, index) => {
-                      return (
-                        <select name={day + "_" + i} onChange={handleTimeSelect} key={"timerange" + i} style={{ borderBottomRightRadius: i == '7:00pm' && day == 'Fri' ? '10px' : 0, maxWidth: 90, width: 80, height: '1.425rem', backgroundColor: grayOutBox(day, index) ? '#c3c4c7' : '' }}>
-                          <option value="N/A"></option>
-                          <option value="In-Person">In-Person</option>
-                          <option value="Remote">Remote</option>
-                          <option value="PRU">PFU</option>
-                          <option value="Break">Break</option>
-                        </select>
-                      )
-                    })
-                    }
-                  </Stack>
-                )
-              })}
-            </Stack>
-          </Stack>
+          <Schedule days={days} timeRange={timeRange} handleTimeSelect={handleTimeSelect}/>
         </div>
       </Stack>
 
       <Button variant="contained" sx={{ mt: 2, mb: 10, maxWidth: '58%' }} fullWidth onClick={() => {
-        const ica = inputValues.map((y, i) => {
-          return [y, inputValues2[i]]
+        const ica = icaName.map((y, i) => {
+          return {name:y, time:icaHours[i]}
         })
         let mySchedule = {
           schedule: data,
