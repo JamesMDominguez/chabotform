@@ -294,6 +294,20 @@ export default function Home() {
                 <Chip color="primary" label={27.5 - getTotalHrs()} />
               </ListItemButton>
             </ListItem>
+            <Divider />
+            <ListItem disablePadding>
+              <ListItemButton component="a" href="#simple-list">
+                <ListItemText primary="Remote Hrs" />
+                <Chip color="primary" label={(27.5 - getTotalHrs())*0.22} />
+              </ListItemButton>
+            </ListItem>
+            <Divider />
+            <ListItem disablePadding>
+              <ListItemButton component="a" href="#simple-list">
+                <ListItemText primary="PFU (Proactive Follow-up) Hrs" />
+                <Chip color="primary" label={(data.length / 2 + getTotalHrs())/5} />
+              </ListItemButton>
+            </ListItem>
           </List>
         </div>
         <div>
