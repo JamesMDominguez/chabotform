@@ -79,27 +79,6 @@ export default function Home() {
   }
 
 
-
-  function getCurrentSeason() {
-    const currentDate = new Date();
-    const currentMonth = currentDate.getMonth() + 1; // January is 1, February is 2, and so on
-    const currentYear = currentDate.getFullYear();
-
-    let season = "";
-
-    if (currentMonth >= 6 && currentMonth <= 7) {
-      season = "summer";
-    } else if (currentMonth >= 1 && currentMonth <= 5) {
-      season = "spring";
-    } else if (currentMonth >= 8 && currentMonth <= 12) {
-      season = "fall";
-    } else {
-      season = "not spring, summer, or fall"; // Modify this line as needed.
-    }
-
-    return `${season} ${currentYear}`;
-  }
-
   const addInputField = () => {
     setInputCount(inputCount + 1);
     setIcaName([...icaName, '']);
@@ -326,7 +305,6 @@ export default function Home() {
           email: email,
           ica: ica,
           comments: comments,
-          currtentSession: getCurrentSeason(),
           approval: "pending",
           year:year,
           semester:semester
