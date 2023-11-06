@@ -22,7 +22,7 @@ import ErrorIcon from '@mui/icons-material/Error';
 
 const drawerWidth = 240;
 const timeRange = ["8:00am", "8:30am", "9:00am", "9:30am", "10:00am", "10:30am", "11:00am", "11:30am", "12:00pm", "12:30pm", "1:00pm", "1:30pm", "2:00pm", "2:30pm", "3:00pm", "3:30pm", "4:00pm", "4:30pm", "5:00pm", "5:30pm", "6:00pm", "6:30pm", "7:00pm"]
-const days = ["Mon", "Tus", "Wed", "Thurs", "Fri"]
+const days = ["Mon", "Tues", "Wed", "Thurs", "Fri"]
 const style = {
   position: 'absolute' as 'absolute',
   top: '50%',
@@ -37,6 +37,7 @@ const style = {
 };
 
 interface MyObject {
+  day: string;
   semester: string;
   year: string;
   _id: string;
@@ -44,14 +45,14 @@ interface MyObject {
   name: string;
   ica: [string, string][];
   comments: string;
-  currtentSession: string; // Typo in your data, should be 'currentSession'
-  approval: string; // Typo in your data, should be 'approval'
+  currtentSession: string;
+  approval: string;
 }
 
 export default function Admin() {
   const [data, setData] = useState<[MyObject]>();
   const [selecteTab, setSelectedTab] = useState('Pending');
-  const [selecteChip, setSelectedChip] = useState<MyObject>();
+  const [selecteChip, setSelectedChip] = useState<any>();
   const [requestData, setRequestData] = useState(false);
   const [open, setOpen] = useState(false);
   const handleOpen = (person: any) => {
@@ -95,15 +96,25 @@ export default function Admin() {
     return false;
   }
 
-  const findDayTime = (Dates:any,Day: any,Time: any) =>{
-    let x = Dates?.map((date:any)=>{
-      if(date.day == Day && date.time == Time){
-        return(date.option)
-      }else{
+  const findDayTime = (Dates: any, Day: any, Time: any) => {
+    let x = Dates?.map((date: any) => {
+      if (date.day == Day && date.time == Time) {
+        return (date.option)
+      } else {
         return ""
       }
     })
-    return(x)
+    return (x)
+  }
+
+  const getDailyHours = (day: string) => {
+    let num = 0
+    selecteChip?.schedule.forEach((time: { day: string; }) => {
+      if (time.day == day) {
+        num++
+      }
+    })
+    return num / 2
   }
 
   return (
@@ -177,13 +188,16 @@ export default function Admin() {
             >
               <Box sx={style}>
                 <Typography id="modal-modal-title" variant="h6" component="h2">
-                  {selecteChip?.name }
+                  {selecteChip?.name}
                 </Typography>
 
                 <Stack direction={"row"}>
                   <Stack sx={{ width: 80 }}>
                     <div style={{ borderStyle: "solid", height: '1.4rem', borderWidth: "thin", borderTopLeftRadius: '10px' }}>
                       <p style={{ fontSize: "14px", textAlign: "center", margin: 0 }}>Time</p>
+                    </div>
+                    <div style={{ borderStyle: "solid", height: '1.4rem', borderWidth: "thin" }}>
+                      <p style={{ fontSize: "13px", textAlign: "center", margin: 0 }}>Daily Hours</p>
                     </div>
                     {timeRange.map((i) => {
                       return (
@@ -202,10 +216,13 @@ export default function Admin() {
                           <div style={{ borderStyle: "solid", height: '1.4rem', borderWidth: "thin", borderTopRightRadius: day == 'Fri' ? '10px' : 0 }}>
                             <p style={{ margin: "0", fontSize: "15px", textAlign: "center" }} >{day}</p>
                           </div>
+                          <div style={{ borderStyle: "solid", height: '1.4rem', borderWidth: "thin" }}>
+                            <p style={{ margin: "0", fontSize: "14px", textAlign: "center" }} >{getDailyHours(day)}</p>
+                          </div>
                           {timeRange.map((i, index) => {
                             return (
-                              <div key={"timerange" + index} style={{borderStyle: "solid", borderWidth: "thin", borderBottomRightRadius: i == '7:00pm' && day == 'Fri' ? '10px' : 0, maxWidth: 90, width: 80, height: '1.3rem',color:'#5d5e5e' ,backgroundColor: grayOutBox(day, index) ? '#c3c4c7' : '' }}>
-                                <p style={{margin: "0",fontSize: "14px", textAlign: "center"}}>{findDayTime(selecteChip?.schedule,day,i)}</p>
+                              <div key={"timerange" + index} style={{ borderStyle: "solid", borderWidth: "thin", borderBottomRightRadius: i == '7:00pm' && day == 'Fri' ? '10px' : 0, maxWidth: 90, width: 80, height: '1.3rem', color: '#5d5e5e', backgroundColor: grayOutBox(day, index) ? '#c3c4c7' : '' }}>
+                                <p style={{ margin: "0", fontSize: "14px", textAlign: "center" }}>{findDayTime(selecteChip?.schedule, day, i)}</p>
                               </div>
                             )
                           })
@@ -228,7 +245,7 @@ export default function Admin() {
 
             <Stack direction={"column"} spacing={2}>
               {data.filter((person) => person.approval == selecteTab.toLowerCase()).map((i, index) => (
-                <Chip sx={{ width: '300px' }} key={i.name + index} label={i.name + " " + i.year+" "+i.semester} onClick={() => { handleOpen(i) }} />
+                <Chip sx={{ width: '300px' }} key={i.name + index} label={i.name + " " + i.year + " " + i.semester} onClick={() => { handleOpen(i) }} />
               ))}
             </Stack>
 
