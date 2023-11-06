@@ -204,7 +204,7 @@ export default function Admin() {
                           </div>
                           {timeRange.map((i, index) => {
                             return (
-                              <div style={{borderStyle: "solid", borderWidth: "thin", borderBottomRightRadius: i == '7:00pm' && day == 'Fri' ? '10px' : 0, maxWidth: 90, width: 80, height: '1.3rem',color:'#5d5e5e' ,backgroundColor: grayOutBox(day, index) ? '#c3c4c7' : '' }}>
+                              <div key={"timerange" + index} style={{borderStyle: "solid", borderWidth: "thin", borderBottomRightRadius: i == '7:00pm' && day == 'Fri' ? '10px' : 0, maxWidth: 90, width: 80, height: '1.3rem',color:'#5d5e5e' ,backgroundColor: grayOutBox(day, index) ? '#c3c4c7' : '' }}>
                                 <p style={{margin: "0",fontSize: "14px", textAlign: "center"}}>{findDayTime(selecteChip?.schedule,day,i)}</p>
                               </div>
                             )
