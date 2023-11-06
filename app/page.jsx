@@ -22,6 +22,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Schedule from '../components/schedule';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import Snackbar from '@mui/material/Snackbar';
 
 const timeRange = ["8:00am", "8:30am", "9:00am", "9:30am", "10:00am", "10:30am", "11:00am", "11:30am", "12:00pm", "12:30pm", "1:00pm", "1:30pm", "2:00pm", "2:30pm", "3:00pm", "3:30pm", "4:00pm", "4:30pm", "5:00pm", "5:30pm", "6:00pm", "6:30pm", "7:00pm"]
 const days = ["Mon", "Tues", "Wed", "Thurs", "Fri"]
@@ -38,6 +39,19 @@ export default function Home() {
   const [breaks, setBreaks] = useState([]);
   const [semester, setSemester] = useState('');
   const [year, setYear] = useState('');
+  const [openInfo, setOpenInfo] = useState(false);
+
+  const handleClick = () => {
+    setOpenInfo(true);
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenInfo(false);
+  };
+
 
   const updateData = (day, time, value) => {
     let updated = true;
@@ -69,14 +83,14 @@ export default function Home() {
       setBreaks(filteredArray);
     }
   };
-  
+
   const handleTimeSelect = (e) => {
     let myData = [...data]
     let [day, time] = e.target.name.split('_');
 
-    updateBreaks(day,time)
+    updateBreaks(day, time)
 
-    if(e.target.value == "Break"){
+    if (e.target.value == "Break") {
       let myBreaks = [...breaks]
 
       myBreaks.push({
@@ -97,12 +111,12 @@ export default function Home() {
 
   const getDailyHours = (day) => {
     let num = 0
-    data.forEach((time)=>{
-      if(time.day == day){
+    data.forEach((time) => {
+      if (time.day == day) {
         num++
       }
     })
-    return num/2
+    return num / 2
   }
 
   const addInputField = () => {
@@ -184,19 +198,19 @@ export default function Home() {
   }
 
   const getTotalPFUhours = () => {
-    let num = ((data.length / 2 )*0.1)
-    if(num > 2.5) return 2.5
+    let num = ((data.length / 2) * 0.1)
+    if (num > 2.5) return 2.5
     else return Math.floor(num * 2) / 2
   }
 
-  function getRemoteHours(){
+  function getRemoteHours() {
     let hrs = 0;
     icaHours.forEach((val) => {
       hrs = hrs + Number(val)
     })
     hrs = hrs / 0.54545
 
-    let num = ((27.5 - hrs)*0.22)
+    let num = ((27.5 - hrs) * 0.22)
     return Math.round(num * 2) / 2;
   }
 
@@ -303,30 +317,38 @@ export default function Home() {
           <List>
             <ListItem disablePadding>
               <ListItemButton>
-                <ListItemText primary="Total Weekly hours" />
-                <Chip color="primary" label={data.length / 2 + getTotalHrs()} />
+                <ListItemText primary="Total ICA Hours" />
+                <Chip color="primary" label={getTotalHrs()+0} />
 
               </ListItemButton>
             </ListItem>
             <Divider />
             <ListItem disablePadding>
-              <ListItemButton component="a" href="#simple-list">
-                <ListItemText primary="Direct Weekly Counseling Hours" />
+              <ListItemButton component="a" href="#simple-list" onClick={handleClick}>
+                <ListItemText primary="Total Direct Weekly Counseling Hours" />
                 <Chip color="primary" label={27.5 - getTotalHrs()} />
               </ListItemButton>
             </ListItem>
             <Divider />
             <ListItem disablePadding>
               <ListItemButton component="a" href="#simple-list">
-                <ListItemText primary="Remote Hrs" />
+                <ListItemText primary="Available Remote Hours" />
                 <Chip color="primary" label={getRemoteHours()} />
               </ListItemButton>
             </ListItem>
             <Divider />
             <ListItem disablePadding>
               <ListItemButton component="a" href="#simple-list">
-                <ListItemText primary="PFU (Proactive Follow-up) Hrs" />
+                <ListItemText primary="Proactive Follow-up Hours" />
                 <Chip color="primary" label={getTotalPFUhours()} />
+              </ListItemButton>
+            </ListItem>
+            <Divider />
+            <ListItem disablePadding>
+              <ListItemButton>
+                <ListItemText primary="Total Weekly hours (Must Equal 27.5)" />
+                <Chip color="primary" label={data.length / 2 + getTotalHrs()} />
+
               </ListItemButton>
             </ListItem>
           </List>
@@ -348,14 +370,21 @@ export default function Home() {
           ica: ica,
           comments: comments,
           approval: "pending",
-          year:year,
-          semester:semester,
+          year: year,
+          semester: semester,
           breaks: breaks,
-          weekTotalHrs:data.length / 2 + getTotalHrs(),
-          totalDhours:27.5 - getTotalHrs(),
+          weekTotalHrs: data.length / 2 + getTotalHrs(),
+          totalDhours: 27.5 - getTotalHrs(),
         }
         handleSubmitForm(mySchedule)
       }}>Submit</Button>
+
+      <Snackbar
+        open={openInfo}
+        autoHideDuration={6000}
+        onClose={handleClose}
+        message="Note archived"
+      />
     </Stack>
   )
 }
