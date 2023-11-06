@@ -35,16 +35,16 @@ export default function Home() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const router = useRouter()
-
+  const [breaks, setBreaks] = useState([]);
   const [semester, setSemester] = useState('');
   const [year, setYear] = useState('');
 
   const updateData = (day, time, value) => {
-    let updated = true
+    let updated = true;
     let myData = data.map((date) => {
       if (date.day == day && date.time == time) {
         updated = false
-        if (value == "N/A") {
+        if (value == "N/A" || value == "Break") {
           return null
         }
         return { ...date, option: value };
@@ -57,9 +57,34 @@ export default function Home() {
     return updated
   }
 
+  const updateBreaks = (day, time) => {
+    if (breaks) {
+      let myBreaks = breaks.map((thisBreak) => {
+        if (thisBreak.day === day && thisBreak.time === time) {
+          return null;
+        }
+        return thisBreak;
+      });
+      const filteredArray = myBreaks.filter((item) => item !== null);
+      setBreaks(filteredArray);
+    }
+  };
+  
   const handleTimeSelect = (e) => {
     let myData = [...data]
     let [day, time] = e.target.name.split('_');
+
+    updateBreaks(day,time)
+
+    if(e.target.value == "Break"){
+      let myBreaks = [...breaks]
+
+      myBreaks.push({
+        day: day,
+        time: time
+      })
+      setBreaks(myBreaks)
+    }
     if (updateData(day, time, e.target.value) && e.target.value != "Break" && e.target.value != "N/A") {
       myData.push({
         day: day,
@@ -184,7 +209,7 @@ export default function Home() {
         </Toolbar>
       </AppBar>
 
-      <Stack direction={"row"} gap={2} mt={4}>
+      <Stack direction={"row"} gap={2} mt={4} flexWrap="wrap">
         <div>
           <p style={{ textAlign: "center" }}>Contact details</p>
           <Stack direction={"row"} gap={2}>
@@ -314,11 +339,12 @@ export default function Home() {
           comments: comments,
           approval: "pending",
           year:year,
-          semester:semester
+          semester:semester,
+          breaks: breaks
         }
         handleSubmitForm(mySchedule)
       }}>Submit</Button>
-
+    <Button onClick={()=>console.log(breaks,data)}>Click</Button>
     </Stack>
   )
 }
