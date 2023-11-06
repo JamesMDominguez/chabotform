@@ -2,7 +2,7 @@
 import Stack from '@mui/material/Stack';
 import React, { useState } from 'react';
 
-export default function Schedule({days,timeRange,handleTimeSelect}){
+export default function Schedule({days,timeRange,handleTimeSelect,getDailyHours}){
 
     function grayOutBox(day, index) {
         if (index < 2) return true;
@@ -12,12 +12,16 @@ export default function Schedule({days,timeRange,handleTimeSelect}){
         if (day == "Fri" && index > 17) return true;
         return false;
       }
+      
 return(
     <Stack direction={"row"}>
 
     <Stack sx={{ width: 80 }}>
       <div style={{ borderStyle: "solid", height: '1.4rem', borderWidth: "thin", borderTopLeftRadius: '10px' }}>
         <p style={{ fontSize: "14px", textAlign: "center", margin: 0 }}>Time</p>
+      </div>
+      <div style={{ borderStyle: "solid", height: '1.4rem', borderWidth: "thin" }}>
+        <p style={{ fontSize: "13px", textAlign: "center", margin: 0 }}>Daily Hours</p>
       </div>
       {timeRange.map((i) => {
         return (
@@ -35,6 +39,9 @@ return(
           <Stack key={"yourDay" + day} sx={{ maxWidth: 120 }}>
             <div style={{ borderStyle: "solid", height: '1.4rem', borderWidth: "thin", borderTopRightRadius: day == 'Fri' ? '10px' : 0 }}>
               <p style={{ margin: "0", fontSize: "14px", textAlign: "center" }} >{day}</p>
+            </div>
+            <div style={{ borderStyle: "solid", height: '1.4rem', borderWidth: "thin" }}>
+              <p style={{ margin: "0", fontSize: "14px", textAlign: "center" }} >{getDailyHours(day)}</p>
             </div>
             {timeRange.map((i, index) => {
               return (

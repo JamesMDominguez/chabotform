@@ -21,15 +21,10 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Schedule from '../components/schedule';
-
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import Select from '@mui/material/Select';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
 
 const timeRange = ["8:00am", "8:30am", "9:00am", "9:30am", "10:00am", "10:30am", "11:00am", "11:30am", "12:00pm", "12:30pm", "1:00pm", "1:30pm", "2:00pm", "2:30pm", "3:00pm", "3:30pm", "4:00pm", "4:30pm", "5:00pm", "5:30pm", "6:00pm", "6:30pm", "7:00pm"]
-const days = ["Mon", "Tus", "Wed", "Thurs", "Fri"]
+const days = ["Mon", "Tues", "Wed", "Thurs", "Fri"]
 
 export default function Home() {
   const [data, setData] = useState([]);
@@ -44,9 +39,6 @@ export default function Home() {
   const [semester, setSemester] = useState('');
   const [year, setYear] = useState('');
 
-  const handleChange = (event) => {
-    setAge(event.target.value);
-  };
   const updateData = (day, time, value) => {
     let updated = true
     let myData = data.map((date) => {
@@ -78,6 +70,15 @@ export default function Home() {
     }
   }
 
+  const getDailyHours = (day) => {
+    let num = 0
+    data.forEach((time)=>{
+      if(time.day == day){
+        num++
+      }
+    })
+    return num/2
+  }
 
   const addInputField = () => {
     setInputCount(inputCount + 1);
@@ -155,6 +156,12 @@ export default function Home() {
       hrs = hrs + Number(val)
     })
     return roundToNearestDecimal(hrs / 0.54545, 1)
+  }
+
+  const getTotalPFUhours = () => {
+    let num = (data.length / 2 + getTotalHrs())/5
+    if(num > 2.5) return 2.5
+    else return num
   }
 
 
@@ -284,14 +291,14 @@ export default function Home() {
             <ListItem disablePadding>
               <ListItemButton component="a" href="#simple-list">
                 <ListItemText primary="PFU (Proactive Follow-up) Hrs" />
-                <Chip color="primary" label={(data.length / 2 + getTotalHrs())/5} />
+                <Chip color="primary" label={getTotalPFUhours()} />
               </ListItemButton>
             </ListItem>
           </List>
         </div>
         <div>
           <p style={{ textAlign: "center" }}>Proposed Weekly Schedule</p>
-          <Schedule days={days} timeRange={timeRange} handleTimeSelect={handleTimeSelect} />
+          <Schedule days={days} getDailyHours={getDailyHours} timeRange={timeRange} handleTimeSelect={handleTimeSelect} />
         </div>
       </Stack>
 
