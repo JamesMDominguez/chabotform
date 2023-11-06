@@ -13,6 +13,7 @@
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.14.15",
     "@mui/material": "^5.14.15",
+    "@react-email/render": "^0.0.9",
     "mongodb": "^6.2.0",
     "mongoose": "^7.6.1",
     "next": "13.5.4",

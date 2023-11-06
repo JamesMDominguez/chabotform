@@ -186,9 +186,19 @@ export default function Home() {
   const getTotalPFUhours = () => {
     let num = (data.length / 2 + getTotalHrs())/5
     if(num > 2.5) return 2.5
-    else return num
+    else return Math.round(num*2)/2
   }
 
+  function getRemoteHours(){
+    let hrs = 0;
+    icaHours.forEach((val) => {
+      hrs = hrs + Number(val)
+    })
+    hrs = hrs / 0.54545
+
+    let num = ((27.5 - hrs)*0.22)
+    return Math.round(num * 2) / 2;
+  }
 
   return (
     <Stack
@@ -309,7 +319,7 @@ export default function Home() {
             <ListItem disablePadding>
               <ListItemButton component="a" href="#simple-list">
                 <ListItemText primary="Remote Hrs" />
-                <Chip color="primary" label={(27.5 - getTotalHrs())*0.22} />
+                <Chip color="primary" label={getRemoteHours()} />
               </ListItemButton>
             </ListItem>
             <Divider />
