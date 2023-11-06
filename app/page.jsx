@@ -184,9 +184,9 @@ export default function Home() {
   }
 
   const getTotalPFUhours = () => {
-    let num = (data.length / 2 + getTotalHrs())/5
+    let num = ((data.length / 2 )*0.1)
     if(num > 2.5) return 2.5
-    else return Math.round(num*2)/2
+    else return Math.floor(num * 2) / 2
   }
 
   function getRemoteHours(){
@@ -350,7 +350,9 @@ export default function Home() {
           approval: "pending",
           year:year,
           semester:semester,
-          breaks: breaks
+          breaks: breaks,
+          weekTotalHrs:data.length / 2 + getTotalHrs(),
+          totalDhours:27.5 - getTotalHrs(),
         }
         handleSubmitForm(mySchedule)
       }}>Submit</Button>
