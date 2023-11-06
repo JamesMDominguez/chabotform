@@ -354,7 +354,6 @@ export default function Home() {
         }
         handleSubmitForm(mySchedule)
       }}>Submit</Button>
-    <Button onClick={()=>console.log(breaks,data)}>Click</Button>
     </Stack>
   )
 }
