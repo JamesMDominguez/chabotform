@@ -24,6 +24,16 @@ export async function POST(req) {
         return ""
       }
     }).join('')
+    if(x == ''){
+        let val = data2?.breaks.map((date) => {
+            if (date.day == Day && date.time == Time) {
+              return ("Break")
+            } else {
+              return ""
+            }
+          }).join('')
+        return val
+    }
     return (x)
   }
 
@@ -50,7 +60,7 @@ export async function POST(req) {
     from: 'jamesdominguez2020@gmail.com',
     to: email,
     subject: `Counseling Proposed Schedule`,
-    text: `Hello! Your Schedule has been sent`,
+    text: `Hello ${data2.name}! Your Schedule has been sent`,
     html:`
     <!DOCTYPE html>
     <html>
@@ -62,6 +72,8 @@ export async function POST(req) {
         </style>
     </head>
     <body>
+
+    <h1>${data2.year+" "+data2.semester}</h1>
     <h1>Proposed Weekly Schedule</h1>
     <table>
     <tr>
@@ -76,7 +88,6 @@ export async function POST(req) {
     <td>${getDailyHours(i)}</td>
     `).join('')}
     </tr>
-    
     ${timeRange.map((i,index)=>`
     <tr>
       <td>${i}</td>
@@ -86,6 +97,23 @@ export async function POST(req) {
     </tr>
     `).join('')}
   </table>
+
+  <h1>Instruction / Coord / Assign (ICA)</h1>
+  <table>
+    <tr>
+        <th>Name</th>
+        <th>A-Hour</th>
+        <th>D-Hour</th>
+    </tr>
+    ${data2?.ica.map((i)=>`
+    <tr>
+        <th>${i.name}</th>
+        <th>${i.aHours}</th>
+        <th>${i.dHours}</th>
+    </tr>
+    `).join('')}
+  </table>
+
 </body>
 </html>
 `};

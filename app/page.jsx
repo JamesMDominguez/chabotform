@@ -24,6 +24,11 @@ import Schedule from '../components/schedule';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import Snackbar from '@mui/material/Snackbar';
 
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+
 const timeRange = ["8:00am", "8:30am", "9:00am", "9:30am", "10:00am", "10:30am", "11:00am", "11:30am", "12:00pm", "12:30pm", "1:00pm", "1:30pm", "2:00pm", "2:30pm", "3:00pm", "3:30pm", "4:00pm", "4:30pm", "5:00pm", "5:30pm", "6:00pm", "6:30pm", "7:00pm"]
 const days = ["Mon", "Tues", "Wed", "Thurs", "Fri"]
 
@@ -163,7 +168,7 @@ export default function Home() {
       body: JSON.stringify(val),
     });
     if (response.ok) {
-    const data = await response.json();
+      const data = await response.json();
       const url = process.env.NEXT_PUBLIC_EMAIL;
 
       const requestOptions = {
@@ -177,7 +182,7 @@ export default function Home() {
       };
       await fetch(url, requestOptions);
       router.push('/finished')
-    } 
+    }
     else {
       throw new Error('Request failed');
     }
@@ -247,10 +252,23 @@ export default function Home() {
           </Stack>
 
           <Stack direction={"row"} gap={2}>
-            <TextField value={semester} onChange={(e) => setSemester(e.target.value)} id="filled-basic" label="Semester" variant="outlined" sx={{ mb: "20px" }}
-              InputProps={{ startAdornment: <InputAdornment position="start"><CalendarMonthIcon /> </InputAdornment> }}
-            />
-            <TextField value={year} onChange={(e) => setYear(e.target.value)} id="filled-basic" label="Year" variant="outlined" sx={{ mb: "20px" }}
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">Semester</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                variant="outlined"
+                value={semester}
+                label="Semester"
+                sx={{ mb: "20px" }}
+                onChange={(e) => setSemester(e.target.value)}
+              >
+                <MenuItem value="Summer">Summer ☀️</MenuItem>
+                <MenuItem value="Spring">Spring 🌱</MenuItem>
+                <MenuItem value="Fall">Fall 🍂</MenuItem>
+              </Select>
+            </FormControl>
+            <TextField value={year} onChange={(e) => setYear(e.target.value)} type="number" id="filled-basic" label="Year" variant="outlined" sx={{ mb: "20px" }}
               InputProps={{ startAdornment: <InputAdornment position="start"><CalendarMonthIcon /> </InputAdornment> }}
             />
           </Stack>
@@ -319,7 +337,7 @@ export default function Home() {
             <ListItem disablePadding>
               <ListItemButton>
                 <ListItemText primary="Total ICA Hours" />
-                <Chip color="primary" label={getTotalHrs()+0} />
+                <Chip color="primary" label={getTotalHrs() + 0} />
 
               </ListItemButton>
             </ListItem>
@@ -362,7 +380,7 @@ export default function Home() {
 
       <Button variant="contained" sx={{ mt: 2, mb: 10, maxWidth: '58%' }} fullWidth onClick={() => {
         const ica = icaName.map((y, i) => {
-          return { name: y, time: icaHours[i] }
+          return { name: y, aHours: icaHours[i], dHours: roundToNearestDecimal(icaHours[i] / 0.54545, 1) }
         })
         let mySchedule = {
           schedule: data,
@@ -373,9 +391,7 @@ export default function Home() {
           approval: "pending",
           year: year,
           semester: semester,
-          breaks: breaks,
-          weekTotalHrs: data.length / 2 + getTotalHrs(),
-          totalDhours: 27.5 - getTotalHrs(),
+          breaks: breaks
         }
         handleSubmitForm(mySchedule)
       }}>Submit</Button>
