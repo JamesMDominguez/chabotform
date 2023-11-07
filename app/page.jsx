@@ -58,7 +58,7 @@ export default function Home() {
     let myData = data.map((date) => {
       if (date.day == day && date.time == time) {
         updated = false
-        if (value == "N/A" || value == "Break") {
+        if (value == "" || value == "Break") {
           return null
         }
         return { ...date, option: value };
@@ -99,7 +99,7 @@ export default function Home() {
       })
       setBreaks(myBreaks)
     }
-    if (updateData(day, time, e.target.value) && e.target.value != "Break" && e.target.value != "N/A") {
+    if (updateData(day, time, e.target.value) && e.target.value != "Break" && e.target.value != "") {
       myData.push({
         day: day,
         time: time,

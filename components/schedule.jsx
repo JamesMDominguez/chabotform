@@ -1,6 +1,6 @@
 'use client';
 import Stack from '@mui/material/Stack';
-import React, { useState } from 'react';
+import React, { useState,useMemo } from 'react';
 
 export default function Schedule({days,timeRange,handleTimeSelect,getDailyHours}){
 
@@ -12,6 +12,7 @@ export default function Schedule({days,timeRange,handleTimeSelect,getDailyHours}
         if (day == "Fri" && index > 17) return true;
         return false;
       }
+
       
 return(
     <Stack direction={"row"}>
@@ -45,13 +46,15 @@ return(
             </div>
             {timeRange.map((i, index) => {
               return (
-                <select name={day + "_" + i} onChange={handleTimeSelect} key={"timerange" + i} style={{ borderBottomRightRadius: i == '7:00pm' && day == 'Fri' ? '10px' : 0, maxWidth: 90, width: 80, height: '1.425rem', backgroundColor: grayOutBox(day, index) ? '#c3c4c7' : '' }}>
-                  <option value="N/A"></option>
-                  <option value="In-Person">In-Person</option>
-                  <option value="Remote">Remote</option>
-                  <option value="PFU">PFU</option>
-                  <option value="Break">Break</option>
-                </select>
+                <div key={"timerange" + i}>
+                <input type="search" list="list" name={day + "_" + i} autoComplete="on" onChange={handleTimeSelect} style={{borderBottomRightRadius: i == '7:00pm' && day == 'Fri' ? '10px' : 0,maxWidth: 100, width: 95, height: '1.425rem',backgroundColor: grayOutBox(day, index) ? '#c3c4c7' : '',borderStyle: "solid",borderWidth: "thin" }}/>
+                <datalist id="list">
+                    <option value="In-Person">In-Person</option>
+                    <option value="Remote">Remote</option>
+                    <option value="PFU">PFU</option>
+                    <option value="Break">Break</option>
+                </datalist>
+              </div>
               )
             })
             }
