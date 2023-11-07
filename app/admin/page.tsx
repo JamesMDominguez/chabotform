@@ -97,14 +97,24 @@ export default function Admin() {
     return false;
   }
 
-  const findDayTime = (Dates: any, Day: any, Time: any) => {
+  const findDayTime = (Dates: any,Breaks:any, Day: any, Time: any) => {
     let x = Dates?.map((date: any) => {
       if (date.day == Day && date.time == Time) {
         return (date.option)
       } else {
         return ""
       }
-    })
+    }).join('')
+    if(x == ""){
+      let val = Breaks?.map((date:any) => {
+          if (date.day == Day && date.time == Time) {
+            return ("Break")
+          } else {
+            return ""
+          }
+        }).join('')
+      return val
+  }
     return (x)
   }
 
@@ -223,7 +233,7 @@ export default function Admin() {
                           {timeRange.map((i, index) => {
                             return (
                               <div key={"timerange" + index} style={{ borderStyle: "solid", borderWidth: "thin", borderBottomRightRadius: i == '7:00pm' && day == 'Fri' ? '10px' : 0, maxWidth: 90, width: 80, height: '1.3rem', color: '#5d5e5e', backgroundColor: grayOutBox(day, index) ? '#c3c4c7' : '' }}>
-                                <p style={{ margin: "0", fontSize: "14px", textAlign: "center" }}>{findDayTime(selecteChip?.schedule, day, i)}</p>
+                                <p style={{ margin: "0", fontSize: "14px", textAlign: "center" }}>{findDayTime(selecteChip?.schedule,selecteChip?.breaks, day, i)}</p>
                               </div>
                             )
                           })
