@@ -155,15 +155,15 @@ export default function Home() {
   };
 
   const handleSubmitForm = async (val) => {
-    const response = await fetch(process.env.NEXT_PUBLIC_ADMIN, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(val),
-    });
-    if (response.ok) {
-      const data = await response.json();
+    // const response = await fetch(process.env.NEXT_PUBLIC_ADMIN, {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify(val),
+    // });
+    // if (response.ok) {
+    //const data = await response.json();
       const url = process.env.NEXT_PUBLIC_EMAIL;
 
       const requestOptions = {
@@ -177,9 +177,10 @@ export default function Home() {
       };
       await fetch(url, requestOptions);
       router.push('/finished')
-    } else {
-      throw new Error('Request failed');
-    }
+    //} 
+    // else {
+    //   throw new Error('Request failed');
+    // }
 
   }
 
