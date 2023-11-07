@@ -43,7 +43,7 @@ export async function POST(request) {
 export async function PUT(request) {
   const res = await request.json()
   console.log(res)
-  //await isConnected()
-  //const data = await db.collection('Schedule').updateOne({_id: res.id}, {$set: {approval: args.approval}})
-  //return Response.json({ data })
+  await isConnected()
+  const data = await db.collection('Schedule').updateOne({_id: res.id}, {$set: {approval: args.approval}})
+  return Response.json({ data })
 }
