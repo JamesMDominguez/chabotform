@@ -29,6 +29,10 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
+import LoadingButton from '@mui/lab/LoadingButton';
+import SendIcon from '@mui/icons-material/Send';
+
+
 const timeRange = ["8:00am", "8:30am", "9:00am", "9:30am", "10:00am", "10:30am", "11:00am", "11:30am", "12:00pm", "12:30pm", "1:00pm", "1:30pm", "2:00pm", "2:30pm", "3:00pm", "3:30pm", "4:00pm", "4:30pm", "5:00pm", "5:30pm", "6:00pm", "6:30pm", "7:00pm"]
 const days = ["Mon", "Tues", "Wed", "Thurs", "Fri"]
 
@@ -44,18 +48,8 @@ export default function Home() {
   const [breaks, setBreaks] = useState([]);
   const [semester, setSemester] = useState('');
   const [year, setYear] = useState('');
-  const [openInfo, setOpenInfo] = useState(false);
+  const [loading, setLoading] = React.useState(false);
 
-  const handleClick = () => {
-    setOpenInfo(true);
-  };
-
-  const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setOpenInfo(false);
-  };
 
 
   const updateData = (day, time, value) => {
@@ -160,6 +154,7 @@ export default function Home() {
   };
 
   const handleSubmitForm = async (val) => {
+    setLoading(true)
     const response = await fetch(process.env.NEXT_PUBLIC_ADMIN, {
       method: 'POST',
       headers: {
@@ -180,7 +175,7 @@ export default function Home() {
         },
         body: JSON.stringify(val)
       };
-      await fetch(url, requestOptions);
+      let emailRes = await fetch(url, requestOptions);
       router.push('/finished')
     }
     else {
@@ -381,7 +376,8 @@ export default function Home() {
         </div>
       </Stack>
 
-      <Button variant="contained" sx={{ mt: 2, mb: 10, maxWidth: '58%' }} fullWidth onClick={() => {
+        <LoadingButton
+          variant="contained" sx={{ mt: 2, maxWidth: '58%' }} fullWidth onClick={() => {
         const ica = icaName.map((y, i) => {
           return { name: y, aHours: icaHours[i], dHours: roundToNearestDecimal(icaHours[i] / 0.54545, 1) }
         })
@@ -397,14 +393,14 @@ export default function Home() {
           breaks: breaks
         }
         handleSubmitForm(mySchedule)
-      }}>Submit</Button>
+      }}
+          endIcon={<SendIcon />}
+          loading={loading}
+          loadingPosition="end"
+        >
+          <span>Submit</span>
+        </LoadingButton>
 
-      <Snackbar
-        open={openInfo}
-        autoHideDuration={6000}
-        onClose={handleClose}
-        message="Note archived"
-      />
     </Stack>
   )
 }
