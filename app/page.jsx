@@ -341,7 +341,7 @@ export default function Home() {
             </ListItem>
             <Divider />
             <ListItem disablePadding>
-              <ListItemButton component="a" href="#simple-list" onClick={handleClick}>
+              <ListItemButton component="a" href="#simple-list">
                 <ListItemText primary="Total Direct Weekly Counseling Hours" />
                 <Chip color="primary" label={27.5 - getTotalHrs()} />
               </ListItemButton>
