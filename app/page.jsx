@@ -204,7 +204,10 @@ export default function Home() {
   }
 
   const getTotalPFUhours = () => {
-    let num = ((data.length / 2) * 0.1)
+    let num = ((27.5 - getTotalHrs()) * 0.1)
+    console.log(num)
+    console.log(Math.floor(num * 2) / 2)
+
     if (num > 2.5) return 2.5
     else return Math.floor(num * 2) / 2
   }
