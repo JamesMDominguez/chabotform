@@ -248,7 +248,6 @@ export default function Admin() {
                 <thead>
                   <tr>
                     <th>Name</th>
-                    <th>A-Hour</th>
                     <th>D-Hour</th>
                   </tr>
                   </thead>
@@ -256,7 +255,6 @@ export default function Admin() {
                   {selecteChip?.ica.map((x:any)=>{
                     return(<tr key={'tableRow'+x.name+x.dHours}>
                       <th>{x.name}</th>
-                      <th>{x.dHours}</th>
                       <th>{x.dHours}</th>
                     </tr>)
                   })}
