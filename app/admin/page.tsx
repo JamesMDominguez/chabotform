@@ -16,10 +16,10 @@ import PendingActionsIcon from '@mui/icons-material/PendingActions';
 import AddTaskIcon from '@mui/icons-material/AddTask';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
-import Modal from '@mui/material/Modal';
-import Button from '@mui/material/Button';
 import ErrorIcon from '@mui/icons-material/Error';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import React from 'react';
+import SelectedSchedule from '../../components/selectedSchedule';
 
 const drawerWidth = 240;
 const timeRange = ["8:00am", "8:30am", "9:00am", "9:30am", "10:00am", "10:30am", "11:00am", "11:30am", "12:00pm", "12:30pm", "1:00pm", "1:30pm", "2:00pm", "2:30pm", "3:00pm", "3:30pm", "4:00pm", "4:30pm", "5:00pm", "5:30pm", "6:00pm", "6:30pm", "7:00pm"]
@@ -55,12 +55,11 @@ export default function Admin() {
   const [selecteTab, setSelectedTab] = useState('Pending');
   const [selecteChip, setSelectedChip] = useState<any>();
   const [requestData, setRequestData] = useState(false);
-  const [open, setOpen] = useState(false);
+
   const handleOpen = (person: any) => {
     setSelectedChip(person)
-    setOpen(true);
+    setSelectedTab("Selected Schedule")
   }
-  const handleClose = () => setOpen(false);
 
   useEffect(() => {
     async function getData() {
@@ -88,45 +87,8 @@ export default function Admin() {
     await fetch(url, requestOptions);
     setRequestData(true);
   };
-  function grayOutBox(day: string, index: number) {
-    if (index < 2) return true;
-    if (day == "Mon" && index > 17) return true;
-    if (day == "Wed" && index > 9 && index < 14) return true;
-    if (day == "Thurs" && index > 17) return true;
-    if (day == "Fri" && index > 17) return true;
-    return false;
-  }
 
-  const findDayTime = (Dates: any,Breaks:any, Day: any, Time: any) => {
-    let x = Dates?.map((date: any) => {
-      if (date.day == Day && date.time == Time) {
-        return (date.option)
-      } else {
-        return ""
-      }
-    }).join('')
-    if(x == ""){
-      let val = Breaks?.map((date:any) => {
-          if (date.day == Day && date.time == Time) {
-            return ("Break")
-          } else {
-            return ""
-          }
-        }).join('')
-      return val
-  }
-    return (x)
-  }
 
-  const getDailyHours = (day: string) => {
-    let num = 0
-    selecteChip?.schedule?.forEach((time: { day: string; }) => {
-      if (time.day == day) {
-        num++
-      }
-    })
-    return num / 2
-  }
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -174,12 +136,21 @@ export default function Admin() {
             </ListItemButton>
           </ListItem>
 
-          <ListItem disablePadding sx={{ backgroundColor: selecteTab == "Rejected" ? "#D3D3D3" : "" }}>
-            <ListItemButton onClick={() => setSelectedTab("Rejected")}>
+          <ListItem disablePadding sx={{ backgroundColor: selecteTab == "Resubmission" ? "#D3D3D3" : "" }}>
+            <ListItemButton onClick={() => setSelectedTab("Resubmission")}>
               <ListItemIcon>
                 <ErrorIcon />
               </ListItemIcon>
-              <ListItemText primary={"Rejected"} />
+              <ListItemText primary={"Resubmission"} />
+            </ListItemButton>
+          </ListItem>
+
+          <ListItem disablePadding sx={{ backgroundColor: selecteTab == "Selected Schedule" ? "#D3D3D3" : "" }}>
+            <ListItemButton onClick={() => setSelectedTab("Selected Schedule")}>
+              <ListItemIcon>
+                <CalendarMonthIcon />
+              </ListItemIcon>
+              <ListItemText primary={"Selected Schedule"} />
             </ListItemButton>
           </ListItem>
         </List>
@@ -191,94 +162,13 @@ export default function Admin() {
         <Toolbar />
         {data && (
           <>
-            <Modal
-              open={open}
-              onClose={handleClose}
-              aria-labelledby="modal-modal-title"
-              aria-describedby="modal-modal-description"
-            >
-              <Box sx={style}>
-                <Typography id="modal-modal-title" variant="h6" component="h2">
-                  {selecteChip?.name}
-                </Typography>
-
-                <div style={{display:"flex"}}>
-                <Stack direction={"row"}>
-                  <Stack sx={{ width: 80 }}>
-                    <div style={{ borderStyle: "solid", height: '1.4rem', borderWidth: "thin", borderTopLeftRadius: '10px' }}>
-                      <p style={{ fontSize: "14px", textAlign: "center", margin: 0 }}>Time</p>
-                    </div>
-                    <div style={{ borderStyle: "solid", height: '1.4rem', borderWidth: "thin" }}>
-                      <p style={{ fontSize: "13px", textAlign: "center", margin: 0 }}>Daily Hours</p>
-                    </div>
-                    {timeRange.map((i) => {
-                      return (
-                        <div key={"Weekly" + i} style={{ borderBottomLeftRadius: i == '7:00pm' ? '10px' : 0, color: '#5d5e5e', fontSize: "14px", borderStyle: "solid", borderWidth: "thin", textAlign: "center", height: '1.3rem' }} >
-                          <p style={{ fontSize: "14px", textAlign: "center", margin: 0 }}>{i}</p>
-                        </div>
-                      )
-                    })
-                    }
-                  </Stack>
-
-                  <Stack direction={"row"}>
-                    {days.map((day) => {
-                      return (
-                        <Stack key={"yourDay" + day} sx={{ maxWidth: 150 }}>
-                          <div style={{ borderStyle: "solid", height: '1.4rem', borderWidth: "thin", borderTopRightRadius: day == 'Fri' ? '10px' : 0 }}>
-                            <p style={{ margin: "0", fontSize: "15px", textAlign: "center" }} >{day}</p>
-                          </div>
-                          <div style={{ borderStyle: "solid", height: '1.4rem', borderWidth: "thin" }}>
-                            <p style={{ margin: "0", fontSize: "14px", textAlign: "center" }} >{getDailyHours(day)}</p>
-                          </div>
-                          {timeRange.map((i, index) => {
-                            return (
-                              <div key={"timerange" + index} style={{ borderStyle: "solid", borderWidth: "thin", borderBottomRightRadius: i == '7:00pm' && day == 'Fri' ? '10px' : 0, maxWidth: 90, width: 80, height: '1.3rem', color: '#5d5e5e', backgroundColor: grayOutBox(day, index) ? '#c3c4c7' : '' }}>
-                                <p style={{ margin: "0", fontSize: "14px", textAlign: "center" }}>{findDayTime(selecteChip?.schedule,selecteChip?.breaks, day, i)}</p>
-                              </div>
-                            )
-                          })
-                          }
-                        </Stack>
-                      )
-                    })}
-                  </Stack>
-                </Stack>
-                <table style={{height:50,marginLeft:"10px"}}>
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>D-Hour</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  {selecteChip?.ica.map((x:any)=>{
-                    return(<tr key={'tableRow'+x.name+x.dHours}>
-                      <th>{x.name}</th>
-                      <th>{x.dHours}</th>
-                    </tr>)
-                  })}
-                </tbody>
-                </table>
-                </div>
-
-
-                <p style={{ margin: 0 }}><b>Comments</b></p>
-                <p style={{ margin: 0 }}>{selecteChip?.comments}</p>
-
-                <Stack direction={"row"} justifyContent="space-between" sx={{ mt: 2 }}>
-                  <Button variant="contained" onClick={handleNewRequest}>Accept</Button>
-                  <Button color="error">Reject</Button>
-                </Stack>
-              </Box>
-            </Modal>
-
             <Stack direction={"column"} spacing={2}>
               {data.filter((person) => person.approval == selecteTab.toLowerCase()).map((i, index) => (
                 <Chip sx={{ width: '300px' }} key={i.name + index} label={i.name + " " + i.year + " " + i.semester} onClick={() => { handleOpen(i) }} />
               ))}
             </Stack>
 
+            {selecteTab == "Selected Schedule" && <SelectedSchedule selecteChip={selecteChip}/>}
           </>
         )}
       </Box>
