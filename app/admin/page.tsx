@@ -244,6 +244,21 @@ export default function Admin() {
                   </Stack>
                 </Stack>
 
+                <table style={{marginTop:15}}>
+                  <tr>
+                    <th>Name</th>
+                    <th>A-Hour</th>
+                    <th>D-Hour</th>
+                  </tr>
+                  {selecteChip?.ica.map((x:any)=>{
+                    return(<tr>
+                      <th>{x.name}</th>
+                      <th>{x.aHours}</th>
+                      <th>{x.dHours}</th>
+                    </tr>)
+                  })}
+                </table>
+
                 <p style={{ margin: 0 }}><b>Comments</b></p>
                 <p style={{ margin: 0 }}>{selecteChip?.comments}</p>
 
