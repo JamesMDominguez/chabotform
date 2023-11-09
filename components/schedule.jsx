@@ -47,7 +47,7 @@ return(
             {timeRange.map((i, index) => {
               return (
                 <div key={"timerange" + i}>
-                <input type="search" list="list" name={day + "_" + i} autoComplete="on" onChange={handleTimeSelect} style={{borderBottomRightRadius: i == '7:00pm' && day == 'Fri' ? '10px' : 0,maxWidth: 100, width: 95, height: '1.425rem',backgroundColor: grayOutBox(day, index) ? '#c3c4c7' : '',borderStyle: "solid",borderWidth: "thin" }}/>
+                <input type="search" list="list" name={day + "_" + i} autoComplete="on" onChange={handleTimeSelect} style={{borderBottomRightRadius: i == '7:00pm' && day == 'Fri' ? '10px' : 0,maxWidth: 100, width: 95, height: '1.41rem',backgroundColor: grayOutBox(day, index) ? '#c3c4c7' : '',borderStyle: "solid",borderWidth: "thin" }}/>
                 <datalist id="list">
                     <option value="In-Person">In-Person</option>
                     <option value="Remote">Remote</option>

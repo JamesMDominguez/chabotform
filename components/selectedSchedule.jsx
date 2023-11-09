@@ -77,6 +77,8 @@ export default function SelectedSchedule({ selecteChip }) {
       }
 
     return (<>
+    <h3>{selecteChip.name+" "+selecteChip.year+" "+selecteChip.semester}</h3>
+
     <Stack direction={"row"}>
         <Stack sx={{ width: 80 }}>
             <div style={{ borderStyle: "solid", height: '1.4rem', borderWidth: "thin", borderTopLeftRadius: '10px' }}>

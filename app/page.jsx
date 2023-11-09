@@ -349,14 +349,14 @@ export default function Home() {
             <Divider />
             <ListItem disablePadding>
               <ListItemButton component="a" href="#simple-list">
-                <ListItemText primary="Available Remote Hours" />
+                <ListItemText primary="Available Remote Hours (From Total D-Hours)" />
                 <Chip color="primary" label={getRemoteHours()} />
               </ListItemButton>
             </ListItem>
             <Divider />
             <ListItem disablePadding>
               <ListItemButton component="a" href="#simple-list">
-                <ListItemText primary="Proactive Follow-up Hours" />
+                <ListItemText primary="Proactive Follow-up Hours (From Total D-Hours)" />
                 <Chip color="primary" label={getTotalPFUhours()} />
               </ListItemButton>
             </ListItem>
