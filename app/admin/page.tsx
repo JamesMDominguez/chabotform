@@ -29,7 +29,7 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: "50%",
+  height: "80%",
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
@@ -202,6 +202,7 @@ export default function Admin() {
                   {selecteChip?.name}
                 </Typography>
 
+                <div style={{display:"flex"}}>
                 <Stack direction={"row"}>
                   <Stack sx={{ width: 80 }}>
                     <div style={{ borderStyle: "solid", height: '1.4rem', borderWidth: "thin", borderTopLeftRadius: '10px' }}>
@@ -243,21 +244,26 @@ export default function Admin() {
                     })}
                   </Stack>
                 </Stack>
-
-                <table style={{marginTop:15}}>
+                <table style={{height:50,marginLeft:"10px"}}>
+                <thead>
                   <tr>
                     <th>Name</th>
                     <th>A-Hour</th>
                     <th>D-Hour</th>
                   </tr>
+                  </thead>
+                  <tbody>
                   {selecteChip?.ica.map((x:any)=>{
-                    return(<tr>
+                    return(<tr key={'tableRow'+x.name+x.dHours}>
                       <th>{x.name}</th>
-                      <th>{x.aHours}</th>
+                      <th>{x.dHours}</th>
                       <th>{x.dHours}</th>
                     </tr>)
                   })}
+                </tbody>
                 </table>
+                </div>
+
 
                 <p style={{ margin: 0 }}><b>Comments</b></p>
                 <p style={{ margin: 0 }}>{selecteChip?.comments}</p>
