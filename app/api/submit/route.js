@@ -42,8 +42,9 @@ export async function POST(request) {
 
 export async function PUT(request) {
   const res = await request.json()
-  console.log(res)
   await isConnected()
-  const data = await db.collection('Schedule').updateOne({_id: res.id}, {$set: {approval: args.approval}})
+  console.log(res)
+  const data = await db.collection('Schedule').updateOne({_id: new mongoose.Types.ObjectId(res.id)}, {$set: {approval:res.approval}})
+  console.log(data)
   return Response.json({ data })
 }

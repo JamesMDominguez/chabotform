@@ -163,7 +163,7 @@ export default function Admin() {
         {data && (
           <>
             <Stack direction={"column"} spacing={2}>
-              {data.filter((person) => person.approval == selecteTab.toLowerCase()).map((i, index) => (
+              {data.filter((person) => person.approval.toLowerCase() == selecteTab.toLowerCase()).map((i, index) => (
                 <Chip sx={{ width: '300px' }} key={i.name + index} label={i.name + " " + i.year + " " + i.semester} onClick={() => { handleOpen(i) }} />
               ))}
             </Stack>

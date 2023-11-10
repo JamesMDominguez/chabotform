@@ -22,7 +22,6 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Schedule from '../components/schedule';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import Snackbar from '@mui/material/Snackbar';
 
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -48,7 +47,7 @@ export default function Home() {
   const [breaks, setBreaks] = useState([]);
   const [semester, setSemester] = useState('');
   const [year, setYear] = useState('');
-  const [loading, setLoading] = React.useState(false);
+  const [loading, setLoading] = useState(false);
 
 
 

@@ -1,27 +1,31 @@
 
 import Stack from '@mui/material/Stack';
-import React from 'react';
+import {useState} from 'react';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import SendIcon from '@mui/icons-material/Send';
+import DialogTitle from '@mui/material/DialogTitle';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 const timeRange = ["8:00am", "8:30am", "9:00am", "9:30am", "10:00am", "10:30am", "11:00am", "11:30am", "12:00pm", "12:30pm", "1:00pm", "1:30pm", "2:00pm", "2:30pm", "3:00pm", "3:30pm", "4:00pm", "4:30pm", "5:00pm", "5:30pm", "6:00pm", "6:30pm", "7:00pm"]
 const days = ["Mon", "Tues", "Wed", "Thurs", "Fri"]
 
 export default function SelectedSchedule({ selecteChip }) {
-      
+
+    const [loading, setLoading] = useState(false);
     let TotalICA = 0
-    function createData(name, calories, fat, carbs, protein) {
-        return { name, calories, fat, carbs, protein };
-      }
-      
-      const rows = [
-        createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-        createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-        createData('Eclair', 262, 16.0, 24, 6.0),
-        createData('Cupcake', 305, 3.7, 67, 4.3),
-        createData('Gingerbread', 356, 16.0, 49, 3.9),
-      ];
+    const [open, setOpen] = useState(false);
+    const handleClickOpen = () => {
+      setOpen(true);
+    };
+    const handleClose = () => {
+      setOpen(false);
+    };
+  
     function grayOutBox(day, index) {
         if (index < 2) return true;
         if (day == "Mon" && index > 17) return true;
@@ -40,21 +44,6 @@ export default function SelectedSchedule({ selecteChip }) {
         })
         return num / 2
       }
-
-      function roundToNearestDecimal(number, decimalPlaces) {
-        if (number == 0) return ''
-        const multiplier = 10 ** decimalPlaces;
-        return Math.round(number * multiplier) / multiplier;
-      }
-
-      const getTotalHrs = () => {
-        let hrs = 0;
-        selecteChip?.ica.forEach((val) => {
-          hrs = hrs + Number(val.dHours)
-        })
-        return roundToNearestDecimal(hrs / 0.54545, 1)
-      }
-    
       const findDayTime = (Dates,Breaks, Day, Time) => {
         let x = Dates?.map((date) => {
           if (date.day == Day && date.time == Time) {
@@ -74,6 +63,22 @@ export default function SelectedSchedule({ selecteChip }) {
           return val
       }
         return (x)
+      }
+
+      const handleApprove = async () => {
+        setLoading(true)
+
+        const res = await fetch(process.env.NEXT_PUBLIC_ADMIN, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({approval:"Approved",id:selecteChip._id}),
+          });
+          if(res.ok){
+            setLoading(false)
+            setOpen(false)
+          }
       }
 
     return (<>
@@ -154,8 +159,39 @@ export default function SelectedSchedule({ selecteChip }) {
             <Chip label={selecteChip?.comments} />
 
             <Stack direction={"row"} justifyContent="start" spacing={4} sx={{ mt: 2 }}>
-                  <Button variant="contained">Accept</Button>
-                  <Button color="error" variant="outlined" >Resubmission</Button>
+                  <Button variant="contained" onClick={handleClickOpen}>Approve</Button>
+                  <Button color="error" variant="contained" >Resubmission</Button>
+                  <Button color="warning" variant="contained">Pending</Button>
             </Stack>
+
+        <Dialog open={open} onClose={handleClose} >
+        <DialogTitle>Approval confirmation</DialogTitle>
+        <DialogContent sx={{minWidth:"400px"}}>
+          <TextField
+            autoFocus
+            multiline
+            margin="dense"
+            rows={3}
+            id="name"
+            label="Comments"
+            type="email"
+            fullWidth
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+
+        <LoadingButton
+          sx={{width:'50%'}}
+          variant="contained" fullWidth onClick={handleApprove}
+          endIcon={<SendIcon />}
+          loading={loading}
+          loadingPosition="end"
+        >
+          <span>Send</span>
+        </LoadingButton>
+        </DialogActions>
+      </Dialog>
+
     </>)
 }
