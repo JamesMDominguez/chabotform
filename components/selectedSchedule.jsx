@@ -14,12 +14,13 @@ import LoadingButton from '@mui/lab/LoadingButton';
 const timeRange = ["8:00am", "8:30am", "9:00am", "9:30am", "10:00am", "10:30am", "11:00am", "11:30am", "12:00pm", "12:30pm", "1:00pm", "1:30pm", "2:00pm", "2:30pm", "3:00pm", "3:30pm", "4:00pm", "4:30pm", "5:00pm", "5:30pm", "6:00pm", "6:30pm", "7:00pm"]
 const days = ["Mon", "Tues", "Wed", "Thurs", "Fri"]
 
-export default function SelectedSchedule({ selecteChip }) {
-
+export default function SelectedSchedule({ selecteChip, getData,setSelectedTab }) {
     const [loading, setLoading] = useState(false);
+    const [approvalState, setApprovalState] = useState(false);
     let TotalICA = 0
     const [open, setOpen] = useState(false);
-    const handleClickOpen = () => {
+    const handleClickOpen = (state) => {
+      setApprovalState(state)
       setOpen(true);
     };
     const handleClose = () => {
@@ -65,7 +66,7 @@ export default function SelectedSchedule({ selecteChip }) {
         return (x)
       }
 
-      const handleApprove = async () => {
+      const handleConfirmation = async () => {
         setLoading(true)
 
         const res = await fetch(process.env.NEXT_PUBLIC_ADMIN, {
@@ -73,15 +74,17 @@ export default function SelectedSchedule({ selecteChip }) {
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({approval:"Approved",id:selecteChip._id}),
+            body: JSON.stringify({approval: approvalState ,id: selecteChip._id }),
           });
           if(res.ok){
             setLoading(false)
+            getData()
+            setSelectedTab(approvalState)
             setOpen(false)
           }
       }
 
-    return (<>
+    return (selecteChip&&<>
     <h3>{selecteChip.name+" "+selecteChip.year+" "+selecteChip.semester}</h3>
 
     <Stack direction={"row"}>
@@ -118,7 +121,6 @@ export default function SelectedSchedule({ selecteChip }) {
                 </Stack>)})}
             </Stack>
         </Stack>
-
 
             <table style={{height:50,marginTop:"10px"}}>
                 <thead >
@@ -159,14 +161,14 @@ export default function SelectedSchedule({ selecteChip }) {
             <Chip label={selecteChip?.comments} />
 
             <Stack direction={"row"} justifyContent="start" spacing={4} sx={{ mt: 2 }}>
-                  <Button variant="contained" onClick={handleClickOpen}>Approve</Button>
-                  <Button color="error" variant="contained" >Resubmission</Button>
-                  <Button color="warning" variant="contained">Pending</Button>
+                  <Button variant="contained" onClick={()=>handleClickOpen("Approved")}>Approve</Button>
+                  <Button color="error" variant="contained" onClick={()=>handleClickOpen("Resubmission")}>Resubmission</Button>
+                  <Button color="warning" variant="contained" onClick={()=>handleClickOpen("Pending")}>Pending</Button>
             </Stack>
 
         <Dialog open={open} onClose={handleClose} >
-        <DialogTitle>Approval confirmation</DialogTitle>
-        <DialogContent sx={{minWidth:"400px"}}>
+        <DialogTitle>{approvalState} confirmation</DialogTitle>
+        {/* <DialogContent sx={{minWidth:"400px"}}>
           <TextField
             autoFocus
             multiline
@@ -177,13 +179,13 @@ export default function SelectedSchedule({ selecteChip }) {
             type="email"
             fullWidth
           />
-        </DialogContent>
+        </DialogContent> */}
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
 
         <LoadingButton
           sx={{width:'50%'}}
-          variant="contained" fullWidth onClick={handleApprove}
+          variant="contained" fullWidth onClick={handleConfirmation}
           endIcon={<SendIcon />}
           loading={loading}
           loadingPosition="end"
