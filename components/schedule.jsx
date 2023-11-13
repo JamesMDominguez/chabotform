@@ -37,7 +37,7 @@ return(
     <Stack direction={"row"}>
       {days.map((day) => {
         return (
-          <Stack key={"yourDay" + day} sx={{ maxWidth: 120 }}>
+          <div key={"yourDay" + day} style={{ maxWidth: 120,display:"flex",flexDirection:"column" }}>
             <div style={{ borderStyle: "solid", height: '1.4rem', borderWidth: "thin", borderTopRightRadius: day == 'Fri' ? '10px' : 0 }}>
               <p style={{ margin: "0", fontSize: "14px", textAlign: "center" }} >{day}</p>
             </div>
@@ -46,8 +46,8 @@ return(
             </div>
             {timeRange.map((i, index) => {
               return (
-                <div key={"timerange" + i}>
-                <input type="search" list="list" name={day + "_" + i} autoComplete="on" onChange={handleTimeSelect} style={{borderBottomRightRadius: i == '7:00pm' && day == 'Fri' ? '10px' : 0,maxWidth: 100, width: 95, height: '1.41rem',backgroundColor: grayOutBox(day, index) ? '#c3c4c7' : '',borderStyle: "solid",borderWidth: "thin" }}/>
+                <div key={"timerange" + i} style={{borderStyle: "solid",borderWidth: "thin",borderBottomRightRadius: i == '7:00pm' && day == 'Fri' ? '10px': 0, backgroundColor: grayOutBox(day, index) ? '#c3c4c7' : '', height: '1.3rem'}}>
+                <input type="search" list="list" name={day + "_" + i} autoComplete="on" onChange={handleTimeSelect} style={{borderBottomRightRadius: i == '7:00pm' && day == 'Fri' ? '10px' : 0,maxWidth: 100, width: 95,borderStyle: "none",backgroundColor: grayOutBox(day, index) ? '#c3c4c7' : ''}}/>
                 <datalist id="list">
                     <option value="In-Person">In-Person</option>
                     <option value="Remote">Remote</option>
@@ -58,7 +58,7 @@ return(
               )
             })
             }
-          </Stack>
+          </div>
         )
       })}
     </Stack>
