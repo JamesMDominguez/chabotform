@@ -1,19 +1,9 @@
 'use client';
 import Stack from '@mui/material/Stack';
 import React, { useState,useMemo } from 'react';
-
+import Fun from "../app/utils/myFunc"
 export default function Schedule({days,timeRange,handleTimeSelect,getDailyHours}){
-
-    function grayOutBox(day, index) {
-        if (index < 2) return true;
-        if (day == "Mon" && index > 17) return true;
-        if (day == "Wed" && index > 9 && index < 14) return true;
-        if (day == "Thurs" && index > 17) return true;
-        if (day == "Fri" && index > 17) return true;
-        return false;
-      }
-
-      
+    const grayOutBox = Fun.grayOutBox
 return(
     <Stack direction={"row"}>
 
