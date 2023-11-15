@@ -54,7 +54,7 @@ export default function SelectedSchedule({ selecteChip, getData, setSelectedTab 
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ comment: comment, CommentId: selecteChip._id, sender: "admin" }),
+            body: JSON.stringify({ comment: comment, CommentId: selecteChip._id, sender: "admin",email:selecteChip.email }),
         });
         if (res.ok) {
             setComment("")

@@ -17,7 +17,7 @@ export async function POST(req) {
       pass: process.env.EMAILPASS,
     },
   });
-  console.log(data2.schedule)
+
   const mailOptions = {
     from: 'jamesdominguez2020@gmail.com',
     to: email,

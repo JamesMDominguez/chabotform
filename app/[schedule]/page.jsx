@@ -29,7 +29,7 @@ export default function Page({ params }) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ comment: comment, CommentId: params.schedule,sender:"user"}),
+      body: JSON.stringify({ comment: comment, CommentId: params.schedule,sender:"user",email:selecteChip.email}),
     });
     if (res.ok) {
       setComment("")

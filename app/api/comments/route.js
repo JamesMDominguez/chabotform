@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-
+import nodemailer from 'nodemailer';
 let db = undefined;
 
 const isConnected = async () => {
@@ -36,7 +36,42 @@ export async function GET(request) {
 }
 
 export async function POST(request) {
-  const res = await request.json()
+    const res = await request.json()
+
+    const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: 'jamesdominguez2020@gmail.com',
+          pass: process.env.EMAILPASS,
+        },
+      });
+
+      const mailOptions = {
+        from: 'jamesdominguez2020@gmail.com',
+        to: res.email,
+        subject: `New Comment on Proposed Schedule`,
+        html: `
+        <!DOCTYPE html>
+        <html>
+        <head>
+        </head>
+        <body>
+            <h1>Hello! Your Schedule has a New Comment, To view comment click on this <a href="${process.env.NEXTAUTH_URL+ res.CommentId}">link</a> </h1>
+        </body>
+        </html>
+        `,
+        };
+    
+    if(res.sender=="admin"){
+      try {
+            await transporter.sendMail(mailOptions);
+            console.log('Email sent');
+        } catch (error) {
+            console.error('Failed to send email:', error);
+        }
+    }
+
+
   await isConnected()
   const data = await db.collection('Comment').insertOne(res)
   return Response.json({ data })
