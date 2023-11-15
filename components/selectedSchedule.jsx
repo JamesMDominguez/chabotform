@@ -70,7 +70,7 @@ export default function SelectedSchedule({ selecteChip, getData, setSelectedTab 
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ approval: approvalState, id: selecteChip._id }),
+            body: JSON.stringify({ approval: approvalState, id: selecteChip._id,email:selecteChip.email }),
         });
         if (res.ok) {
             setLoading(false)

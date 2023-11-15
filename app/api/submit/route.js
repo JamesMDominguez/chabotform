@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import nodemailer from 'nodemailer';
 
 let db = undefined;
 
@@ -37,6 +38,40 @@ export async function GET() {
 
 export async function PUT(request) {
   const res = await request.json()
+
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'jamesdominguez2020@gmail.com',
+      pass: process.env.EMAILPASS,
+    },
+  });
+
+  const mailOptions = {
+    from: 'jamesdominguez2020@gmail.com',
+    to: res.email,
+    subject: `Proposed Schedule Update`,
+    html: `
+    <!DOCTYPE html>
+    <html>
+    <head>
+    </head>
+    <body>
+        <h3>Hello! We are pleased to inform you that your schedule has been reviewed and approved. Thank you for your prompt submission.</h3>
+    </body>
+    </html>
+    `,
+    };
+
+  if(res.approval == "Approved"){
+    try {
+      await transporter.sendMail(mailOptions);
+      console.log('Email sent');
+  } catch (error) {
+      console.error('Failed to send email:', error);
+  }
+  }
+
   await isConnected()
   const data = await db.collection('Schedule').updateOne({_id: new mongoose.Types.ObjectId(res.id)}, {$set: {approval:res.approval}})
   return Response.json({ data })
