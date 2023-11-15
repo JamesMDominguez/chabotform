@@ -9,7 +9,7 @@ return(
         <table style={{ height: 50, marginTop: "10px",marginRight:"20px" }}>
       <thead >
         <tr>
-          <th>CAH Name</th>
+          <th>ICA Name</th>
           <th>D-Hour</th>
         </tr>
       </thead>
