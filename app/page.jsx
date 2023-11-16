@@ -161,10 +161,11 @@ export default function Home() {
       },
       body: JSON.stringify(val),
     });
-    if (response.ok) {
+    console.log(response)
+    if(response.ok){
       const data = await response.json();
       const url = process.env.NEXT_PUBLIC_EMAIL;
-
+      console.log(url)
       const requestOptions = {
         method: "POST",
         headers: {
@@ -178,7 +179,7 @@ export default function Home() {
       router.push('/finished')
     }
     else {
-      throw new Error('Request failed');
+      console.log('Request failed');
     }
 
   }

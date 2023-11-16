@@ -20,6 +20,7 @@ import ErrorIcon from '@mui/icons-material/Error';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import React from 'react';
 import SelectedSchedule from '../../components/selectedSchedule';
+import ApprovalBtn from '../../components/approvalBtn';
 
 const drawerWidth = 240;
 
@@ -92,42 +93,7 @@ export default function Admin() {
         <Toolbar />
 
         <Divider />
-        <List>
-          <ListItem disablePadding sx={{ backgroundColor: selecteTab == "Pending" ? "#D3D3D3" : "" }}>
-            <ListItemButton onClick={() => setSelectedTab("Pending")}>
-              <ListItemIcon>
-                <PendingActionsIcon />
-              </ListItemIcon>
-              <ListItemText primary={"Pending"} />
-            </ListItemButton>
-          </ListItem>
-          <ListItem disablePadding sx={{ backgroundColor: selecteTab == "Aproved" ? "#D3D3D3" : "" }}>
-            <ListItemButton onClick={() => setSelectedTab("Approved")}>
-              <ListItemIcon>
-                <AddTaskIcon />
-              </ListItemIcon>
-              <ListItemText primary={"Approved"} />
-            </ListItemButton>
-          </ListItem>
-
-          <ListItem disablePadding sx={{ backgroundColor: selecteTab == "Resubmission" ? "#D3D3D3" : "" }}>
-            <ListItemButton onClick={() => setSelectedTab("Resubmission")}>
-              <ListItemIcon>
-                <ErrorIcon />
-              </ListItemIcon>
-              <ListItemText primary={"Resubmission"} />
-            </ListItemButton>
-          </ListItem>
-
-          <ListItem disablePadding sx={{ backgroundColor: selecteTab == "Selected Schedule" ? "#D3D3D3" : "" }}>
-            <ListItemButton onClick={() => setSelectedTab("Selected Schedule")}>
-              <ListItemIcon>
-                <CalendarMonthIcon />
-              </ListItemIcon>
-              <ListItemText primary={"Selected Schedule"} />
-            </ListItemButton>
-          </ListItem>
-        </List>
+       <ApprovalBtn setSelectedTab={setSelectedTab} selecteTab={selecteTab}/>
       </Drawer>
       <Box
         component="main"

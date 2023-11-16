@@ -76,3 +76,10 @@ export async function PUT(request) {
   const data = await db.collection('Schedule').updateOne({_id: new mongoose.Types.ObjectId(res.id)}, {$set: {approval:res.approval}})
   return Response.json({ data })
 }
+
+export async function POST(request) {
+  const res = await request.json()
+  await isConnected()
+  const data = await db.collection('Schedule').insertOne(res)
+  return Response.json({ data })
+}
