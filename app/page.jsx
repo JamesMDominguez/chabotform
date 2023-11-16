@@ -161,17 +161,16 @@ export default function Home() {
       },
       body: JSON.stringify(val),
     });
-    console.log(response)
     if(response.ok){
       const data = await response.json();
       const url = process.env.NEXT_PUBLIC_EMAIL;
-      console.log(url)
+      const objectID = data.insertedId
       const requestOptions = {
         method: "POST",
         headers: {
           name: name,
           email: email,
-          data: data
+          data: objectID.toString()
         },
         body: JSON.stringify(val)
       };

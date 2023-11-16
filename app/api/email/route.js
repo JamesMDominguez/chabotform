@@ -1,9 +1,11 @@
 import nodemailer from 'nodemailer';
 import Fun from '../../utils/myFunc'
+
 export async function POST(req) {
   const data2 = await req.json();
   const newHeaders = new Headers(req.headers);
   const email = newHeaders.get('email');
+  const dataHeader = newHeaders.get('data');
   const timeRange = ["8:00am", "8:30am", "9:00am", "9:30am", "10:00am", "10:30am", "11:00am", "11:30am", "12:00pm", "12:30pm", "1:00pm", "1:30pm", "2:00pm", "2:30pm", "3:00pm", "3:30pm", "4:00pm", "4:30pm", "5:00pm", "5:30pm", "6:00pm", "6:30pm", "7:00pm"]
   const days = ["Mon", "Tues", "Wed", "Thurs", "Fri"]
   const grayOutBox = Fun.grayOutBox
@@ -95,7 +97,7 @@ export async function POST(req) {
     </tr>
     `).join('')}
   </table>
-
+  <h2>A link to your schedule can be found in this <a href="${process.env.NEXTAUTH_URL+dataHeader}">LINK</a>
 </body>
 </html>
 `};
