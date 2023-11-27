@@ -44,7 +44,7 @@ export default function Admin() {
   async function getData(){
     try {
       const res = await fetch(process.env.NEXT_PUBLIC_ADMIN as string);
-      const inboxRes = await fetch('http://localhost:3000/api/inbox')
+      const inboxRes = await fetch(process.env.NEXT_PUBLIC_INBOX as string)
       if (!res.ok) {
         throw new Error(`Request failed with status: ${res.status}`);
       }
@@ -62,7 +62,7 @@ export default function Admin() {
       if(element._id == id){
         setSelectedChip(element)
         setSelectedTab("Selected Schedule")
-        await fetch('http://localhost:3000/api/inbox',{
+        await fetch(process.env.NEXT_PUBLIC_INBOX as string,{
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
