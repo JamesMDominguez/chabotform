@@ -11,9 +11,10 @@ import AddTaskIcon from '@mui/icons-material/AddTask';
 import ErrorIcon from '@mui/icons-material/Error';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import React from 'react';
+import Badge from '@mui/material/Badge';
 
 
-export default function ApprovalBtn({setSelectedTab,selecteTab}){
+export default function ApprovalBtn({setSelectedTab,selecteTab,inboxLen}){
     return(<List>
         <ListItem disablePadding sx={{ backgroundColor: selecteTab == "Pending" ? "#D3D3D3" : "" }}>
           <ListItemButton onClick={() => setSelectedTab("Pending")}>
@@ -53,7 +54,9 @@ export default function ApprovalBtn({setSelectedTab,selecteTab}){
         <ListItem disablePadding sx={{ backgroundColor: selecteTab == "Inbox" ? "#D3D3D3" : "" }}>
           <ListItemButton onClick={() => setSelectedTab("Inbox")}>
             <ListItemIcon>
-              <MailIcon />
+              <Badge badgeContent={inboxLen} color="primary">
+               <MailIcon />
+              </Badge>
             </ListItemIcon>
             <ListItemText primary={"Inbox"} />
           </ListItemButton>

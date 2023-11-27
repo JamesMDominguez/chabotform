@@ -5,22 +5,15 @@ import Drawer from '@mui/material/Drawer';
 import CssBaseline from '@mui/material/CssBaseline';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
-import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import PendingActionsIcon from '@mui/icons-material/PendingActions';
-import AddTaskIcon from '@mui/icons-material/AddTask';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
-import ErrorIcon from '@mui/icons-material/Error';
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import React from 'react';
 import SelectedSchedule from '../../components/selectedSchedule';
 import ApprovalBtn from '../../components/approvalBtn';
+import MarkUnreadChatAltIcon from '@mui/icons-material/MarkUnreadChatAlt';
+import MarkEmailReadIcon from '@mui/icons-material/MarkEmailRead';
 
 const drawerWidth = 240;
 
@@ -41,23 +34,44 @@ export default function Admin() {
   const [data, setData] = useState<[MyObject]>();
   const [selecteTab, setSelectedTab] = useState('Pending');
   const [selecteChip, setSelectedChip] = useState<any>();
-
+  const [inbox, setInbox] = useState<any>();
+  let inboxLen = inbox?.filter((element: { status: string; })=>element.status=='unread').length
   const handleOpen = (person: any) => {
     setSelectedChip(person)
     setSelectedTab("Selected Schedule")
   }
   
-  async function getData() {
+  async function getData(){
     try {
       const res = await fetch(process.env.NEXT_PUBLIC_ADMIN as string);
+      const inboxRes = await fetch('http://localhost:3000/api/inbox')
       if (!res.ok) {
         throw new Error(`Request failed with status: ${res.status}`);
       }
+      const inboxJson = await inboxRes.json();
       const jsonData = await res.json();
       setData(jsonData);
+      setInbox(inboxJson)
     } catch (error) {
       console.error('Error fetching data:', error);
     }
+  }
+
+  const selectedInbox = (id:string) => {
+    data?.forEach(async element => {
+      if(element._id == id){
+        setSelectedChip(element)
+        setSelectedTab("Selected Schedule")
+        await fetch('http://localhost:3000/api/inbox',{
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({id:id}),
+        })
+        getData()
+      }
+    });
   }
 
   useEffect(() => {
@@ -91,9 +105,8 @@ export default function Admin() {
         anchor="left"
       >
         <Toolbar />
-
         <Divider />
-       <ApprovalBtn setSelectedTab={setSelectedTab} selecteTab={selecteTab}/>
+       <ApprovalBtn setSelectedTab={setSelectedTab} selecteTab={selecteTab} inboxLen={inboxLen}/>
       </Drawer>
       <Box
         component="main"
@@ -107,8 +120,14 @@ export default function Admin() {
                 <Chip sx={{ width: '300px' }} key={i.name + index} label={i.name + " " + i.year + " " + i.semester} onClick={() => { handleOpen(i) }} />
               ))}
             </Stack>
-
             {selecteTab == "Selected Schedule" && <SelectedSchedule selecteChip={selecteChip} getData={getData} setSelectedTab={setSelectedTab} />}
+            {selecteTab == "Inbox" && [...inbox].reverse().map((box:any)=>{
+            return(
+              <div key={box._id} style={{marginBottom:"10px"}}>    
+              <Chip onClick={()=>selectedInbox(box.CommentId)} icon={box.status == "unread"?<MarkUnreadChatAltIcon color='error' />:<MarkEmailReadIcon color='success'/>} label={box.name} />
+              </div>
+            )}
+            )}
           </>
         )}
       </Box>

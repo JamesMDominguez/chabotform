@@ -16,20 +16,20 @@ export default function Page({ params }) {
     key1: params.schedule
   };
 
-  async function getData() {
+  async function getData(){
     const res = await fetch(`${process.env.NEXT_PUBLIC_COMMENT}?${new URLSearchParams(requestData)}`, { cache: 'no-store' });
     const jsonData = await res.json();
     setComments(jsonData.Comment);
     setSelecteChip(jsonData.Schedule[0]);
   }
 
-  async function sendComment() {
+  async function sendComment(){
     const res = await fetch(process.env.NEXT_PUBLIC_COMMENT, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ comment: comment, CommentId: params.schedule,sender:"user",email:selecteChip.email}),
+      body: JSON.stringify({ comment: comment, CommentId: params.schedule,sender:"user",email:selecteChip.email,name:`${selecteChip.name + " " + selecteChip.year + " " + selecteChip.semester}`}),
     });
     if (res.ok) {
       setComment("")

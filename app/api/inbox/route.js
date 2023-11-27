@@ -35,9 +35,19 @@ export async function GET() {
       }
 }
 
-export async function POST(request) {
-    const res = await request.json()
+export async function PUT(request) {
+  const res = await request.json()
   await isConnected()
-  const data = await db.collection('Inbox').insertOne(res)
-  return Response.json({ data })
+  try {
+    const result = await db.collection('Inbox').updateMany({ CommentId: res.id }, { $set: {status:"read"} });
+    console.log(result)
+    return new Response(JSON.stringify(result), {
+        status: 200,
+      });
+  } catch (error) {
+    console.error(error);
+    return new Response('Internal Server Error', {
+        status: 500,
+      });
+  }
 }
