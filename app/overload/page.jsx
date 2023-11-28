@@ -133,7 +133,7 @@ export default function Finished() {
                     </FormControl>
                     <FormControl variant="standard">
                         <FormLabel id="demo-controlled-radio-buttons-group" sx={{ marginTop: "20px" }}>Are you planning to work overload hours for workload banking? </FormLabel>
-                        <FormLabel id="demo-controlled-radio-buttons-group">If you answered "Yes", additional forms need to be completed </FormLabel>
+                        <FormLabel id="demo-controlled-radio-buttons-group">If you answered Yes, additional forms need to be completed </FormLabel>
                         <FormLabel id="demo-controlled-radio-buttons-group">and submitted to Academic Services. </FormLabel>
                         <RadioGroup
                             aria-labelledby="demo-radio-buttons-group-label"
