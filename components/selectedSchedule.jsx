@@ -10,13 +10,15 @@ import SendIcon from '@mui/icons-material/Send';
 import DialogTitle from '@mui/material/DialogTitle';
 import LoadingButton from '@mui/lab/LoadingButton';
 import DataTable from './dataTable';
-import Fun from '../app/utils/myFunc'
+import Fun from '../app/utils/myFunc';
+
 const timeRange = ["8:00am", "8:30am", "9:00am", "9:30am", "10:00am", "10:30am", "11:00am", "11:30am", "12:00pm", "12:30pm", "1:00pm", "1:30pm", "2:00pm", "2:30pm", "3:00pm", "3:30pm", "4:00pm", "4:30pm", "5:00pm", "5:30pm", "6:00pm", "6:30pm", "7:00pm"]
 const days = ["Mon", "Tues", "Wed", "Thurs", "Fri"]
 
 export default function SelectedSchedule({ selecteChip, getData, setSelectedTab }) {
 
     const [loading, setLoading] = useState(false);
+    const [ResubmissionComment, setResubmissionComment] = useState('')
     const [comment, setComment] = useState('')
     const [comments, setComments] = useState([]);
     const grayOutBox = Fun.grayOutBox
@@ -44,9 +46,6 @@ export default function SelectedSchedule({ selecteChip, getData, setSelectedTab 
     useEffect(() => {
         getCommentData()
     }, [])
-
-
-
 
     async function sendComment() {
         const res = await fetch(process.env.NEXT_PUBLIC_COMMENT, {
@@ -149,12 +148,25 @@ export default function SelectedSchedule({ selecteChip, getData, setSelectedTab 
 
         <Stack direction={"row"} justifyContent="start" spacing={4} sx={{ mt: 2 }}>
             <Button variant="contained" onClick={() => handleClickOpen("Approved")}>Approve</Button>
-            <Button color="error" variant="contained" onClick={() => handleClickOpen("Resubmission")}>Resubmission</Button>
-            <Button color="warning" variant="contained" onClick={() => handleClickOpen("Pending")}>Pending</Button>
+            <Button color="error" variant="contained" onClick={() => handleClickOpen("PendingResubmission")}>Resubmission</Button>
         </Stack>
 
-        <Dialog open={open} onClose={handleClose} >
+        <Dialog open={open} onClose={handleClose}>
             <DialogTitle>{approvalState} confirmation</DialogTitle>
+            {approvalState == "PendingResubmission" && <TextField
+                autoFocus
+                multiline
+                sx={{ml:"10px",mr:"10px"}}
+                value={ResubmissionComment}
+                rows={3}
+                onChange={(e) => setResubmissionComment(e.target.value)}
+                id="name"
+                label="Add a comment...   "
+                type="email"
+                variant='outlined'
+                
+            />}
+            
             <DialogActions>
                 <Button onClick={handleClose}>Cancel</Button>
 

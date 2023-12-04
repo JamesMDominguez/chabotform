@@ -12,7 +12,7 @@ import ErrorIcon from '@mui/icons-material/Error';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import React from 'react';
 import Badge from '@mui/material/Badge';
-
+import AccessAlarmsIcon from '@mui/icons-material/AccessAlarms';
 
 export default function ApprovalBtn({setSelectedTab,selecteTab,inboxLen}){
     return(<List>
@@ -38,7 +38,16 @@ export default function ApprovalBtn({setSelectedTab,selecteTab,inboxLen}){
             <ListItemIcon>
               <ErrorIcon />
             </ListItemIcon>
-            <ListItemText primary={"Resubmission"} />
+            <ListItemText primary={"Resubmitted"} />
+          </ListItemButton>
+        </ListItem>
+
+        <ListItem disablePadding sx={{ backgroundColor: selecteTab == "PendingResubmission" ? "#D3D3D3" : "" }}>
+          <ListItemButton onClick={() => setSelectedTab("PendingResubmission")}>
+            <ListItemIcon>
+              <AccessAlarmsIcon />
+            </ListItemIcon>
+            <ListItemText primary={"Pending Resubmission"} />
           </ListItemButton>
         </ListItem>
 

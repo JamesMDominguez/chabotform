@@ -38,6 +38,7 @@ export async function GET() {
 
 export async function PUT(request) {
   const res = await request.json()
+  await isConnected()
 
   const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -63,6 +64,22 @@ export async function PUT(request) {
     `,
     };
 
+  const ResubmissionMailOptions = {
+    from: 'jamesdominguez2020@gmail.com',
+    to: res.email,
+    subject: `Proposed Schedule Update`,
+    html: `
+    <!DOCTYPE html>
+    <html>
+    <head>
+    </head>
+    <body>
+      <h3>Hello! We have reviewed your schedule and it requires resubmission. Please make the necessary changes and submit again. Thank you.</h3>
+    </body>
+    </html>
+    `,
+    };
+
   if(res.approval == "Approved"){
     try {
       await transporter.sendMail(mailOptions);
@@ -72,10 +89,49 @@ export async function PUT(request) {
   }
   }
 
-  await isConnected()
+  if(res.approval == "PendingResubmission"){
+    try {
+      await transporter.sendMail(ResubmissionMailOptions);
+      console.log('Resubmission Email sent');
+      const data = await db.collection('Schedule').updateOne({_id: new mongoose.Types.ObjectId(res.id)}, {$set: {approval:res.approval}})
+      return Response.json("Ressibmission Email Sent")
+
+  } catch (error) {
+      console.error('Failed to send Resubmission:', error);
+  }
+  }
+
+  if(res.data.approval == "Resubmission"){
+    try {
+      await transporter.sendMail({
+        from: 'jamesdominguez2020@gmail.com',
+        to: res.data.email,
+        subject: `Proposed Schedule Resubmission`,
+        html: `
+        <!DOCTYPE html>
+        <html>
+        <head>
+        </head>
+        <body>
+          <h3>Hello! This is a automated email notifying you that we have received your schedule resubmission. Thank you for making necessary changes.</h3>
+        </body>
+        </html>
+        `,
+        });
+      console.log('Resubmission Email sent');
+      console.log(res.data)
+      const data = await db.collection('Schedule').updateOne({_id: new mongoose.Types.ObjectId(res.id)}, {$set: res.data})
+      console.log(data)
+      return Response.json(data)
+  } catch (error) {
+      console.error('Failed to send Resubmission:', error);
+  }
+  }
+
   const data = await db.collection('Schedule').updateOne({_id: new mongoose.Types.ObjectId(res.id)}, {$set: {approval:res.approval}})
   return Response.json(data)
 }
+
 
 export async function POST(request) {
   const res = await request.json()

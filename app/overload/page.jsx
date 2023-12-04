@@ -49,7 +49,7 @@ export default function Finished() {
                 <Stack>
                     <FormControl variant="standard">
                         <FormLabel id="demo-controlled-radio-buttons-group" sx={{ mb: "10px" }}>Contact details</FormLabel>
-                        <Stack direction={"row"} gap={2}>
+                        <Stack direction={"row"} gap={2}>  
                             <TextField id="filled-basic" label="Counselor Name" variant="outlined" sx={{ mb: "20px" }}
                                 InputProps={{ startAdornment: <InputAdornment position="start"><PersonOutlineIcon /> </InputAdornment> }}
                             />

@@ -2,7 +2,7 @@
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { useRouter } from 'next/navigation'
 import InputAdornment from '@mui/material/InputAdornment';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
@@ -20,7 +20,7 @@ import Divider from '@mui/material/Divider';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import Schedule from '../components/schedule';
+import Schedule from '../../../components/schedule';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 
 import InputLabel from '@mui/material/InputLabel';
@@ -35,7 +35,7 @@ import SendIcon from '@mui/icons-material/Send';
 const timeRange = ["8:00am", "8:30am", "9:00am", "9:30am", "10:00am", "10:30am", "11:00am", "11:30am", "12:00pm", "12:30pm", "1:00pm", "1:30pm", "2:00pm", "2:30pm", "3:00pm", "3:30pm", "4:00pm", "4:30pm", "5:00pm", "5:30pm", "6:00pm", "6:30pm", "7:00pm"]
 const days = ["Mon", "Tues", "Wed", "Thurs", "Fri"]
 
-export default function Home() {
+export default function Page({ params }) {
   const [data, setData] = useState([]);
   const [inputCount, setInputCount] = useState(1);
   const [icaName, setIcaName] = useState(['']);
@@ -49,8 +49,23 @@ export default function Home() {
   const [year, setYear] = useState('');
   const [loading, setLoading] = useState(false);
 
+  const requestData = {
+    key1: params.id
+  };
 
+  async function getData(){
+    const res = await fetch(`${process.env.NEXT_PUBLIC_COMMENT}?${new URLSearchParams(requestData)}`, { cache: 'no-store' });
+    const jsonData = await res.json();
+    setName(jsonData.Schedule[0].name)
+    setEmail(jsonData.Schedule[0].email)
+    setSemester(jsonData.Schedule[0].semester)
+    setYear(jsonData.Schedule[0].year)
+    console.log(jsonData.Schedule[0]);
+  }
 
+  useEffect(() => {
+    getData()
+  }, [])
   const updateData = (day, time, value) => {
     let updated = true;
     let myData = data.map((date) => {
@@ -155,32 +170,16 @@ export default function Home() {
   const handleSubmitForm = async (val) => {
     setLoading(true)
     const response = await fetch(process.env.NEXT_PUBLIC_ADMIN, {
-      method: 'POST',
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(val),
     });
-    if(response.ok){
-      const data = await response.json();
-      const url = process.env.NEXT_PUBLIC_EMAIL;
-      const objectID = data.insertedId
-      const requestOptions = {
-        method: "POST",
-        headers: {
-          name: name,
-          email: email,
-          data: objectID.toString()
-        },
-        body: JSON.stringify(val)
-      };
-      let emailRes = await fetch(url, requestOptions);
+    if (response.ok) {
+      setLoading(false)
       router.push('/finished')
     }
-    else {
-      console.log('Request failed');
-    }
-
   }
 
   function roundToNearestDecimal(number, decimalPlaces) {
@@ -228,7 +227,7 @@ export default function Home() {
             alt="Image Description"
           />
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            In-Load Proposed Schedule Full-Time Counselors
+            In-Load Proposed Schedule Full-Time Counselors Resubmission
           </Typography>
         </Toolbar>
       </AppBar>
@@ -378,16 +377,18 @@ export default function Home() {
           return { name: y, aHours: icaHours[i], dHours: roundToNearestDecimal(icaHours[i] / 0.54545, 1) }
         })
         let mySchedule = {
+          id: params.id,
+          data:{
           schedule: data,
           name: name,
           email: email,
           ica: ica,
           comments: comments,
-          approval: "Pending",
+          approval: "Resubmission",
           year: year,
           semester: semester,
           breaks: breaks
-        }
+        }}
         handleSubmitForm(mySchedule)
       }}
           endIcon={<SendIcon />}
