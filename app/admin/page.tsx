@@ -167,7 +167,6 @@ export default function Admin() {
                     sx={{ maxWidth: '300px' }}
                     key={person.email + index}
                     label={person.name}
-                    onClick={() => handleOpen(person)}
                   />
                 ))}
             </Stack>
