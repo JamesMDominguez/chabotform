@@ -23,6 +23,9 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+
 
 const drawerWidth = 240;
 
@@ -43,6 +46,8 @@ interface MyObject {
 export default function Admin() {
   const [data, setData] = useState<[MyObject]>();
   const [selecteTab, setSelectedTab] = useState('Schedule Overview');
+  const [selectedLoad, setSelectedLoad] = useState('Summer');
+
   const tabsList = [
     { name: 'Pending', label: "Pending Review", icon: <PendingActionsIcon sx={{ marginBottom: "-5px" }} /> },
     { name: 'Approved', label: "Approved", icon: <AddTaskIcon sx={{ marginBottom: "-5px" }} /> },
@@ -113,11 +118,16 @@ export default function Admin() {
   }, []);
 
 
+  function handleButtonClick(arg0: string): void {
+    setSelectedLoad(arg0);
+  }
+
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
       <AppBar
         position="fixed"
+        color='inherit'
         sx={{ width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px` }}
       >
         <Toolbar>
@@ -138,7 +148,12 @@ export default function Admin() {
         variant="permanent"
         anchor="left"
       >
-        <Toolbar />
+        <Toolbar>        
+          <img
+          src='https://districtazure.clpccd.org/prmg/files/docs/styles-logos/cc-logo-horizontal-1c.jpg'
+          height={50}
+          alt="Image Description"
+        /></Toolbar>
         <Divider />
         <ApprovalBtn setSelectedTab={setSelectedTab} selecteTab={selecteTab} inboxLen={inboxLen} />
       </Drawer>
@@ -149,24 +164,42 @@ export default function Admin() {
         <Toolbar />
         {data && (
           <>
-                        {selecteTab == "Schedule Overview" && (
-            <FormControl fullWidth size='small' sx={{maxWidth:"200px"}}>
-              <InputLabel id="demo-simple-select-label">Semester</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                variant="outlined"
-                value={semester}
-                label="Semester"
-                sx={{ mb: "20px" }}
-                onChange={(e) => setSemester(e.target.value)}
-              >
-                <MenuItem value="Summer">Summer ☀️</MenuItem>
-                <MenuItem value="Spring">Spring 🌱</MenuItem>
-                <MenuItem value="Fall">Fall 🍂</MenuItem>
-              </Select>
-            </FormControl>
-             )}
+            {selecteTab == "Schedule Overview" && (
+              <>
+                <Stack direction={"row"} spacing={2}>
+                  <FormControl fullWidth size='small' sx={{ maxWidth: "200px" }}>
+                    <InputLabel id="demo-simple-select-label">Semester</InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      variant="outlined"
+                      value={semester}
+                      label="Semester"
+                      sx={{ mb: "20px" }}
+                      onChange={(e) => setSemester(e.target.value)}
+                    >
+                      <MenuItem value="Summer">Summer ☀️</MenuItem>
+                      <MenuItem value="Spring">Spring 🌱</MenuItem>
+                      <MenuItem value="Fall">Fall 🍂</MenuItem>
+                    </Select>
+                  </FormControl>
+                  <ButtonGroup sx={{ height: "40px" }} size='small' variant="outlined" color='inherit' aria-label="outlined button group">
+                    <Button
+                      style={{ backgroundColor: selectedLoad === 'button1' ? '#d6d6d6' : 'white' }}
+                      onClick={() => handleButtonClick('button1')}
+                    >
+                      Over-Load
+                    </Button>
+                    <Button
+                      style={{ backgroundColor: selectedLoad === 'button2' ? '#d6d6d6' : 'white' }}
+                      onClick={() => handleButtonClick('button2')}
+                    >
+                      In-Load
+                    </Button>
+                  </ButtonGroup>
+                </Stack>
+              </>
+            )}
             <Stack direction={"row"} spacing={2}>
               {selecteTab == "Schedule Overview" && tabsList.map(({ name, icon, label }) => (
                 <Stack key={name} direction={"column"} spacing={2}>
