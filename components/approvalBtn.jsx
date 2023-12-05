@@ -7,12 +7,10 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import PendingActionsIcon from '@mui/icons-material/PendingActions';
-import AddTaskIcon from '@mui/icons-material/AddTask';
-import ErrorIcon from '@mui/icons-material/Error';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import React from 'react';
 import Badge from '@mui/material/Badge';
-import AccessAlarmsIcon from '@mui/icons-material/AccessAlarms';
+import RecentActorsIcon from '@mui/icons-material/RecentActors';
 
 export default function ApprovalBtn({setSelectedTab,selecteTab,inboxLen}){
     return(<List>
@@ -42,6 +40,17 @@ export default function ApprovalBtn({setSelectedTab,selecteTab,inboxLen}){
               </Badge>
             </ListItemIcon>
             <ListItemText primary={"Inbox"} />
+          </ListItemButton>
+        </ListItem>
+
+        <ListItem disablePadding sx={{ backgroundColor: selecteTab == "Contacts" ? "#D3D3D3" : "" }}>
+          <ListItemButton onClick={() => setSelectedTab("Contacts")}>
+            <ListItemIcon>
+              <Badge badgeContent={inboxLen} color="primary">
+               <RecentActorsIcon />
+              </Badge>
+            </ListItemIcon>
+            <ListItemText primary={"Contacts"} />
           </ListItemButton>
         </ListItem>
       </List>)

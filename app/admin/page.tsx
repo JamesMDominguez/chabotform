@@ -233,6 +233,11 @@ export default function Admin() {
               )
             }
             )}
+            <Stack gap={2} direction={"row"} flexWrap="wrap">              
+            {selecteTab == "Contacts" && people.map((person, index) => (
+              <Chip sx={{ maxWidth: '300px' }} key={person.email + index} label={person.name} />
+            ))}
+            </Stack>
           </>
         )}
       </Box>
