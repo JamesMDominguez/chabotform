@@ -74,7 +74,7 @@ export default function SelectedSchedule({ selecteChip, getData, setSelectedTab 
         if (res.ok) {
             setLoading(false)
             getData()
-            setSelectedTab(approvalState)
+            setSelectedTab("Schedule Overview")
             setOpen(false)
         }
     }

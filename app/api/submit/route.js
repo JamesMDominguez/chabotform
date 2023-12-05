@@ -74,7 +74,7 @@ export async function PUT(request) {
     <head>
     </head>
     <body>
-      <h3>Hello! We have reviewed your schedule and it requires resubmission. Please make the necessary changes and submit again. Thank you.</h3>
+      <h3>Hello! We have reviewed your schedule and it requires resubmission. Please make the necessary changes and submit again using this <a href="${process.env.NEXTAUTH_URL +"resubmission/" +res.id}">LINK</a>. Thank you.</h3>
     </body>
     </html>
     `,

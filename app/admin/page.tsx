@@ -173,7 +173,7 @@ export default function Admin() {
             </Stack>
             )}
             </Stack>
-            {selecteTab == "Selected Schedule" && <SelectedSchedule selecteChip={selecteChip} getData={getData} setSelectedTab={setSelectedTab} />}
+            {selecteTab == "Selected Schedule" && <SelectedSchedule selecteChip={selecteChip} getData={getData} setSelectedTab={setSelectedTab}/>}
             {selecteTab == "Inbox" && [...inbox].reverse().map((box:any)=>{
             return(
               <div key={box._id} style={{marginBottom:"10px"}}>    
