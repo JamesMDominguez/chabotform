@@ -16,38 +16,12 @@ import AccessAlarmsIcon from '@mui/icons-material/AccessAlarms';
 
 export default function ApprovalBtn({setSelectedTab,selecteTab,inboxLen}){
     return(<List>
-        <ListItem disablePadding sx={{ backgroundColor: selecteTab == "Pending" ? "#D3D3D3" : "" }}>
-          <ListItemButton onClick={() => setSelectedTab("Pending")}>
+        <ListItem disablePadding sx={{ backgroundColor: selecteTab == "Schedule Overview" ? "#D3D3D3" : "" }}>
+          <ListItemButton onClick={() => setSelectedTab("Schedule Overview")}>
             <ListItemIcon>
               <PendingActionsIcon />
             </ListItemIcon>
-            <ListItemText primary={"Pending"} />
-          </ListItemButton>
-        </ListItem>
-        <ListItem disablePadding sx={{ backgroundColor: selecteTab == "Aproved" ? "#D3D3D3" : "" }}>
-          <ListItemButton onClick={() => setSelectedTab("Approved")}>
-            <ListItemIcon>
-              <AddTaskIcon />
-            </ListItemIcon>
-            <ListItemText primary={"Approved"} />
-          </ListItemButton>
-        </ListItem>
-
-        <ListItem disablePadding sx={{ backgroundColor: selecteTab == "Resubmission" ? "#D3D3D3" : "" }}>
-          <ListItemButton onClick={() => setSelectedTab("Resubmission")}>
-            <ListItemIcon>
-              <ErrorIcon />
-            </ListItemIcon>
-            <ListItemText primary={"Resubmitted"} />
-          </ListItemButton>
-        </ListItem>
-
-        <ListItem disablePadding sx={{ backgroundColor: selecteTab == "PendingResubmission" ? "#D3D3D3" : "" }}>
-          <ListItemButton onClick={() => setSelectedTab("PendingResubmission")}>
-            <ListItemIcon>
-              <AccessAlarmsIcon />
-            </ListItemIcon>
-            <ListItemText primary={"Pending Resubmission"} />
+            <ListItemText primary={"Schedule Overview"} />                      
           </ListItemButton>
         </ListItem>
 

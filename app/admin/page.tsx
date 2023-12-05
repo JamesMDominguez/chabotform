@@ -15,6 +15,14 @@ import ApprovalBtn from '../../components/approvalBtn';
 import MarkUnreadChatAltIcon from '@mui/icons-material/MarkUnreadChatAlt';
 import MarkEmailReadIcon from '@mui/icons-material/MarkEmailRead';
 
+import ListItemIcon from '@mui/material/ListItemIcon';
+import PendingActionsIcon from '@mui/icons-material/PendingActions';
+import AddTaskIcon from '@mui/icons-material/AddTask';
+import ErrorIcon from '@mui/icons-material/Error';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import Badge from '@mui/material/Badge';
+import AccessAlarmsIcon from '@mui/icons-material/AccessAlarms';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 const drawerWidth = 240;
 
 interface MyObject {
@@ -24,6 +32,7 @@ interface MyObject {
   _id: string;
   schedule: string[];
   name: string;
+  email: string;
   ica: [string, string][];
   comments: string;
   currtentSession: string;
@@ -32,9 +41,33 @@ interface MyObject {
 
 export default function Admin() {
   const [data, setData] = useState<[MyObject]>();
-  const [selecteTab, setSelectedTab] = useState('Pending');
+  const [selecteTab, setSelectedTab] = useState('Schedule Overview');
+  const tabs = ['Pending', 'Approved', 'PendingResubmission','Resubmission'];
+  const tabsList = [
+    { name: 'Pending',label:"Pending Review" ,icon: <PendingActionsIcon sx={{marginBottom:"-5px"}}/> },
+    { name: 'Approved',label:"Approved", icon: <AddTaskIcon sx={{marginBottom:"-5px"}}/> },
+    { name: 'PendingResubmission',label:"Pending Resubmission", icon: <AccessAlarmsIcon sx={{marginBottom:"-5px"}}/> },
+    { name: 'Resubmission',label:"Resubmited", icon:  <ErrorIcon sx={{marginBottom:"-5px"}}/>},
+  ] 
   const [selecteChip, setSelectedChip] = useState<any>();
   const [inbox, setInbox] = useState<any>();
+  const people = [
+    { name: 'Michelle Reyes', email: 'mreyes@chabotcollege.edu' },
+    { name: 'Frances Fon', email: 'ffon@chabotcollege.edu' },
+    { name: 'Benjamin Barboza', email: 'bbarboza@chabotcollege.edu' },
+    { name: 'Wafa Ali', email: 'wali@chabotcollege.edu' },
+    { name: 'Dara Greene', email: 'dgreene@chabotcollege.edu' },
+    { name: 'Laura Alarcon', email: 'lalarcon@chabotcollege.edu' },
+    { name: 'Reena Jas', email: 'rjas@chabotcollege.edu' },
+    { name: 'Heather Oshiro', email: 'hoshiro@chabotcollege.edu' },
+    { name: 'Yetunde Osikomaiya', email: 'yosikomaiya@chabotcollege.edu' },
+    { name: 'David Irving', email: 'dirving@chabotcollege.edu' },
+    { name: 'Katie Messina Silva', email: 'kmessina@chabotcollege.edu' },
+    { name: 'Shannon Stanley', email: 'sstanley@chabotcollege.edu' },
+    { name: 'John Salangsang', email: 'jsalangsang@chabotcollege.edu' },
+    { name: 'Emmanuel Lopez', email: 'ealopez@chabotcollege.edu' },
+    { name: 'Juztino Panella', email: 'jpanella@chabotcollege.edu' },
+  ];
   let inboxLen = inbox?.filter((element: { status: string; })=>element.status=='unread').length
   const handleOpen = (person: any) => {
     setSelectedChip(person)
@@ -115,10 +148,30 @@ export default function Admin() {
         <Toolbar />
         {data && (
           <>
+          <Stack direction={"row"} spacing={2}>
+            {selecteTab == "Schedule Overview" && tabsList.map(({name,icon,label}) => (
+            <Stack key={name} direction={"column"} spacing={2}>
+            <h4>{icon} {label}</h4>
+            {data.filter((person) => person.approval.toLowerCase() == name.toLowerCase()).map((i, index) => (
+              <Chip sx={{ maxWidth: '300px' }} key={i.name + index} label={i.name} onClick={() => { handleOpen(i) }} />
+            ))}
+          </Stack>
+            ))}
+            {selecteTab == "Schedule Overview" && (
             <Stack direction={"column"} spacing={2}>
-              {data.filter((person) => person.approval.toLowerCase() == selecteTab.toLowerCase()).map((i, index) => (
-                <Chip sx={{ width: '300px' }} key={i.name + index} label={i.name + " " + i.year + " " + i.semester} onClick={() => { handleOpen(i) }} />
-              ))}
+              <h4><HelpOutlineIcon sx={{marginBottom:"-5px"}}/> Missing</h4>
+              {people
+                .filter(person => !data.some(item => item.email === person.email))
+                .map((person, index) => (
+                  <Chip
+                    sx={{ maxWidth: '300px' }}
+                    key={person.email + index}
+                    label={person.name}
+                    onClick={() => handleOpen(person)}
+                  />
+                ))}
+            </Stack>
+            )}
             </Stack>
             {selecteTab == "Selected Schedule" && <SelectedSchedule selecteChip={selecteChip} getData={getData} setSelectedTab={setSelectedTab} />}
             {selecteTab == "Inbox" && [...inbox].reverse().map((box:any)=>{
