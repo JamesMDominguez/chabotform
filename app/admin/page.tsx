@@ -14,15 +14,16 @@ import SelectedSchedule from '../../components/selectedSchedule';
 import ApprovalBtn from '../../components/approvalBtn';
 import MarkUnreadChatAltIcon from '@mui/icons-material/MarkUnreadChatAlt';
 import MarkEmailReadIcon from '@mui/icons-material/MarkEmailRead';
-
-import ListItemIcon from '@mui/material/ListItemIcon';
 import PendingActionsIcon from '@mui/icons-material/PendingActions';
 import AddTaskIcon from '@mui/icons-material/AddTask';
 import ErrorIcon from '@mui/icons-material/Error';
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import Badge from '@mui/material/Badge';
 import AccessAlarmsIcon from '@mui/icons-material/AccessAlarms';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+
 const drawerWidth = 240;
 
 interface MyObject {
@@ -42,15 +43,15 @@ interface MyObject {
 export default function Admin() {
   const [data, setData] = useState<[MyObject]>();
   const [selecteTab, setSelectedTab] = useState('Schedule Overview');
-  const tabs = ['Pending', 'Approved', 'PendingResubmission','Resubmission'];
   const tabsList = [
-    { name: 'Pending',label:"Pending Review" ,icon: <PendingActionsIcon sx={{marginBottom:"-5px"}}/> },
-    { name: 'Approved',label:"Approved", icon: <AddTaskIcon sx={{marginBottom:"-5px"}}/> },
-    { name: 'PendingResubmission',label:"Pending Resubmission", icon: <AccessAlarmsIcon sx={{marginBottom:"-5px"}}/> },
-    { name: 'Resubmission',label:"Resubmited", icon:  <ErrorIcon sx={{marginBottom:"-5px"}}/>},
-  ] 
+    { name: 'Pending', label: "Pending Review", icon: <PendingActionsIcon sx={{ marginBottom: "-5px" }} /> },
+    { name: 'Approved', label: "Approved", icon: <AddTaskIcon sx={{ marginBottom: "-5px" }} /> },
+    { name: 'PendingResubmission', label: "Pending Resubmission", icon: <AccessAlarmsIcon sx={{ marginBottom: "-5px" }} /> },
+    { name: 'Resubmission', label: "Resubmited", icon: <ErrorIcon sx={{ marginBottom: "-5px" }} /> },
+  ]
   const [selecteChip, setSelectedChip] = useState<any>();
   const [inbox, setInbox] = useState<any>();
+  const [semester, setSemester] = useState('');
   const people = [
     { name: 'Michelle Reyes', email: 'mreyes@chabotcollege.edu' },
     { name: 'Frances Fon', email: 'ffon@chabotcollege.edu' },
@@ -68,13 +69,13 @@ export default function Admin() {
     { name: 'Emmanuel Lopez', email: 'ealopez@chabotcollege.edu' },
     { name: 'Juztino Panella', email: 'jpanella@chabotcollege.edu' },
   ];
-  let inboxLen = inbox?.filter((element: { status: string; })=>element.status=='unread').length
+  let inboxLen = inbox?.filter((element: { status: string; }) => element.status == 'unread').length
   const handleOpen = (person: any) => {
     setSelectedChip(person)
     setSelectedTab("Selected Schedule")
   }
-  
-  async function getData(){
+
+  async function getData() {
     try {
       const res = await fetch(process.env.NEXT_PUBLIC_ADMIN as string);
       const inboxRes = await fetch(process.env.NEXT_PUBLIC_INBOX as string)
@@ -90,17 +91,17 @@ export default function Admin() {
     }
   }
 
-  const selectedInbox = (id:string) => {
+  const selectedInbox = (id: string) => {
     data?.forEach(async element => {
-      if(element._id == id){
+      if (element._id == id) {
         setSelectedChip(element)
         setSelectedTab("Selected Schedule")
-        await fetch(process.env.NEXT_PUBLIC_INBOX as string,{
+        await fetch(process.env.NEXT_PUBLIC_INBOX as string, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({id:id}),
+          body: JSON.stringify({ id: id }),
         })
         getData()
       }
@@ -139,7 +140,7 @@ export default function Admin() {
       >
         <Toolbar />
         <Divider />
-       <ApprovalBtn setSelectedTab={setSelectedTab} selecteTab={selecteTab} inboxLen={inboxLen}/>
+        <ApprovalBtn setSelectedTab={setSelectedTab} selecteTab={selecteTab} inboxLen={inboxLen} />
       </Drawer>
       <Box
         component="main"
@@ -148,37 +149,56 @@ export default function Admin() {
         <Toolbar />
         {data && (
           <>
-          <Stack direction={"row"} spacing={2}>
-            {selecteTab == "Schedule Overview" && tabsList.map(({name,icon,label}) => (
-            <Stack key={name} direction={"column"} spacing={2}>
-            <h4>{icon} {label}</h4>
-            {data.filter((person) => person.approval.toLowerCase() == name.toLowerCase()).map((i, index) => (
-              <Chip sx={{ maxWidth: '300px' }} key={i.name + index} label={i.name} onClick={() => { handleOpen(i) }} />
-            ))}
-          </Stack>
-            ))}
-            {selecteTab == "Schedule Overview" && (
-            <Stack direction={"column"} spacing={2}>
-              <h4><HelpOutlineIcon sx={{marginBottom:"-5px"}}/> Missing</h4>
-              {people
-                .filter(person => !data.some(item => item.email === person.email))
-                .map((person, index) => (
-                  <Chip
-                    sx={{ maxWidth: '300px' }}
-                    key={person.email + index}
-                    label={person.name}
-                  />
-                ))}
+                        {selecteTab == "Schedule Overview" && (
+            <FormControl fullWidth size='small' sx={{maxWidth:"200px"}}>
+              <InputLabel id="demo-simple-select-label">Semester</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                variant="outlined"
+                value={semester}
+                label="Semester"
+                sx={{ mb: "20px" }}
+                onChange={(e) => setSemester(e.target.value)}
+              >
+                <MenuItem value="Summer">Summer ☀️</MenuItem>
+                <MenuItem value="Spring">Spring 🌱</MenuItem>
+                <MenuItem value="Fall">Fall 🍂</MenuItem>
+              </Select>
+            </FormControl>
+             )}
+            <Stack direction={"row"} spacing={2}>
+              {selecteTab == "Schedule Overview" && tabsList.map(({ name, icon, label }) => (
+                <Stack key={name} direction={"column"} spacing={2}>
+                  <h4>{icon} {label}</h4>
+                  {data.filter((person) => person.approval.toLowerCase() == name.toLowerCase()).map((i, index) => (
+                    <Chip sx={{ maxWidth: '300px' }} key={i.name + index} label={i.name} onClick={() => { handleOpen(i) }} />
+                  ))}
+                </Stack>
+              ))}
+              {selecteTab == "Schedule Overview" && (
+                <Stack direction={"column"} spacing={2}>
+                  <h4><HelpOutlineIcon sx={{ marginBottom: "-5px" }} /> Missing</h4>
+                  {people
+                    .filter(person => !data.some(item => item.email === person.email))
+                    .map((person, index) => (
+                      <Chip
+                        sx={{ maxWidth: '300px' }}
+                        key={person.email + index}
+                        label={person.name}
+                      />
+                    ))}
+                </Stack>
+              )}
             </Stack>
-            )}
-            </Stack>
-            {selecteTab == "Selected Schedule" && <SelectedSchedule selecteChip={selecteChip} getData={getData} setSelectedTab={setSelectedTab}/>}
-            {selecteTab == "Inbox" && [...inbox].reverse().map((box:any)=>{
-            return(
-              <div key={box._id} style={{marginBottom:"10px"}}>    
-              <Chip onClick={()=>selectedInbox(box.CommentId)} icon={box.status == "unread"?<MarkUnreadChatAltIcon color='error' />:<MarkEmailReadIcon color='success'/>} label={box.name} />
-              </div>
-            )}
+            {selecteTab == "Selected Schedule" && <SelectedSchedule selecteChip={selecteChip} getData={getData} setSelectedTab={setSelectedTab} />}
+            {selecteTab == "Inbox" && [...inbox].reverse().map((box: any) => {
+              return (
+                <div key={box._id} style={{ marginBottom: "10px" }}>
+                  <Chip onClick={() => selectedInbox(box.CommentId)} icon={box.status == "unread" ? <MarkUnreadChatAltIcon color='error' /> : <MarkEmailReadIcon color='success' />} label={box.name} />
+                </div>
+              )
+            }
             )}
           </>
         )}

@@ -18,7 +18,6 @@ const days = ["Mon", "Tues", "Wed", "Thurs", "Fri"]
 export default function SelectedSchedule({ selecteChip, getData, setSelectedTab }) {
 
     const [loading, setLoading] = useState(false);
-    const [ResubmissionComment, setResubmissionComment] = useState('')
     const [comment, setComment] = useState('')
     const [comments, setComments] = useState([]);
     const grayOutBox = Fun.grayOutBox
@@ -153,20 +152,6 @@ export default function SelectedSchedule({ selecteChip, getData, setSelectedTab 
 
         <Dialog open={open} onClose={handleClose}>
             <DialogTitle>{approvalState} confirmation</DialogTitle>
-            {approvalState == "PendingResubmission" && <TextField
-                autoFocus
-                multiline
-                sx={{ml:"10px",mr:"10px"}}
-                value={ResubmissionComment}
-                rows={3}
-                onChange={(e) => setResubmissionComment(e.target.value)}
-                id="name"
-                label="Add a comment...   "
-                type="email"
-                variant='outlined'
-                
-            />}
-            
             <DialogActions>
                 <Button onClick={handleClose}>Cancel</Button>
 
