@@ -74,6 +74,12 @@ export default function Admin() {
     { name: 'Emmanuel Lopez', email: 'ealopez@chabotcollege.edu' },
     { name: 'Juztino Panella', email: 'jpanella@chabotcollege.edu' },
   ];
+
+  const partTimers = [
+    { name: 'Patrise Diaz', email: 'pdiaz@chabotcollege.edu' },
+    { name: 'Valarie Carey', email: 'vcarey@chabotcollege.edu'}
+  ];
+  
   let inboxLen = inbox?.filter((element: { status: string; }) => element.status == 'unread').length
   const handleOpen = (person: any) => {
     setSelectedChip(person)
@@ -233,11 +239,23 @@ export default function Admin() {
               )
             }
             )}
-            <Stack gap={2} direction={"row"} flexWrap="wrap">              
-            {selecteTab == "Contacts" && people.map((person, index) => (
+            {selecteTab == "Contacts" && (
+            <>
+            <h4>Full Time Counselors</h4>            
+            <Stack gap={2} direction={"row"} flexWrap="wrap">  
+            {people.map((person, index) => (
               <Chip sx={{ maxWidth: '300px' }} key={person.email + index} label={person.name} />
             ))}
             </Stack>
+            <h4>Part Time Counselors</h4>            
+            <Stack gap={2} direction={"row"} flexWrap="wrap">
+            {partTimers.map((person, index) => (
+              <Chip sx={{ maxWidth: '300px' }} key={person.email + index} label={person.name} />
+            ))}
+            </Stack>
+            </>
+            )
+            } 
           </>
         )}
       </Box>

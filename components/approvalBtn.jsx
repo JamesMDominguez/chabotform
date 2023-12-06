@@ -46,7 +46,7 @@ export default function ApprovalBtn({setSelectedTab,selecteTab,inboxLen}){
         <ListItem disablePadding sx={{ backgroundColor: selecteTab == "Contacts" ? "#D3D3D3" : "" }}>
           <ListItemButton onClick={() => setSelectedTab("Contacts")}>
             <ListItemIcon>
-              <Badge badgeContent={inboxLen} color="primary">
+              <Badge color="primary">
                <RecentActorsIcon />
               </Badge>
             </ListItemIcon>

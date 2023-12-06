@@ -35,6 +35,30 @@ import SendIcon from '@mui/icons-material/Send';
 const timeRange = ["8:00am", "8:30am", "9:00am", "9:30am", "10:00am", "10:30am", "11:00am", "11:30am", "12:00pm", "12:30pm", "1:00pm", "1:30pm", "2:00pm", "2:30pm", "3:00pm", "3:30pm", "4:00pm", "4:30pm", "5:00pm", "5:30pm", "6:00pm", "6:30pm", "7:00pm"]
 const days = ["Mon", "Tues", "Wed", "Thurs", "Fri"]
 
+const people = [
+  { label: 'Michelle Reyes', email: 'mreyes@chabotcollege.edu' },
+  { label: 'Frances Fon', email: 'ffon@chabotcollege.edu' },
+  { label: 'Benjamin Barboza', email: 'bbarboza@chabotcollege.edu' },
+  { label: 'Wafa Ali', email: 'wali@chabotcollege.edu' },
+  { label: 'Dara Greene', email: 'dgreene@chabotcollege.edu' },
+  { label: 'Laura Alarcon', email: 'lalarcon@chabotcollege.edu' },
+  { label: 'Reena Jas', email: 'rjas@chabotcollege.edu' },
+  { label: 'Heather Oshiro', email: 'hoshiro@chabotcollege.edu' },
+  { label: 'Yetunde Osikomaiya', email: 'yosikomaiya@chabotcollege.edu' },
+  { label: 'David Irving', email: 'dirving@chabotcollege.edu' },
+  { label: 'Katie Messina Silva', email: 'kmessina@chabotcollege.edu' },
+  { label: 'Shannon Stanley', email: 'sstanley@chabotcollege.edu' },
+  { label: 'John Salangsang', email: 'jsalangsang@chabotcollege.edu' },
+  { label: 'Emmanuel Lopez', email: 'ealopez@chabotcollege.edu' },
+  { label: 'Juztino Panella', email: 'jpanella@chabotcollege.edu'},
+  { label: 'Patrise Diaz', email: 'pdiaz@chabotcollege.edu' },
+  { label: 'Valarie Carey', email: 'vcarey@chabotcollege.edu'}
+];
+  
+const names = people.map(person => person.label);
+
+
+  
 export default function Home() {
   const [data, setData] = useState([]);
   const [inputCount, setInputCount] = useState(1);
@@ -42,14 +66,17 @@ export default function Home() {
   const [icaHours, setIcaHours] = useState(['']);
   const [comments, setComments] = useState('');
   const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
   const router = useRouter()
   const [breaks, setBreaks] = useState([]);
   const [semester, setSemester] = useState('');
   const [year, setYear] = useState('');
   const [loading, setLoading] = useState(false);
 
-
+  const findEmailByName = (name) => {
+    const person = people.find(person => person.label === name);
+    return person ? person.email : '';
+  }
+  const [email, setEmail] = useState(findEmailByName(name));
 
   const updateData = (day, time, value) => {
     let updated = true;
@@ -214,6 +241,7 @@ export default function Home() {
     return Math.round(num * 2) / 2;
   }
 
+
   return (
     <Stack
       direction="column"
@@ -237,12 +265,26 @@ export default function Home() {
         <div>
           <p style={{ textAlign: "center" }}>Contact details</p>
           <Stack direction={"row"} gap={2}>
-            <TextField value={name} onChange={(e) => setName(e.target.value)} id="filled-basic" label="Counselor Name" variant="outlined" sx={{ mb: "20px" }}
-              InputProps={{ startAdornment: <InputAdornment position="start"><PersonOutlineIcon /> </InputAdornment> }}
-            />
-            <TextField value={email} onChange={(e) => setEmail(e.target.value)} id="filled-basic" label="Chabot Email" variant="outlined" sx={{ mb: "20px" }}
-              InputProps={{ startAdornment: <InputAdornment position="start"><MailOutlineIcon /> </InputAdornment> }}
-            />
+            <FormControl fullWidth>
+  <InputLabel id="demo-simple-select-label">Counselor Name</InputLabel>
+  <Select
+    labelId="demo-simple-select-label"
+    id="demo-simple-select"
+    sx={{ mb: "20px" }}
+    value={name}
+    label="Counselor Name"
+    onChange={(e)=>{
+      setName(e.target.value)
+      setEmail(findEmailByName(e.target.value))
+    }}
+  >
+    {names.map((name) => (
+      <MenuItem key={name+"menuItem"} value={name}>{name}</MenuItem>
+    )) 
+    }
+  </Select>
+</FormControl>
+
           </Stack>
 
           <Stack direction={"row"} gap={2}>
