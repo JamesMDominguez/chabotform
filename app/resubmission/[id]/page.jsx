@@ -31,7 +31,6 @@ import Select from '@mui/material/Select';
 import LoadingButton from '@mui/lab/LoadingButton';
 import SendIcon from '@mui/icons-material/Send';
 
-
 const timeRange = ["8:00am", "8:30am", "9:00am", "9:30am", "10:00am", "10:30am", "11:00am", "11:30am", "12:00pm", "12:30pm", "1:00pm", "1:30pm", "2:00pm", "2:30pm", "3:00pm", "3:30pm", "4:00pm", "4:30pm", "5:00pm", "5:30pm", "6:00pm", "6:30pm", "7:00pm"]
 const days = ["Mon", "Tues", "Wed", "Thurs", "Fri"]
 
@@ -52,7 +51,6 @@ export default function Page({ params }) {
   const requestData = {
     key1: params.id
   };
-
   async function getData(){
     const res = await fetch(`${process.env.NEXT_PUBLIC_COMMENT}?${new URLSearchParams(requestData)}`, { cache: 'no-store' });
     const jsonData = await res.json();
@@ -235,14 +233,9 @@ export default function Page({ params }) {
       <Stack direction={"row"} gap={2} mt={4} flexWrap="wrap">
         <div>
           <p style={{ textAlign: "center" }}>Contact details</p>
-          <Stack direction={"row"} gap={2}>
-            <TextField value={name} onChange={(e) => setName(e.target.value)} id="filled-basic" label="Counselor Name" variant="outlined" sx={{ mb: "20px" }}
+            <TextField fullWidth value={name} id="filled-basic" label="Counselor Name" variant="outlined" sx={{ mb: "20px" }}
               InputProps={{ startAdornment: <InputAdornment position="start"><PersonOutlineIcon /> </InputAdornment> }}
             />
-            <TextField value={email} onChange={(e) => setEmail(e.target.value)} id="filled-basic" label="Chabot Email" variant="outlined" sx={{ mb: "20px" }}
-              InputProps={{ startAdornment: <InputAdornment position="start"><MailOutlineIcon /> </InputAdornment> }}
-            />
-          </Stack>
 
           <Stack direction={"row"} gap={2}>
             <FormControl fullWidth>

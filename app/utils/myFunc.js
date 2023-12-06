@@ -40,6 +40,25 @@ const getDailyHours = (day,selecteChip) => {
     }
     return (x)
   }
-
-const Fun =  {findDayTime:findDayTime, getDailyHours:getDailyHours, grayOutBox:grayOutBox}
+  const people = [
+    { name: 'Michelle Reyes', email: 'mreyes@chabotcollege.edu' },
+    { name: 'Frances Fon', email: 'ffon@chabotcollege.edu' },
+    { name: 'Benjamin Barboza', email: 'bbarboza@chabotcollege.edu' },
+    { name: 'Wafa Ali', email: 'wali@chabotcollege.edu' },
+    { name: 'Dara Greene', email: 'dgreene@chabotcollege.edu' },
+    { name: 'Laura Alarcon', email: 'lalarcon@chabotcollege.edu' },
+    { name: 'Reena Jas', email: 'rjas@chabotcollege.edu' },
+    { name: 'Heather Oshiro', email: 'hoshiro@chabotcollege.edu' },
+    { name: 'Yetunde Osikomaiya', email: 'yosikomaiya@chabotcollege.edu' },
+    { name: 'David Irving', email: 'dirving@chabotcollege.edu' },
+    { name: 'Katie Messina Silva', email: 'kmessina@chabotcollege.edu' },
+    { name: 'Shannon Stanley', email: 'sstanley@chabotcollege.edu' },
+    { name: 'John Salangsang', email: 'jsalangsang@chabotcollege.edu' },
+    { name: 'Emmanuel Lopez', email: 'ealopez@chabotcollege.edu' },
+    { name: 'Juztino Panella', email: 'jpanella@chabotcollege.edu'},
+    { name: 'Patrise Diaz', email: 'pdiaz@chabotcollege.edu' },
+    { name: 'Valarie Carey', email: 'vcarey@chabotcollege.edu'}
+  ];
+  
+const Fun =  {findDayTime:findDayTime, getDailyHours:getDailyHours, grayOutBox:grayOutBox,people:people}
 export default Fun
