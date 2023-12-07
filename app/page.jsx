@@ -29,6 +29,7 @@ import Select from '@mui/material/Select';
 import LoadingButton from '@mui/lab/LoadingButton';
 import SendIcon from '@mui/icons-material/Send';
 import Fun from "./utils/myFunc"
+import { useSearchParams } from 'next/navigation'
 
 
 const timeRange = ["8:00am", "8:30am", "9:00am", "9:30am", "10:00am", "10:30am", "11:00am", "11:30am", "12:00pm", "12:30pm", "1:00pm", "1:30pm", "2:00pm", "2:30pm", "3:00pm", "3:30pm", "4:00pm", "4:30pm", "5:00pm", "5:30pm", "6:00pm", "6:30pm", "7:00pm"]
@@ -44,10 +45,11 @@ export default function Home() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [breaks, setBreaks] = useState([]);
-  const [semester, setSemester] = useState('');
-  const [year, setYear] = useState('');
   const [loading, setLoading] = useState(false);
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const [semester, setSemester] = useState(searchParams.get('semester')||"");
+  const [year, setYear] = useState(searchParams.get('year')||"");
 
   const findEmailByName = (name) => {
     const person = Fun.people.find(person => person.name === name);

@@ -11,6 +11,7 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import React from 'react';
 import Badge from '@mui/material/Badge';
 import RecentActorsIcon from '@mui/icons-material/RecentActors';
+import InsertLinkIcon from '@mui/icons-material/InsertLink';
 
 export default function ApprovalBtn({setSelectedTab,selecteTab,inboxLen}){
     return(<List>
@@ -51,6 +52,17 @@ export default function ApprovalBtn({setSelectedTab,selecteTab,inboxLen}){
               </Badge>
             </ListItemIcon>
             <ListItemText primary={"Contacts"} />
+          </ListItemButton>
+        </ListItem>
+
+        <ListItem disablePadding sx={{ backgroundColor: selecteTab == "Link Generator" ? "#D3D3D3" : "" }}>
+          <ListItemButton onClick={() => setSelectedTab("Link Generator")}>
+            <ListItemIcon>
+              <Badge color="primary">
+               <InsertLinkIcon />
+              </Badge>
+            </ListItemIcon>
+            <ListItemText primary={"Link Generator"} />
           </ListItemButton>
         </ListItem>
       </List>)

@@ -25,7 +25,13 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
-
+import Fun from '../utils/myFunc'
+import TextField from '@mui/material/TextField';
+import InputAdornment from '@mui/material/InputAdornment';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import Snackbar from '@mui/material/Snackbar';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 
 const drawerWidth = 240;
 
@@ -44,9 +50,11 @@ interface MyObject {
 }
 
 export default function Admin() {
+  const [open, setOpen] = React.useState(false);
   const [data, setData] = useState<[MyObject]>();
   const [selecteTab, setSelectedTab] = useState('Schedule Overview');
-  const [selectedLoad, setSelectedLoad] = useState('Summer');
+  const [selectedLoad, setSelectedLoad] = useState('');
+  const [year, setYear] = useState('');
 
   const tabsList = [
     { name: 'Pending', label: "Pending Review", icon: <PendingActionsIcon sx={{ marginBottom: "-5px" }} /> },
@@ -57,34 +65,33 @@ export default function Admin() {
   const [selecteChip, setSelectedChip] = useState<any>();
   const [inbox, setInbox] = useState<any>();
   const [semester, setSemester] = useState('');
-  const people = [
-    { name: 'Michelle Reyes', email: 'mreyes@chabotcollege.edu' },
-    { name: 'Frances Fon', email: 'ffon@chabotcollege.edu' },
-    { name: 'Benjamin Barboza', email: 'bbarboza@chabotcollege.edu' },
-    { name: 'Wafa Ali', email: 'wali@chabotcollege.edu' },
-    { name: 'Dara Greene', email: 'dgreene@chabotcollege.edu' },
-    { name: 'Laura Alarcon', email: 'lalarcon@chabotcollege.edu' },
-    { name: 'Reena Jas', email: 'rjas@chabotcollege.edu' },
-    { name: 'Heather Oshiro', email: 'hoshiro@chabotcollege.edu' },
-    { name: 'Yetunde Osikomaiya', email: 'yosikomaiya@chabotcollege.edu' },
-    { name: 'David Irving', email: 'dirving@chabotcollege.edu' },
-    { name: 'Katie Messina Silva', email: 'kmessina@chabotcollege.edu' },
-    { name: 'Shannon Stanley', email: 'sstanley@chabotcollege.edu' },
-    { name: 'John Salangsang', email: 'jsalangsang@chabotcollege.edu' },
-    { name: 'Emmanuel Lopez', email: 'ealopez@chabotcollege.edu' },
-    { name: 'Juztino Panella', email: 'jpanella@chabotcollege.edu' },
-  ];
 
-  const partTimers = [
-    { name: 'Patrise Diaz', email: 'pdiaz@chabotcollege.edu' },
-    { name: 'Valarie Carey', email: 'vcarey@chabotcollege.edu'}
-  ];
-  
   let inboxLen = inbox?.filter((element: { status: string; }) => element.status == 'unread').length
   const handleOpen = (person: any) => {
     setSelectedChip(person)
     setSelectedTab("Selected Schedule")
   }
+
+  const copyToClipboard = async() => {
+    setOpen(true);
+    const linkQuery = await process.env.NEXT_PUBLIC_LINK as string;
+    navigator.clipboard
+      .writeText(`${linkQuery}?semester=${semester}&year=${year}`)
+      .then(() => {
+        console.log('Text copied to clipboard');
+      })
+      .catch((error) => {
+        console.error('Failed to copy text: ', error);
+      });
+  };
+
+  const handleClose = (event: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
 
   async function getData() {
     try {
@@ -128,6 +135,23 @@ export default function Admin() {
     setSelectedLoad(arg0);
   }
 
+
+  const action = (
+    <React.Fragment>
+      <Button color="secondary" size="small" onClick={handleClose}>
+        UNDO
+      </Button>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={handleClose}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </React.Fragment>
+  );
+
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
@@ -154,12 +178,12 @@ export default function Admin() {
         variant="permanent"
         anchor="left"
       >
-        <Toolbar>        
+        <Toolbar>
           <img
-          src='https://districtazure.clpccd.org/prmg/files/docs/styles-logos/cc-logo-horizontal-1c.jpg'
-          height={50}
-          alt="Image Description"
-        /></Toolbar>
+            src='https://districtazure.clpccd.org/prmg/files/docs/styles-logos/cc-logo-horizontal-1c.jpg'
+            height={50}
+            alt="Image Description"
+          /></Toolbar>
         <Divider />
         <ApprovalBtn setSelectedTab={setSelectedTab} selecteTab={selecteTab} inboxLen={inboxLen} />
       </Drawer>
@@ -191,14 +215,14 @@ export default function Admin() {
                   </FormControl>
                   <ButtonGroup sx={{ height: "40px" }} size='small' variant="outlined" color='inherit' aria-label="outlined button group">
                     <Button
-                      style={{ backgroundColor: selectedLoad === 'button1' ? '#d6d6d6' : 'white' }}
-                      onClick={() => handleButtonClick('button1')}
+                      style={{ backgroundColor: selectedLoad === 'Over-Load' ? '#d6d6d6' : 'white' }}
+                      onClick={() => handleButtonClick('Over-Load')}
                     >
                       Over-Load
                     </Button>
                     <Button
-                      style={{ backgroundColor: selectedLoad === 'button2' ? '#d6d6d6' : 'white' }}
-                      onClick={() => handleButtonClick('button2')}
+                      style={{ backgroundColor: selectedLoad === 'In-Load' ? '#d6d6d6' : 'white' }}
+                      onClick={() => handleButtonClick('In-Load')}
                     >
                       In-Load
                     </Button>
@@ -218,7 +242,7 @@ export default function Admin() {
               {selecteTab == "Schedule Overview" && (
                 <Stack direction={"column"} spacing={2}>
                   <h4><HelpOutlineIcon sx={{ marginBottom: "-5px" }} /> Missing</h4>
-                  {people
+                  {Fun.people
                     .filter(person => !data.some(item => item.email === person.email))
                     .map((person, index) => (
                       <Chip
@@ -240,22 +264,53 @@ export default function Admin() {
             }
             )}
             {selecteTab == "Contacts" && (
-            <>
-            <h4>Full Time Counselors</h4>            
-            <Stack gap={2} direction={"row"} flexWrap="wrap">  
-            {people.map((person, index) => (
-              <Chip sx={{ maxWidth: '300px' }} key={person.email + index} label={person.name} />
-            ))}
-            </Stack>
-            <h4>Part Time Counselors</h4>            
-            <Stack gap={2} direction={"row"} flexWrap="wrap">
-            {partTimers.map((person, index) => (
-              <Chip sx={{ maxWidth: '300px' }} key={person.email + index} label={person.name} />
-            ))}
-            </Stack>
-            </>
+              <>
+                <h4>Counselors</h4>
+                <Stack gap={2} direction={"row"} flexWrap="wrap">
+                  {Fun.people.map((person, index) => (
+                    <Chip sx={{ maxWidth: '300px' }} key={person.email + index} label={person.name} />
+                  ))}
+                </Stack>
+              </>
             )
-            } 
+            }
+            {selecteTab == "Link Generator" && (
+              <>
+                <h4>Link Generator</h4>
+                <Stack gap={2} direction={"row"}>
+                <Snackbar
+                  open={open}
+                  autoHideDuration={1000}
+                  onClose={handleClose}
+                  message="Copied to clipboard"
+                  action={action}
+                />
+                <FormControl size='small' fullWidth sx={{ maxWidth: "200px" }}>
+                  <InputLabel id="demo-simple-select-label">Semester</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    variant="outlined"
+                    value={semester}
+                    label="Semester"
+                    sx={{ mb: "20px" }}
+                    onChange={(e) => setSemester(e.target.value)}
+                  >
+                    <MenuItem value="Summer">Summer ☀️</MenuItem>
+                    <MenuItem value="Spring">Spring 🌱</MenuItem>
+                    <MenuItem value="Fall">Fall 🍂</MenuItem>
+                  </Select>
+                </FormControl>
+                <TextField size='small' value={year} onChange={(e) => setYear(e.target.value)} type="number" id="filled-basic" label="Year" variant="outlined" sx={{ mb: "20px" }}
+                  InputProps={{ startAdornment: <InputAdornment position="start"><CalendarMonthIcon /> </InputAdornment> }}
+                />
+               <Button sx={{height:"40px"}} onClick={copyToClipboard} variant="contained" color='inherit'>Copy Link</Button>
+              </Stack>
+              <h3>{`${process.env.NEXT_PUBLIC_LINK}${semester ? `?semester=${semester}` : ''}${year ? `&year=${year}` : ''}`}</h3>
+              </>
+            )}
+
+
           </>
         )}
       </Box>
