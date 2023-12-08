@@ -80,7 +80,6 @@ export async function PUT(request) {
     `,
     };
     if(res.approval == "Approved"){
-    console.log(res)
     try {
       await transporter.sendMail(mailOptions);
       console.log('Email sent');

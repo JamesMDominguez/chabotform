@@ -1,8 +1,10 @@
 import nodemailer from 'nodemailer';
+import Fun from '../../utils/myFunc.js';
 
 export async function POST(req) {
     try {
         const data = await req.json();
+        const grayOutBox = Fun.grayOutBox;
         const { headers } = req;
         const email = headers.get('email');
         const dataHeader = headers.get('data');
@@ -120,6 +122,11 @@ export async function POST(req) {
                     <!DOCTYPE html>
                     <html>
                     <head>
+                    <style>
+                    table, th, td {
+                            border: 1px solid;
+                    }
+                    </style>
                     </head>
                     <body>
                         <h3>Hello! This is an automatic email notifying you that ${data.name} has submitted their schedule.</h3>
