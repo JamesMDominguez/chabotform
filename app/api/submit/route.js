@@ -79,17 +79,15 @@ export async function PUT(request) {
     </html>
     `,
     };
-
-  if(res.approval == "Approved"){
+    if(res.approval == "Approved"){
+    console.log(res)
     try {
       await transporter.sendMail(mailOptions);
       console.log('Email sent');
   } catch (error) {
       console.error('Failed to send email:', error);
   }
-  }
-
-  if(res.approval == "PendingResubmission"){
+  }else if(res.approval == "PendingResubmission"){
     try {
       await transporter.sendMail(ResubmissionMailOptions);
       console.log('Resubmission Email sent');
@@ -100,8 +98,7 @@ export async function PUT(request) {
       console.error('Failed to send Resubmission:', error);
   }
   }
-
-  if(res.data.approval == "Resubmission"){
+  else if(res.data.approval == "Resubmission"){
     try {
       await transporter.sendMail({
         from: 'jamesdominguez2020@gmail.com',
