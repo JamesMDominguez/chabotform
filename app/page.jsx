@@ -2,7 +2,7 @@
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation'
 import InputAdornment from '@mui/material/InputAdornment';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
@@ -35,21 +35,21 @@ import { useSearchParams } from 'next/navigation'
 const timeRange = ["8:00am", "8:30am", "9:00am", "9:30am", "10:00am", "10:30am", "11:00am", "11:30am", "12:00pm", "12:30pm", "1:00pm", "1:30pm", "2:00pm", "2:30pm", "3:00pm", "3:30pm", "4:00pm", "4:30pm", "5:00pm", "5:30pm", "6:00pm", "6:30pm", "7:00pm"]
 const days = ["Mon", "Tues", "Wed", "Thurs", "Fri"]
 
-  
+
 export default function Home() {
   const [data, setData] = useState([]);
   const [inputCount, setInputCount] = useState(1);
   const [icaName, setIcaName] = useState(['']);
   const [icaHours, setIcaHours] = useState(['']);
   const [comments, setComments] = useState('');
+  const searchParams = useSearchParams()
   const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState("");
   const [breaks, setBreaks] = useState([]);
   const [loading, setLoading] = useState(false);
   const router = useRouter()
-  const searchParams = useSearchParams()
-  const [semester, setSemester] = useState(searchParams.get('semester')||"");
-  const [year, setYear] = useState(searchParams.get('year')||"");
+  const [semester, setSemester] = useState("");
+  const [year, setYear] = useState("");
 
   const findEmailByName = (name) => {
     const person = Fun.people.find(person => person.name === name);
@@ -85,6 +85,15 @@ export default function Home() {
       setBreaks(filteredArray);
     }
   };
+
+  useEffect(() => {
+    let counselorName = searchParams.get('counselor')
+    let searchName = Fun.people.find(person => person.email === counselorName)
+    setName(searchName?.name || '');
+    setEmail(searchParams.get('counselor') || '');
+    setSemester(searchParams.get('semester') || '');
+    setYear(searchParams.get('year') || '');
+  }, [])
 
   const handleTimeSelect = (e) => {
     let myData = [...data]
@@ -165,7 +174,7 @@ export default function Home() {
       },
       body: JSON.stringify(val),
     });
-    if(response.ok){
+    if (response.ok) {
       const data = await response.json();
       const url = process.env.NEXT_PUBLIC_EMAIL;
       const objectID = data.insertedId
@@ -242,23 +251,24 @@ export default function Home() {
           <p style={{ textAlign: "center" }}>Contact details</p>
           <Stack direction={"row"} gap={2}>
             <FormControl fullWidth>
-  <InputLabel id="demo-simple-select-label">Counselor Name</InputLabel>
-  <Select
-    labelId="demo-simple-select-label"
-    id="demo-simple-select"
-    sx={{ mb: "20px" }}
-    value={name}
-    label="Counselor Name"
-    onChange={(e)=>{
-      setName(e.target.value)
-      setEmail(findEmailByName(e.target.value))
-    }}
-  >
-    {Fun.people.map((person) => (
-      <MenuItem key={person.name+"menuItem"} value={person.name}>{person.name}</MenuItem>
-    ))}
-  </Select>
-</FormControl>
+              <InputLabel id="demo-simple-select-label">Counselor Name</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                sx={{ mb: "20px" }}
+                value={name || ''}
+                label="Counselor Name"
+                defaultValue=''
+                onChange={(e) => {
+                  setName(e.target.value)
+                  setEmail(findEmailByName(e.target.value))
+                }}
+              >
+                {Fun.people.map((person) => (
+                  <MenuItem key={person.name + "menuItem"} value={person.name}>{person.name}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
 
           </Stack>
 
@@ -389,30 +399,30 @@ export default function Home() {
         </div>
       </Stack>
 
-        <LoadingButton
-          variant="contained" sx={{ mt: 2, maxWidth: '58%' }} fullWidth onClick={() => {
-        const ica = icaName.map((y, i) => {
-          return { name: y, aHours: icaHours[i], dHours: roundToNearestDecimal(icaHours[i] / 0.54545, 1) }
-        })
-        let mySchedule = {
-          schedule: data,
-          name: name,
-          email: email,
-          ica: ica,
-          comments: comments,
-          approval: "Pending",
-          year: year,
-          semester: semester,
-          breaks: breaks
-        }
-        handleSubmitForm(mySchedule)
-      }}
-          endIcon={<SendIcon />}
-          loading={loading}
-          loadingPosition="end"
-        >
-          <span>Submit</span>
-        </LoadingButton>
+      <LoadingButton
+        variant="contained" sx={{ mt: 2, maxWidth: '58%' }} fullWidth onClick={() => {
+          const ica = icaName.map((y, i) => {
+            return { name: y, aHours: icaHours[i], dHours: roundToNearestDecimal(icaHours[i] / 0.54545, 1) }
+          })
+          let mySchedule = {
+            schedule: data,
+            name: name,
+            email: email,
+            ica: ica,
+            comments: comments,
+            approval: "Pending",
+            year: year,
+            semester: semester,
+            breaks: breaks
+          }
+          handleSubmitForm(mySchedule)
+        }}
+        endIcon={<SendIcon />}
+        loading={loading}
+        loadingPosition="end"
+      >
+        <span>Submit</span>
+      </LoadingButton>
 
     </Stack>
   )
