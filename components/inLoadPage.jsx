@@ -2,27 +2,19 @@
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation'
 import InputAdornment from '@mui/material/InputAdornment';
-import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import SchoolIcon from '@mui/icons-material/School';
 import Chip from '@mui/material/Chip';
-
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
-
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Schedule from '../../../components/schedule';
+import Schedule from '../components/schedule';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -33,17 +25,17 @@ import SendIcon from '@mui/icons-material/Send';
 const timeRange = ["8:00am", "8:30am", "9:00am", "9:30am", "10:00am", "10:30am", "11:00am", "11:30am", "12:00pm", "12:30pm", "1:00pm", "1:30pm", "2:00pm", "2:30pm", "3:00pm", "3:30pm", "4:00pm", "4:30pm", "5:00pm", "5:30pm", "6:00pm", "6:30pm", "7:00pm"]
 const days = ["Mon", "Tues", "Wed", "Thurs", "Fri"]
 
-export default function Page({ params }) {
+export default function Home() {
   const [data, setData] = useState([]);
   const [inputCount, setInputCount] = useState(1);
   const [icaName, setIcaName] = useState(['']);
   const [icaHours, setIcaHours] = useState(['']);
   const [comments, setComments] = useState('');
-  const router = useRouter()
   const [breaks, setBreaks] = useState([]);
-  const [semester, setSemester] = useState('');
-  const [year, setYear] = useState('');
   const [loading, setLoading] = useState(false);
+  const router = useRouter()
+  const [semester, setSemester] = useState("");
+  const [year, setYear] = useState("");
 
   const updateData = (day, time, value) => {
     let updated = true;
@@ -149,17 +141,18 @@ export default function Page({ params }) {
   const handleSubmitForm = async (val) => {
     setLoading(true)
     const apiUrl = `${process.env.NEXT_PUBLIC_LINK}/api/inLoadSchedule`;
-
     const response = await fetch(apiUrl, {
-      method: 'PUT',
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(val),
     });
     if (response.ok) {
-      setLoading(false)
       router.push('/finished')
+    }
+    else {
+      console.log('Request failed');
     }
   }
 
@@ -200,22 +193,10 @@ export default function Page({ params }) {
       justifyContent="center"
       alignItems="center"
     >
-      <AppBar position="static" color='transparent'>
-        <Toolbar>
-          <img
-            src='https://districtazure.clpccd.org/prmg/files/docs/styles-logos/cc-logo-horizontal-1c.jpg'
-            height={50}
-            alt="Image Description"
-          />
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            In-Load Proposed Schedule Full-Time Counselors Resubmission
-          </Typography>
-        </Toolbar>
-      </AppBar>
-
       <Stack direction={"row"} gap={2} mt={4} flexWrap="wrap">
         <div>
           <p style={{ textAlign: "center" }}>Semester and Year</p>
+
           <Stack direction={"row"} gap={2}>
             <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label">Semester</InputLabel>
@@ -343,34 +324,31 @@ export default function Page({ params }) {
         </div>
       </Stack>
 
-        <LoadingButton
-          variant="contained" sx={{ mt: 2, maxWidth: '58%' }} fullWidth onClick={() => {
-        const ica = icaName.map((y, i) => {
-          return { name: y, aHours: icaHours[i], dHours: roundToNearestDecimal(icaHours[i] / 0.54545, 1) }
-        })
-        let mySchedule = {
-          id: params.id,
-          data:{
-          schedule: data,
-          ica: ica,
-          comments: comments,
-          approval: "Resubmission",
-          year: year,
-          semester: semester,
-          breaks: breaks
+      <LoadingButton
+        variant="contained" sx={{ mt: 2, maxWidth: '58%' }} fullWidth onClick={() => {
+          const ica = icaName.map((y, i) => {
+            return { name: y, aHours: icaHours[i], dHours: roundToNearestDecimal(icaHours[i] / 0.54545, 1) }
+          })
+          let mySchedule = {
+            schedule: data,
+            ica: ica,
+            comments: comments,
+            approval: "Pending",
+            year: year,
+            semester: semester,
+            breaks: breaks,
+          }
+          handleSubmitForm(mySchedule)
         }}
-        handleSubmitForm(mySchedule)
-      }}
-          endIcon={<SendIcon />}
-          loading={loading}
-          loadingPosition="end"
-        >
-          <span>Submit</span>
-        </LoadingButton>
+        endIcon={<SendIcon />}
+        loading={loading}
+        loadingPosition="end"
+      >
+        <span>Submit</span>
+      </LoadingButton>
 
     </Stack>
   )
 }
-
 
 

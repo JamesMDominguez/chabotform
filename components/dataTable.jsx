@@ -1,45 +1,89 @@
 'use client';
 import React from 'react';
 
-export default function DataTable({selecteChip}){
-let TotalICA = 0;
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import { styled } from '@mui/material/styles';
+import { Stack } from '@mui/material';
 
-return(
-    <div style={{display:"flex",flexDirection:"row"}}>
-        <table style={{ height: 50, marginTop: "10px",marginRight:"20px" }}>
-      <thead >
-        <tr>
-          <th>ICA Name</th>
-          <th>D-Hour</th>
-        </tr>
-      </thead>
-      <tbody>
-        {selecteChip?.ica?.map((x) => {
-          TotalICA += x.dHours
-          return (<tr key={'tableRow' + x.name + x.dHours}>
-            <th>{x.name}</th>
-            <th>{x.dHours}</th>
-          </tr>)
-        })}
-        <tr>
-          <th>Total</th>
-          <th>{TotalICA}</th>
-        </tr>
-      </tbody>
-    </table>
+export default function DataTable({ selectedChip }) {
+  let TotalICA = 0;
+  const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+      backgroundColor: theme.palette.grey[600],
+      color: theme.palette.common.white,
+    },
+    [`&.${tableCellClasses.body}`]: {
+      fontSize: 14,
+    },
+  }));
+  
+  const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    '&:nth-of-type(odd)': {
+      backgroundColor: theme.palette.action.hover,
+    },
+    // hide last border
+    '&:last-child td, &:last-child th': {
+      border: 0,
+    },
+  }));
 
-    <table style={{ height: 50, marginTop: "10px" }}>
-      <thead>
-        <tr>
-          <th>D-Hours</th>
-          <th>{selecteChip.schedule?.length / 2}</th>
-        </tr>
-        <tr>
-          <th>Week Hours</th>
-          <th>{TotalICA + selecteChip.schedule?.length / 2}</th>
-        </tr>
-      </thead>
-    </table>
-    </div>
-)
+  return (
+    <Stack direction={'column'} gap={2} sx={{margin:"10px"}}>
+      {selectedChip?.ica?.length > 0 && selectedChip?.ica[0].name !=="" && 
+      <TableContainer  sx={{ border: '1px solid black',borderRadius:"11px" }}>
+        <Table sx={{ width: 500 }} >
+          <TableHead>
+            <StyledTableRow>
+              <StyledTableCell align="left" sx={{borderTopLeftRadius: '10px'}}>ICA Name	</StyledTableCell>
+              <StyledTableCell align="right" sx={{borderTopRightRadius: '10px'}}>D-Hour Total</StyledTableCell>
+            </StyledTableRow>
+          </TableHead>
+          <TableBody>
+            {selectedChip?.ica?.map((x, index) => {
+              TotalICA += x.dHours;
+              const isLastRow = index === selectedChip.ica.length - 1;
+              return (
+                <StyledTableRow key={x.name}>
+                  <StyledTableCell align="left" sx={{ borderBottomLeftRadius: isLastRow ? '10px' : '0' }}>{x.name}</StyledTableCell>
+                  <StyledTableCell align="right" sx={{ borderBottomRightRadius: isLastRow ? '10px' : '0' }}>{x.dHours}</StyledTableCell>
+                </StyledTableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      }
+
+      <TableContainer sx={{ border: '1px solid black',borderRadius:"11px" }}>
+        <Table sx={{ maxWidth: 500 }}>
+          <TableHead>
+            <StyledTableRow>
+              <StyledTableCell align="left" sx={{borderTopLeftRadius: '10px'}}>Totals	</StyledTableCell>
+              <StyledTableCell align="right" sx={{borderTopRightRadius: '10px'}}>Value</StyledTableCell>
+            </StyledTableRow>
+          </TableHead>
+          <TableBody>
+            <StyledTableRow>
+              <StyledTableCell align="left">Total ICA</StyledTableCell>
+              <StyledTableCell align="right">{TotalICA}</StyledTableCell>
+            </StyledTableRow>
+
+            <StyledTableRow>
+              <StyledTableCell align="left">Direct Counseling Hours</StyledTableCell>
+              <StyledTableCell align="right">{selectedChip.schedule?.length / 2}</StyledTableCell>
+            </StyledTableRow>
+            <StyledTableRow>
+              <StyledTableCell align="left" sx={{borderBottomLeftRadius: '10px'}}>Week Hours</StyledTableCell>
+              <StyledTableCell align="right" sx={{borderBottomRightRadius: '10px'}}>{TotalICA + selectedChip.schedule?.length / 2}</StyledTableCell>
+            </StyledTableRow>
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Stack>
+  );
 }

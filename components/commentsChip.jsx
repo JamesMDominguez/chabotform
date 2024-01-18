@@ -18,6 +18,8 @@ return(
     </Stack>
 
     <Chip label={selecteChip?.comments}  sx={{
+    mb:2,
+    maxWidth: 450,
     height: 'auto',
     '& .MuiChip-label': {
       display: 'block',
