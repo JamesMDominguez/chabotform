@@ -3,7 +3,6 @@ import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import React, { useState } from 'react';
-import { useRouter } from 'next/navigation'
 import InputAdornment from '@mui/material/InputAdornment';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import InputLabel from '@mui/material/InputLabel';
@@ -26,7 +25,7 @@ import dayjs from 'dayjs';
 const timeRange = ["8:00am", "8:30am", "9:00am", "9:30am", "10:00am", "10:30am", "11:00am", "11:30am", "12:00pm", "12:30pm", "1:00pm", "1:30pm", "2:00pm", "2:30pm", "3:00pm", "3:30pm", "4:00pm", "4:30pm", "5:00pm", "5:30pm", "6:00pm", "6:30pm", "7:00pm"]
 const days = ["Mon", "Tues", "Wed", "Thurs", "Fri"]
 
-export default function Home() {
+export default function Home({handleClose,getData}) {
 
     let today = new Date();
     let dd = today.getDate();
@@ -48,7 +47,6 @@ export default function Home() {
     const [comments, setComments] = useState('');
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
-    const router = useRouter()
     const [dateRange, setValue] = useState(dayjs(formattedToday));
     const [dateRange2, setValue2] = useState(dayjs(formattedToday));
     const [dHourRange, setDHourRange] = useState('');
@@ -146,8 +144,8 @@ export default function Home() {
     };
 
     const handleSubmitForm = async (val) => {
-
-        if (!val.checked) {
+        console.log(val,checked)
+        if (!checked) {
             alert("Please confirm that overtime hours do not conflict or overlap with inload hours and any adjustments to approved overload schedule requires prior approval.");
             return;
         }
@@ -187,7 +185,8 @@ export default function Home() {
         });
 
         if (response.ok) {
-            router.push('/finished')
+            handleClose()
+            getData()
         }
         else {
             console.log('Request failed');
@@ -196,7 +195,7 @@ export default function Home() {
 
     return (
         <>
-            <Stack direction={"row"} gap={2} flexWrap="wrap">
+            <Stack direction={"row"} gap={2} flexWrap="wrap" justifyContent="center" alignItems="center" mt={10}>
                 <div>
                     <p style={{ textAlign: "center" }}>F-Hour (non student contact i.e. projects)</p>
                     {projectDescription.map((value, index) => (
@@ -369,14 +368,14 @@ export default function Home() {
                     </Stack>
                     <Schedule days={days} getDailyHours={getDailyHours} timeRange={timeRange} handleTimeSelect={handleTimeSelect} />
                 </div>
-            </Stack>
+                <div>
             <FormControlLabel
                 sx={{ mt: 2 }}
                 control={<Checkbox checked={checked} onChange={(event) => setChecked(event.target.checked)} />}
                 label={<>Click Here to confirm that overtime hours do not conflict or overlap with inload hours
                     <br />and any adjustments to approved overload schedule requires prior approval.</>} />
             <LoadingButton
-                variant="contained" sx={{ mt: 2, mb: 3, maxWidth: '58%' }} fullWidth onClick={() => {
+                variant="contained" sx={{ mt: 2, mb: 3}} fullWidth onClick={() => {
                     const project = projectDescription.map((descriptionValue, i) => {
                         return { name: descriptionValue, funding: funding[i], projectHours: projectHours[i], projectRange: projectRange[i], FOAP: FOAP[i], projectDateRange: projectDateRange[i], project2DateRange: project2DateRange[i] }
                     })
@@ -398,7 +397,9 @@ export default function Home() {
             >
                 <span>Submit</span>
             </LoadingButton>
-
+                </div>
+            </Stack>
+            
         </>
     )
 }

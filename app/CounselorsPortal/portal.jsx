@@ -12,6 +12,8 @@ import Chip from '@mui/material/Chip';
 import { useRouter } from 'next/navigation'
 import Dialog from './dialog'
 import OverloadDialog from './overloadDialog'
+import InloadForm from './inloadForm'
+import OverloadForm from './overloadForm'
 
 export default function Home() {
     const router = useRouter()
@@ -19,6 +21,8 @@ export default function Home() {
     const [overloadData, setOverloadData] = useState(null);
     const [open, setOpen] = useState(false);
     const [open2, setOpen2] = useState(false);
+    const [open3, setOpen3] = useState(false);
+    const [open4, setOpen4] = useState(false);
     const [selectedChip, setSelectedChip] = useState(null);
 
     const handleClickOpen = () => {
@@ -35,6 +39,17 @@ export default function Home() {
   
     const handleClose2 = () => {
       setOpen2(false);
+    };
+
+    const handleClickOpen3 = () => {
+      setOpen3(true);
+    };
+  
+    const handleClose3 = () => {
+      setOpen3(false);
+    };
+    const handleClose4 = () => {
+      setOpen4(false);
     };
 
     async function getData() {
@@ -58,12 +73,12 @@ export default function Home() {
                 </Typography>
                 <Stack direction={"row"} gap={2} mt={2} mb={2}>
                     <Card sx={{ minWidth: 250, borderColor: "black", borderRadius: "20px" }} variant="outlined">
-                        <CardActionArea onClick={() => router.push('/')}>
+                        <CardActionArea onClick={() =>  handleClickOpen3()}>
                             <CardContent>
                                 <Stack direction={"row"} gap={2}>
                                     <CalendarMonthIcon sx={{ fontSize: "35px" }} />
                                     <Typography variant="h4" component="div" sx={{ fontWeight: "light" }}>
-                                        In-Load From
+                                        In-Load Form
                                     </Typography>
                                 </Stack>
                             </CardContent>
@@ -71,12 +86,12 @@ export default function Home() {
                     </Card>
 
                     <Card sx={{ minWidth: 250, borderColor: "black", borderRadius: "20px" }} variant="outlined">
-                        <CardActionArea onClick={() => router.push('/overload')} >
+                        <CardActionArea onClick={() => setOpen4(true)} >
                             <CardContent>
                                 <Stack direction={"row"} gap={2}>
                                     <MoreTimeIcon sx={{ fontSize: "35px" }} />
                                     <Typography variant="h4" component="div" sx={{ fontWeight: "light" }}>
-                                        Over-Load From
+                                        Over-Load Form
                                     </Typography>
                                 </Stack>
                             </CardContent>
@@ -90,7 +105,7 @@ export default function Home() {
 
                     {data && data.map((item, index) => {
                         return (
-                            <Card sx={{  borderColor: "black", borderRadius: "20px" }} variant="outlined">
+                            <Card key={"inload"+index} sx={{  borderColor: "black", borderRadius: "20px" }} variant="outlined">
                                 <CardActionArea onClick={()=>{
                                     setSelectedChip(item);
                                     handleClickOpen();
@@ -116,7 +131,7 @@ export default function Home() {
                 <Stack direction={"row"} gap={2} mt={2} mb={2}>
                 {overloadData && overloadData.map((item, index) => {
                         return (
-                            <Card sx={{  borderColor: "black", borderRadius: "20px" }} variant="outlined">
+                            <Card key={"overloadData"+index} sx={{  borderColor: "black", borderRadius: "20px" }} variant="outlined">
                                 <CardActionArea onClick={()=>{
                                     setSelectedChip(item);
                                     handleClickOpen2();
@@ -138,6 +153,8 @@ export default function Home() {
                 </Stack>
                 <Dialog selectedChip={selectedChip} handleClose={handleClose} open={open} />
                 <OverloadDialog selectedChip={selectedChip} handleClose={handleClose2} open={open2} />
+                <InloadForm selectedChip={selectedChip} handleClose={handleClose3} open={open3} getData={getData}/>
+                <OverloadForm selectedChip={selectedChip} handleClose={handleClose4} open={open4} getData={getData} />
             </Stack>
         </>
     )

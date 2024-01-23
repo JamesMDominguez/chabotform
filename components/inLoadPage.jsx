@@ -3,7 +3,6 @@ import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation'
 import InputAdornment from '@mui/material/InputAdornment';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import SchoolIcon from '@mui/icons-material/School';
@@ -25,7 +24,7 @@ import SendIcon from '@mui/icons-material/Send';
 const timeRange = ["8:00am", "8:30am", "9:00am", "9:30am", "10:00am", "10:30am", "11:00am", "11:30am", "12:00pm", "12:30pm", "1:00pm", "1:30pm", "2:00pm", "2:30pm", "3:00pm", "3:30pm", "4:00pm", "4:30pm", "5:00pm", "5:30pm", "6:00pm", "6:30pm", "7:00pm"]
 const days = ["Mon", "Tues", "Wed", "Thurs", "Fri"]
 
-export default function Home() {
+export default function Home({handleClose,getData}) {
   const [data, setData] = useState([]);
   const [inputCount, setInputCount] = useState(1);
   const [icaName, setIcaName] = useState(['']);
@@ -33,7 +32,6 @@ export default function Home() {
   const [comments, setComments] = useState('');
   const [breaks, setBreaks] = useState([]);
   const [loading, setLoading] = useState(false);
-  const router = useRouter()
   const [semester, setSemester] = useState("");
   const [year, setYear] = useState("");
 
@@ -149,7 +147,8 @@ export default function Home() {
       body: JSON.stringify(val),
     });
     if (response.ok) {
-      router.push('/finished')
+      handleClose()
+      getData()
     }
     else {
       console.log('Request failed');
@@ -193,7 +192,7 @@ export default function Home() {
       justifyContent="center"
       alignItems="center"
     >
-      <Stack direction={"row"} gap={2} mt={4} flexWrap="wrap">
+      <Stack direction={"row"} gap={2} mt={10} flexWrap="wrap">
         <div>
           <p style={{ textAlign: "center" }}>Semester and Year</p>
 
