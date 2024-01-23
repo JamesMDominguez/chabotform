@@ -9,12 +9,14 @@ import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
 import ScheduleGrid from "../../components/scheduleGrid";
 import DataTable from "../../components/dataTable";
+import { useRouter } from 'next/navigation'
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
 export default function FullScreenDialog({selectedChip,open,handleClose}) {
+  const router = useRouter()
 
   return (
     <>
@@ -37,6 +39,9 @@ export default function FullScreenDialog({selectedChip,open,handleClose}) {
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
              {selectedChip?.name + " " + selectedChip?.year + " " + selectedChip?.semester}
             </Typography>
+            <Button onClick={()=>router.push(`/overloadResubmission/${selectedChip._id}`)} disabled={selectedChip?.approval=="Pending"||selectedChip?.approval=="PendingResubmission"?false:true} size="small" color="inherit" variant='outlined' sx={{mr:"10px"}}>
+                Resubmit week for approval
+            </Button>
             <Button autoFocus color="inherit" onClick={handleClose}>
               close
             </Button>

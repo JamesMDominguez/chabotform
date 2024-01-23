@@ -151,7 +151,7 @@ export default function Home({params}) {
 
     const handleSubmitForm = async (val) => {
 
-        if (!val.checked) {
+        if (!checked) {
             alert("Please confirm that overtime hours do not conflict or overlap with inload hours and any adjustments to approved overload schedule requires prior approval.");
             return;
         }
@@ -183,7 +183,7 @@ export default function Home({params}) {
         setLoading(true)
         const apiUrl = `${process.env.NEXT_PUBLIC_LINK}/api/overloadSchedule`;
         const response = await fetch(apiUrl, {
-            method: 'PUT',
+            method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
             },

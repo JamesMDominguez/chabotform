@@ -151,7 +151,7 @@ export default function Page({ params }) {
     const apiUrl = `${process.env.NEXT_PUBLIC_LINK}/api/inLoadSchedule`;
 
     const response = await fetch(apiUrl, {
-      method: 'PUT',
+      method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
       },

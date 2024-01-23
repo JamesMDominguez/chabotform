@@ -37,6 +37,9 @@ export default function FullScreenDialog({selectedChip,open,handleClose}) {
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
              {selectedChip?.dateCreated}
             </Typography>
+            <Button onClick={()=>router.push(`/overloadResubmission/${selectedChip._id}`)} disabled={selectedChip?.approval=="Pending"||selectedChip?.approval=="PendingResubmission"?false:true} size="small" color="inherit" variant='outlined' sx={{mr:"10px"}}>
+                Resubmit week for approval
+            </Button>
             <Button autoFocus color="inherit" onClick={handleClose}>
               close
             </Button>

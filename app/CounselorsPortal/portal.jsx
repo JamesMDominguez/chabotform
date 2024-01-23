@@ -107,11 +107,6 @@ export default function Home() {
                                         </Stack>
                                     </CardContent>
                                 </CardActionArea>
-                                <CardActions>
-                                    <Button fullWidth onClick={()=>router.push(`/resubmission/${item._id}`)} disabled={item.approval=="Pending"?false:true} size="small" color="inherit" variant='outlined' sx={{mb:"10px"}}>
-                                        Resubmit week for approval
-                                    </Button>
-                                </CardActions>
                             </Card>
                         )})}
                 </Stack>
@@ -138,11 +133,6 @@ export default function Home() {
                                         </Stack>
                                     </CardContent>
                                 </CardActionArea>
-                                <CardActions>
-                                    <Button fullWidth onClick={()=>router.push(`/overloadResubmission/${item._id}`)} disabled={item.approval=="Pending"?false:true} size="small" color="inherit" variant='outlined' sx={{mb:"10px"}}>
-                                        Resubmit week for approval
-                                    </Button>
-                                </CardActions>
                             </Card>
                         )})}
                 </Stack>

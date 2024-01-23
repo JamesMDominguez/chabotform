@@ -2,6 +2,8 @@ import mongo from '../util/mongo.js'
 import nodemailer from 'nodemailer';
 import Fun from '../../utils/myFunc.js'
 import { cookies } from 'next/headers'
+import mongoose from 'mongoose';
+import helper from '../util/helper.js';
 
 export async function GET() {
     const db = await mongo()
@@ -188,19 +190,23 @@ const timeRange = [
     res.name = cookies().get('name').value
     res.email = cookies().get('email').value
     const db = await mongo()
-  
+    console.log(res)
+
     if(res.approval == "Approved"){
         await helper.sendEmail(res.email, "Proposed Schedule Update","Hello! We are pleased to inform you that your schedule has been reviewed and approved. Thank you for your prompt submission")
     }else if(res.approval == "PendingResubmission"){
-        await helper.sendEmail(res.email, "Proposed Schedule Update",`Hello! We have reviewed your schedule and it requires resubmission. Please make the necessary changes and submit again using resubmission button on the counselor portal page or this <a href="${process.env.NEXT_PUBLIC_LINK +"/resubmission/" +res.id}">LINK</a>. Thank you.`)
+        await helper.sendEmail(res.email, "Proposed Schedule Update",`Hello! We have reviewed your schedule and it requires resubmission. Please make the necessary changes and submit again using this <a href="${process.env.NEXT_PUBLIC_LINK +"/resubmission/" +res.id}">LINK</a>. Thank you.`)
     }
-    else if(res.data.approval == "Resubmission"){
-        await helper.sendEmail(res.email, "Proposed Schedule Resubmission","Hello! This is a automated email notifying you that we have received your schedule resubmission. Thank you for making necessary changes.")
-        const data = await db.collection('Schedule').updateOne({_id: new mongoose.Types.ObjectId(res.id)}, {$set: res.data})
-        return Response.json("Resubmission sent")
-    }
-  
-    await db.collection('Schedule').updateOne({_id: new mongoose.Types.ObjectId(res.id)}, {$set: {approval:res.approval}})
+
+    const data  = await db.collection('Schedule').updateOne({_id: new mongoose.Types.ObjectId(res.id)}, {$set: {approval:res.approval}})
+    console.log(data,"_updated data")
     return Response.json("Submission sent")
   }
-  
+
+  export async function PATCH(request) {
+    const res = await request.json()
+    const db = await mongo()
+    const email = await helper.sendEmail(res.email, "Proposed Schedule Resubmission","Hello! This is a automated email notifying you that we have received your schedule resubmission. Thank you for making necessary changes.")
+    const data = await db.collection('Schedule').updateOne({_id: new mongoose.Types.ObjectId(res.id)}, {$set: res})
+    return Response.json("Schedule Resubmitted")
+  }

@@ -8,5 +8,4 @@ export async function GET() {
   return new Response(JSON.stringify({Schedule:data,OverloadSchedule:data2}), {
     status: 200,
   });
-
   }

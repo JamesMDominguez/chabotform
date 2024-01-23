@@ -60,7 +60,7 @@ export default function FullScreenDialog({selectedChip,open,handleClose,getData,
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ approval: approvalState, id: selectedChip._id,email:selectedChip.email }),
+            body: JSON.stringify({ approval: approvalState, id: selectedChip._id }),
         });
         if (res.ok) {
             setLoading(false)
