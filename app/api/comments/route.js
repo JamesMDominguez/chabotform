@@ -21,7 +21,7 @@ export async function POST(request) {
         await helper.sendEmail(
             res.email, 
             "New Comment on Proposed Schedule", 
-            `Hello! Your Schedule has a New Comment, To view comment click your most recent submission in the Counselors Portal here <a href="${process.env.NEXT_PUBLIC_LINK}/CounselorsPortal">link</a>`
+            `Hello! Your Schedule has a New Comment, To view comment click your most recent submission in the Counselors Portal here <a href="${process.env.NEXT_PUBLIC_LINK}">link</a>`
             )
     }
     

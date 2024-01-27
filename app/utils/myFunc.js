@@ -42,7 +42,7 @@ const getDailyHours = (day,selecteChip) => {
   async function GetUser(Wnumber) {
     const apiUrl = `${process.env.NEXT_PUBLIC_LINK}/api/users`;
 
-    const response = await fetch(apiUrl,{method:"GET",headers:{"w-number":Wnumber}});
+    const response = await fetch(apiUrl,{method:"GET",headers:{"w_number":Wnumber}});
     const users = await response.json();
     return users
   }

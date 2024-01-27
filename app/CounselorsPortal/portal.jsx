@@ -1,22 +1,14 @@
 "use client";
-import { Stack } from '@mui/material';
-import Typography from '@mui/material/Typography';
-import React from 'react';
+import { Stack,Typography,Card,CardContent,CardActionArea,Chip } from '@mui/material';
 import { useState,useEffect } from 'react';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import { Button, CardActionArea, CardActions } from '@mui/material';
-import Chip from '@mui/material/Chip';
-import { useRouter } from 'next/navigation'
-import Dialog from './dialog'
-import OverloadDialog from './overloadDialog'
-import InloadForm from './inloadForm'
-import OverloadForm from './overloadForm'
+import Dialog from './inload/dialogView'
+import OverloadDialog from './overload/dialogView'
+import InloadForm from './inload/dialogForm'
+import OverloadForm from './overload/dialogForm'
 
 export default function Home() {
-    const router = useRouter()
     const [data, setData] = useState(null);
     const [overloadData, setOverloadData] = useState(null);
     const [open, setOpen] = useState(false);
@@ -25,24 +17,13 @@ export default function Home() {
     const [open4, setOpen4] = useState(false);
     const [selectedChip, setSelectedChip] = useState(null);
 
-    const handleClickOpen = () => {
-      setOpen(true);
-    };
   
     const handleClose = () => {
       setOpen(false);
     };
 
-    const handleClickOpen2 = () => {
-      setOpen2(true);
-    };
-  
     const handleClose2 = () => {
       setOpen2(false);
-    };
-
-    const handleClickOpen3 = () => {
-      setOpen3(true);
     };
   
     const handleClose3 = () => {
@@ -73,7 +54,7 @@ export default function Home() {
                 </Typography>
                 <Stack direction={"row"} gap={2} mt={2} mb={2}>
                     <Card sx={{ minWidth: 250, borderColor: "black", borderRadius: "20px" }} variant="outlined">
-                        <CardActionArea onClick={() =>  handleClickOpen3()}>
+                        <CardActionArea onClick={() => setOpen3(true)}>
                             <CardContent>
                                 <Stack direction={"row"} gap={2}>
                                     <CalendarMonthIcon sx={{ fontSize: "35px" }} />
@@ -108,7 +89,7 @@ export default function Home() {
                             <Card key={"inload"+index} sx={{  borderColor: "black", borderRadius: "20px" }} variant="outlined">
                                 <CardActionArea onClick={()=>{
                                     setSelectedChip(item);
-                                    handleClickOpen();
+                                    setOpen(true)
                                 }}>
                                     <CardContent>
                                         <Typography variant="h4" component="div" sx={{ fontWeight: "light" }}>
@@ -134,7 +115,7 @@ export default function Home() {
                             <Card key={"overloadData"+index} sx={{  borderColor: "black", borderRadius: "20px" }} variant="outlined">
                                 <CardActionArea onClick={()=>{
                                     setSelectedChip(item);
-                                    handleClickOpen2();
+                                    setOpen2(true)
                                 }}>
                                     <CardContent>
                                         <Typography variant="h4" component="div" sx={{ fontWeight: "light" }}>

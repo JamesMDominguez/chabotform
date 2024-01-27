@@ -1,89 +1,112 @@
 'use client';
-import React from 'react';
-
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell, { tableCellClasses } from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import { styled } from '@mui/material/styles';
-import { Stack } from '@mui/material';
+import * as React from 'react';
+import TextField from '@mui/material/TextField';
+import Stack from '@mui/material/Stack';
+import Chip from '@mui/material/Chip';
+import InputAdornment from '@mui/material/InputAdornment';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import SchoolIcon from '@mui/icons-material/School';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemText from '@mui/material/ListItemText';
+import Divider from '@mui/material/Divider';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 
 export default function DataTable({ selectedChip }) {
   let TotalICA = 0;
-  const StyledTableCell = styled(TableCell)(({ theme }) => ({
-    [`&.${tableCellClasses.head}`]: {
-      backgroundColor: theme.palette.grey[600],
-      color: theme.palette.common.white,
-    },
-    [`&.${tableCellClasses.body}`]: {
-      fontSize: 14,
-    },
-  }));
-  
-  const StyledTableRow = styled(TableRow)(({ theme }) => ({
-    '&:nth-of-type(odd)': {
-      backgroundColor: theme.palette.action.hover,
-    },
-    // hide last border
-    '&:last-child td, &:last-child th': {
-      border: 0,
-    },
-  }));
 
   return (
-    <Stack direction={'column'} gap={2} sx={{margin:"10px"}}>
-      {selectedChip?.ica?.length > 0 && selectedChip?.ica[0].name !=="" && 
-      <TableContainer  sx={{ border: '1px solid black',borderRadius:"11px" }}>
-        <Table sx={{ width: 500 }} >
-          <TableHead>
-            <StyledTableRow>
-              <StyledTableCell align="left" sx={{borderTopLeftRadius: '10px'}}>ICA Name	</StyledTableCell>
-              <StyledTableCell align="right" sx={{borderTopRightRadius: '10px'}}>D-Hour Total</StyledTableCell>
-            </StyledTableRow>
-          </TableHead>
-          <TableBody>
-            {selectedChip?.ica?.map((x, index) => {
-              TotalICA += x.dHours;
-              const isLastRow = index === selectedChip.ica.length - 1;
-              return (
-                <StyledTableRow key={x.name}>
-                  <StyledTableCell align="left" sx={{ borderBottomLeftRadius: isLastRow ? '10px' : '0' }}>{x.name}</StyledTableCell>
-                  <StyledTableCell align="right" sx={{ borderBottomRightRadius: isLastRow ? '10px' : '0' }}>{x.dHours}</StyledTableCell>
-                </StyledTableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      }
+    <div style={{ marginRight: "20px" }}>
+      <p style={{ textAlign: "center" }}>Semester and Year</p>
+      <Stack direction={"row"} gap={2}>
+        <FormControl fullWidth>
+          <InputLabel id="demo-simple-select-label">Semester</InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            variant="outlined"
+            value={selectedChip?.semester}
+            label="Semester"
+            sx={{ mb: "20px" }}
+          >
+            <MenuItem value="Summer">Summer ☀️</MenuItem>
+            <MenuItem value="Spring">Spring 🌱</MenuItem>
+            <MenuItem value="Fall">Fall 🍂</MenuItem>
+          </Select>
+        </FormControl>
+        <TextField value={selectedChip.year} type="number" id="filled-basic" label="Year" variant="outlined" sx={{ mb: "20px" }}
+          InputProps={{ startAdornment: <InputAdornment position="start"><CalendarMonthIcon /> </InputAdornment> }}
+        />
+      </Stack>
 
-      <TableContainer sx={{ border: '1px solid black',borderRadius:"11px" }}>
-        <Table sx={{ maxWidth: 500 }}>
-          <TableHead>
-            <StyledTableRow>
-              <StyledTableCell align="left" sx={{borderTopLeftRadius: '10px'}}>Totals	</StyledTableCell>
-              <StyledTableCell align="right" sx={{borderTopRightRadius: '10px'}}>Value</StyledTableCell>
-            </StyledTableRow>
-          </TableHead>
-          <TableBody>
-            <StyledTableRow>
-              <StyledTableCell align="left">Total ICA</StyledTableCell>
-              <StyledTableCell align="right">{TotalICA}</StyledTableCell>
-            </StyledTableRow>
+      <p style={{ textAlign: "center" }}>Instruction / Coord / Assign (ICA)</p>
+      {selectedChip?.ica?.map((value, index) => {
+        TotalICA += value.dHours;
+        return (
+          <Stack
+            key={`input-field-box-${index}`}
+            direction={'row'}
+            gap={2}
+            mb={2}
+          >
+            <TextField
+              id={`outlined-basic-${index}`}
+              label="ICA Name"
+              variant="outlined"
+              value={value.name}
+              key={`input-field-${index}`}
+              InputProps={{ startAdornment: <InputAdornment position="start"><SchoolIcon /> </InputAdornment> }}
+            />
 
-            <StyledTableRow>
-              <StyledTableCell align="left">Direct Counseling Hours</StyledTableCell>
-              <StyledTableCell align="right">{selectedChip.schedule?.length / 2}</StyledTableCell>
-            </StyledTableRow>
-            <StyledTableRow>
-              <StyledTableCell align="left" sx={{borderBottomLeftRadius: '10px'}}>Week Hours</StyledTableCell>
-              <StyledTableCell align="right" sx={{borderBottomRightRadius: '10px'}}>{TotalICA + selectedChip.schedule?.length / 2}</StyledTableCell>
-            </StyledTableRow>
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Stack>
+            <TextField
+              type={'number'}
+              label='D-Hour'
+              id="outlined-basic"
+              variant="outlined"
+              key={`input-field99-${index}`}
+              value={TotalICA}
+              InputProps={{ startAdornment: <InputAdornment position="start"><AccessTimeIcon /> </InputAdornment> }}
+            />
+          </Stack>
+        )
+      })}
+      <List>
+        <ListItem disablePadding>
+          <ListItemButton>
+            <ListItemText primary="Total ICA Hours" />
+            <Chip color="primary" sx={{ width: "70px" }} label={TotalICA + 0} />
+
+          </ListItemButton>
+        </ListItem>
+        <Divider />
+        <ListItem disablePadding>
+          <ListItemButton component="a" href="#simple-list">
+            <ListItemText primary="Total Direct Weekly Counseling Hours" />
+            <Chip color="primary" sx={{ width: "70px" }} label={selectedChip?.schedule?.length / 2} />
+          </ListItemButton>
+        </ListItem>
+        <Divider />
+        <ListItem disablePadding>
+          <ListItemButton>
+            <ListItemText primary="Total Weekly hours (Must Equal 27.5)" />
+            <Chip color="primary" sx={{ width: "70px" }} label={TotalICA + selectedChip?.schedule?.length / 2} />
+          </ListItemButton>
+        </ListItem>
+      </List>
+      <TextField
+        id="outlined-multiline-static"
+        value={selectedChip?.comments}
+        label="Comments"
+        multiline
+        rows={2}
+        fullWidth
+        sx={{ maxWidth: "500px", mt: 2 }}
+      />
+    </div>
   );
 }

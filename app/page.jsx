@@ -12,7 +12,7 @@ import { redirect } from 'next/navigation';
 function Finished() {
     async function Logout() {
         'use server'
-        cookies().delete('w-number')
+        cookies().delete('w_number')
         cookies().delete('name')
         cookies().delete('email')
         redirect("/Login");

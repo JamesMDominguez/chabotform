@@ -5,7 +5,7 @@ import { cookies } from 'next/headers'
 export default function isAuth(Component) {
   return function IsAuth(props) {
     const cookiesList = cookies()
-    const hasCookie = cookiesList.has('w-number')
+    const hasCookie = cookiesList.has('w_number')
     if (!hasCookie) {
       return redirect("/Login");
     }

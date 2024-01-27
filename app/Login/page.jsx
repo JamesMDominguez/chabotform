@@ -10,9 +10,10 @@ export default function Finished() {
 
   async function handleSubmit() {
     const authUser = await Fun.GetUser(w_number);
+    console.log(authUser)
     if (authUser.userFound){
       window.localStorage.setItem('name', authUser.name);
-      router.push('/CounselorsPortal')
+      router.push('/')
     }
     else {
       alert('Invalid W Number');

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import TextField from '@mui/material/TextField';
@@ -10,22 +10,21 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
-import ScheduleGrid from "../../components/scheduleGrid";
 import CommentsChip from "../../components/commentsChip";
 import DialogActions from '@mui/material/DialogActions';
 import SendIcon from '@mui/icons-material/Send';
 import DialogTitle from '@mui/material/DialogTitle';
 import LoadingButton from '@mui/lab/LoadingButton';
-import DataTable from '../../components/overLoadTable'
-const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
+import OverloadView from '../../components/overloadView'
+
+const Transition = React.forwardRef((props, ref) => <Slide direction="up" ref={ref} {...props} />);
 
 export default function FullScreenDialog({selectedChip,open,handleClose,getData,comments,getCommentData}) {
     const [comment, setComment] = useState('')
     const [approvalState, setApprovalState] = useState(false);
     const [open2, setOpen2] = useState(false);
     const [loading, setLoading] = useState(false);
+
     const handleClickOpen = (state) => {
         setApprovalState(state)
         setOpen2(true);
@@ -33,8 +32,6 @@ export default function FullScreenDialog({selectedChip,open,handleClose,getData,
     const handleClose2 = () => {
         setOpen2(false);
     };
-    
-
 
     async function sendComment() {
         const apiUrl = `${process.env.NEXT_PUBLIC_LINK}/api/comments`;
@@ -69,6 +66,26 @@ export default function FullScreenDialog({selectedChip,open,handleClose,getData,
             handleClose()
         }
     }  
+
+    const ViewAppbar = () =>(<AppBar  sx={{ position: 'fixed',backgroundColor:"gray" }} >
+    <Toolbar>
+      <IconButton
+        edge="start"
+        color="inherit"
+        onClick={handleClose}
+        aria-label="close"
+      >
+        <CloseIcon />
+      </IconButton>
+      <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+       {selectedChip?.name}
+      </Typography>
+      <Button autoFocus color="inherit" onClick={handleClose}>
+        close
+      </Button>
+    </Toolbar>
+  </AppBar>)
+
 return (
     <>
       <Dialog
@@ -77,28 +94,8 @@ return (
         onClose={handleClose}
         TransitionComponent={Transition}
       >
-        <AppBar  sx={{ position: 'fixed',backgroundColor:"gray" }} >
-          <Toolbar>
-            <IconButton
-              edge="start"
-              color="inherit"
-              onClick={handleClose}
-              aria-label="close"
-            >
-              <CloseIcon />
-            </IconButton>
-            <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-             {selectedChip?.name}
-            </Typography>
-            <Button autoFocus color="inherit" onClick={handleClose}>
-              close
-            </Button>
-          </Toolbar>
-        </AppBar>
-        <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center',justifyContent:"center",marginTop:"100px" }}>
-            <ScheduleGrid selectedChip={selectedChip} />
-            <DataTable selectedChip={selectedChip} />
-        </div>
+        <ViewAppbar/>
+        <OverloadView selectedChip={selectedChip}/>
         <Stack style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <p style={{marginBottom: "0" }}><b>Comments</b></p>
             <TextField

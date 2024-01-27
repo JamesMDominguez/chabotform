@@ -23,7 +23,7 @@ export async function GET() {
     res.name = cookies().get('name').value
     res.email = cookies().get('email').value
     res.dateCreated = formattedToday
-    res["w-number"] = cookies().get('w-number').value
+    res["w_number"] = cookies().get('w_number').value
     const mongoData = await db.collection('OverloadSchedule').insertOne(res)
     return Response.json(mongoData)
   }
