@@ -1,11 +1,13 @@
 import InLoadPage from './formInputs';
-import * as React from 'react';
+import {forwardRef} from 'react';
 import CloseIcon from '@mui/icons-material/Close';
 import {Button,Dialog,AppBar,Toolbar,IconButton,Typography,Slide} from '@mui/material';
 
-const Transition = React.forwardRef((props, ref) => <Slide direction="up" ref={ref} {...props} />);
 
-export default function FullScreenDialog({open,handleClose,getData}) {
+export default function FullScreenDialog5({open,handleClose,getData}) {
+  const Transition = forwardRef((props, ref) => <Slide direction="up" ref={ref} {...props} />);
+  Transition.displayName = "Transition"
+
   const FormAppBar = () => (
   <AppBar  sx={{ position: 'fixed',backgroundColor:"gray" }} >
   <Toolbar>
@@ -25,7 +27,7 @@ export default function FullScreenDialog({open,handleClose,getData}) {
     </Button>
   </Toolbar>
 </AppBar>)
-
+  FormAppBar.displayName = "FormAppBar"
   return (
     <>
       <Dialog

@@ -5,8 +5,9 @@ import { useRouter } from 'next/navigation'
 import InloadView from '../../../components/inloadView'
 
 const Transition = React.forwardRef((props, ref) => <Slide direction="up" ref={ref} {...props} />);
+Transition.displayName = "Transition"
 
-export default function FullScreenDialog({selectedChip,open,handleClose}) {
+export default function FullScreenDialog4({selectedChip,open,handleClose}) {
   const router = useRouter()
   const ViewAppBar = () => (<AppBar  sx={{ position: 'fixed',backgroundColor:"gray" }} >
   <Toolbar>
@@ -29,6 +30,8 @@ export default function FullScreenDialog({selectedChip,open,handleClose}) {
     </Button>
   </Toolbar>
 </AppBar>)
+  ViewAppBar.displayName = "ViewAppBar"
+
   return (
       <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}>
         <ViewAppBar/>

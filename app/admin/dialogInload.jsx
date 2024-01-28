@@ -7,9 +7,10 @@ import CloseIcon from '@mui/icons-material/Close';
 import SendIcon from '@mui/icons-material/Send';
 import LoadingButton from '@mui/lab/LoadingButton';
 
-const Transition = React.forwardRef((props, ref) => <Slide direction="up" ref={ref} {...props} />);
 
 export default function FullScreenDialog({selectedChip,open,handleClose,getData,comments,getCommentData}) {
+    const Transition = React.forwardRef((props, ref) => <Slide direction="up" ref={ref} {...props} />);
+    Transition.displayName = "Transition"
     const [comment, setComment] = useState('')
     const [approvalState, setApprovalState] = useState(false);
     const [open2, setOpen2] = useState(false);

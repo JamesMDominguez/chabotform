@@ -4,8 +4,9 @@ import {Button,Dialog,AppBar,Toolbar,IconButton,Typography,Slide} from '@mui/mat
 import CloseIcon from '@mui/icons-material/Close';
 
 const Transition = React.forwardRef((props, ref) => <Slide direction="up" ref={ref} {...props} />);
+Transition.displayName = "Transition"
 
-export default function FullScreenDialog({open,handleClose,getData}) {
+export default function FullScreenDialog3({open,handleClose,getData}) {
 
   const ViewAppBar = () => (<AppBar  sx={{ position: 'fixed',backgroundColor:"gray" }} >
   <Toolbar>
@@ -25,6 +26,7 @@ export default function FullScreenDialog({open,handleClose,getData}) {
     </Button>
   </Toolbar>
 </AppBar>)
+  ViewAppBar.displayName = "ViewAppBar"
 
   return (
     <>

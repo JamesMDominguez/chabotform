@@ -4,8 +4,9 @@ import Slide from '@mui/material/Slide';
 import CloseIcon from '@mui/icons-material/Close';
 import OverloadView from '../../../components/overloadView'
 const Transition = React.forwardRef((props, ref) => <Slide direction="up" ref={ref} {...props} />);
+Transition.displayName = "Transition"
 
-export default function FullScreenDialog({ selectedChip, open, handleClose }) {
+export default function FullScreenDialog2({ selectedChip, open, handleClose }) {
   const ViewAppBar = () => (<AppBar  sx={{ position: 'fixed',backgroundColor:"gray" }} >
   <Toolbar>
     <IconButton
@@ -27,6 +28,7 @@ export default function FullScreenDialog({ selectedChip, open, handleClose }) {
     </Button>
   </Toolbar>
 </AppBar>)
+  ViewAppBar.displayName = "ViewAppBar"
 
   return (
     <>
