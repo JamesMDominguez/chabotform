@@ -6,5 +6,6 @@ export default async function Logout() {
     cookies().delete('w_number')
     cookies().delete('name')
     cookies().delete('email')
+    cookies().delete('access')
     redirect("/Login");
   }

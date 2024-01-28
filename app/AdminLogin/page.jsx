@@ -10,7 +10,6 @@ export default function Finished() {
 
   async function handleSubmit() {
     const authUser = await Fun.GetUser(w_number);
-    console.log(authUser)
     if (authUser.userFound && authUser.accessLevel === 'admin'){
       window.localStorage.setItem('name', authUser.name);
       router.push('/admin')
