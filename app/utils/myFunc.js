@@ -1,5 +1,3 @@
-const timeRange = ["8:00am", "8:30am", "9:00am", "9:30am", "10:00am", "10:30am", "11:00am", "11:30am", "12:00pm", "12:30pm", "1:00pm", "1:30pm", "2:00pm", "2:30pm", "3:00pm", "3:30pm", "4:00pm", "4:30pm", "5:00pm", "5:30pm", "6:00pm", "6:30pm", "7:00pm"]
-const days = ["Mon", "Tues", "Wed", "Thurs", "Fri"]
 
 const getDailyHours = (day,selecteChip) => {
     let num = 0
@@ -40,25 +38,22 @@ const getDailyHours = (day,selecteChip) => {
     }
     return (x)
   }
-  const people = [
-    { name: 'Michelle Reyes', email: 'mreyes@chabotcollege.edu' },
-    { name: 'Frances Fon', email: 'ffon@chabotcollege.edu' },
-    { name: 'Benjamin Barboza', email: 'bbarboza@chabotcollege.edu' },
-    { name: 'Wafa Ali', email: 'wali@chabotcollege.edu' },
-    { name: 'Dara Greene', email: 'dgreene@chabotcollege.edu' },
-    { name: 'Laura Alarcon', email: 'lalarcon@chabotcollege.edu' },
-    { name: 'Reena Jas', email: 'rjas@chabotcollege.edu' },
-    { name: 'Heather Oshiro', email: 'hoshiro@chabotcollege.edu' },
-    { name: 'Yetunde Osikomaiya', email: 'yosikomaiya@chabotcollege.edu' },
-    { name: 'David Irving', email: 'dirving@chabotcollege.edu' },
-    { name: 'Katie Messina Silva', email: 'kmessina@chabotcollege.edu' },
-    { name: 'Shannon Stanley', email: 'sstanley@chabotcollege.edu' },
-    { name: 'John Salangsang', email: 'jsalangsang@chabotcollege.edu' },
-    { name: 'Emmanuel Lopez', email: 'ealopez@chabotcollege.edu' },
-    { name: 'Juztino Panella', email: 'jpanella@chabotcollege.edu'},
-    { name: 'Patrise Diaz', email: 'pdiaz@chabotcollege.edu' },
-    { name: 'Valarie Carey', email: 'vcarey@chabotcollege.edu'}
-  ];
+
+  async function GetUser(Wnumber) {
+    const apiUrl = `${process.env.NEXT_PUBLIC_LINK}/api/users`;
+
+    const response = await fetch(apiUrl,{method:"GET",headers:{"w_number":Wnumber}});
+    const users = await response.json();
+    return users
+  }
+
+  async function GetAllUsers(){
+    const apiUrl = `${process.env.NEXT_PUBLIC_LINK}/api/users`;
+    const response = await fetch(apiUrl);
+    const users = await response.json();
+    return users
+  }
+
   
-const Fun =  {findDayTime:findDayTime, getDailyHours:getDailyHours, grayOutBox:grayOutBox,people:people}
+const Fun =  {findDayTime:findDayTime, getDailyHours:getDailyHours, grayOutBox:grayOutBox,GetUser:GetUser,GetAllUsers:GetAllUsers}
 export default Fun

@@ -6,7 +6,6 @@ import Chip from '@mui/material/Chip';
 export default function CommentsChip({selecteChip,comments}){
 
 return(
-    <Stack gap={2} direction={'column'}>
     <Stack gap={2} direction={'column-reverse'}>
       {comments?.map((com) => (<Chip key={com.comment} label={com.comment} color={com.sender=='user'?'primary':'default'}   sx={{
     height: 'auto',
@@ -16,14 +15,5 @@ return(
     },
   }} />))}
     </Stack>
-
-    <Chip label={selecteChip?.comments}  sx={{
-    height: 'auto',
-    '& .MuiChip-label': {
-      display: 'block',
-      whiteSpace: 'normal',
-    },
-  }} />
-  </Stack>
 )
 }
