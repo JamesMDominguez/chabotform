@@ -8,13 +8,14 @@ import SendIcon from '@mui/icons-material/Send';
 import LoadingButton from '@mui/lab/LoadingButton';
 
 const Transition = React.forwardRef((props, ref) => <Slide direction="up" ref={ref} {...props} />);
-Transition.displayName = "Transition"
+Transition.displayName = "Transition";
 
 export default function FullScreenDialog({selectedChip,open,handleClose,getData,comments,getCommentData}) {
     const [comment, setComment] = useState('')
     const [approvalState, setApprovalState] = useState(false);
     const [open2, setOpen2] = useState(false);
     const [loading, setLoading] = useState(false);
+    
 
     const handleClickOpen = (state) => {
         setApprovalState(state)
@@ -70,9 +71,6 @@ export default function FullScreenDialog({selectedChip,open,handleClose,getData,
       <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
        {selectedChip?.name} {selectedChip?.year} {selectedChip?.semester}
       </Typography>
-      <Button autoFocus color="inherit" onClick={handleClose}>
-        close
-      </Button>
     </Toolbar>
   </AppBar>)
     
@@ -89,10 +87,11 @@ return (
         <Stack style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <p style={{marginBottom: "0" }}><b>Comments</b></p>
             <TextField
-                autoFocus
                 multiline
                 value={comment}
-                onChange={(e) => setComment(e.target.value)}
+                onChange={(e) => {
+                    setComment(e.target.value)
+                }}
                 margin="dense"
                 sx={{ marginBottom: "25px",maxWidth:"30rem" }}
                 id="name"
@@ -103,14 +102,14 @@ return (
             />
             {comment != "" &&
                 <Stack direction={"row"} gap={2} justifyContent="flex-end" sx={{ marginBottom: "10px" }}>
-                    <Button variant="text" color="secondary" size='small'>Cancel</Button>
+                    <Button variant="text" onClick={()=> setComment('')} color="secondary" size='small'>Cancel</Button>
                     <Button variant="contained" color="secondary" size='small' onClick={()=>sendComment()}>Comment</Button>
                 </Stack>
             }
             <CommentsChip selecteChip={selectedChip} comments={comments}/>
       </Stack>
 
-      <Stack direction={"row"} justifyContent="center" spacing={4} sx={{ mb: 2 }}>
+      <Stack direction={"row"} justifyContent="center" spacing={4} sx={{ mb: 2,mt:2 }}>
             <Button variant="contained" onClick={() => handleClickOpen("Approved")}>Approve</Button>
             <Button color="error" variant="contained" onClick={() => handleClickOpen("PendingResubmission")}>Resubmission</Button>
         </Stack>
