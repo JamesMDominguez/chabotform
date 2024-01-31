@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState } from 'react';
 import {Button,Dialog,TextField,Stack,AppBar,Toolbar,IconButton,Typography,Slide,DialogTitle,DialogActions} from '@mui/material';
-import CommentsChip from "../../components/commentsChip";
+import Comments from "../../components/comments";
 import InloadView from "../../components/inloadView";
 import CloseIcon from '@mui/icons-material/Close';
 import SendIcon from '@mui/icons-material/Send';
@@ -10,13 +10,11 @@ import LoadingButton from '@mui/lab/LoadingButton';
 const Transition = React.forwardRef((props, ref) => <Slide direction="up" ref={ref} {...props} />);
 Transition.displayName = "Transition";
 
-export default function FullScreenDialog({selectedChip,open,handleClose,getData,comments,getCommentData}) {
-    const [comment, setComment] = useState('')
+export default function FullScreenDialog({selectedChip,open,handleClose,getData}) {
     const [approvalState, setApprovalState] = useState(false);
     const [open2, setOpen2] = useState(false);
     const [loading, setLoading] = useState(false);
-    
-
+      
     const handleClickOpen = (state) => {
         setApprovalState(state)
         setOpen2(true);
@@ -24,21 +22,6 @@ export default function FullScreenDialog({selectedChip,open,handleClose,getData,
     const handleClose2 = () => {
         setOpen2(false);
     };
-
-    async function sendComment() {
-        const apiUrl = `${process.env.NEXT_PUBLIC_LINK}/api/comments`;
-        const res = await fetch(apiUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ comment: comment, CommentId: selectedChip._id, sender: "admin",email:selectedChip.email }),
-        });
-        if (res.ok) {
-            setComment("")
-            getCommentData(selectedChip._id)
-        }
-    }
 
     const handleConfirmation = async () => {
         setLoading(true)
@@ -84,37 +67,12 @@ return (
       >
         <AppbarView/>
         <InloadView selectedChip={selectedChip}/>
-        <Stack style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <p style={{marginBottom: "0" }}><b>Comments</b></p>
-            <TextField
-                multiline
-                value={comment}
-                onChange={(e) => {
-                    setComment(e.target.value)
-                }}
-                margin="dense"
-                sx={{ marginBottom: "25px",maxWidth:"30rem" }}
-                id="name"
-                label="Add a comment...   "
-                type="email"
-                variant='standard'
-                fullWidth
-            />
-            {comment != "" &&
-                <Stack direction={"row"} gap={2} justifyContent="flex-end" sx={{ marginBottom: "10px" }}>
-                    <Button variant="text" onClick={()=> setComment('')} color="secondary" size='small'>Cancel</Button>
-                    <Button variant="contained" color="secondary" size='small' onClick={()=>sendComment()}>Comment</Button>
-                </Stack>
-            }
-            <CommentsChip selecteChip={selectedChip} comments={comments}/>
-      </Stack>
-
+        <Comments selectedChip={selectedChip} sender={"admin"}/>
       <Stack direction={"row"} justifyContent="center" spacing={4} sx={{ mb: 2,mt:2 }}>
             <Button variant="contained" onClick={() => handleClickOpen("Approved")}>Approve</Button>
             <Button color="error" variant="contained" onClick={() => handleClickOpen("PendingResubmission")}>Resubmission</Button>
         </Stack>
       </Dialog>
-
 
         <Dialog open={open2} onClose={handleClose2}>
             <DialogTitle>{approvalState} confirmation</DialogTitle>

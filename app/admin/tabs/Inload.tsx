@@ -17,18 +17,10 @@ export default function Schedule({ data, getData,allUsers }:any) {
   const [year, setYear] = useState('');
   const [open, setOpen] = useState(false);
   const [selectedChip, setSelectedChip] = useState<any>();
-  const [comments, setComments] = useState([]);
 
-  async function getCommentData(id:any) {
-    const apiUrl = `${process.env.NEXT_PUBLIC_LINK}/api/comments`;
-    const res = await fetch(apiUrl,{method:"GET",headers:{"chipID":id}});
-    const jsonData = await res.json();
-    setComments(jsonData);
-}
 
   const handleClickOpen = (i: any) => {
     setSelectedChip(i)
-    getCommentData(i._id);
     setOpen(true);
   };
 
@@ -95,7 +87,7 @@ export default function Schedule({ data, getData,allUsers }:any) {
         </Stack>
       </Stack>
 
-      <Dialog selectedChip={selectedChip} handleClose={handleClose} open={open} getData={getData} comments={comments} getCommentData={getCommentData}/>
+      <Dialog selectedChip={selectedChip} handleClose={handleClose} open={open} getData={getData}/>
     </>
   )
 }

@@ -1,6 +1,6 @@
-import mongoose from 'mongoose';
 import mongo from '../util/mongo.js'
 import helper from '../util/helper.js';
+import { cookies } from 'next/headers'
 
 export async function GET(request) {
     const headers = request.headers;
@@ -16,12 +16,12 @@ export async function GET(request) {
 
 export async function POST(request) {
     const res = await request.json()
-
+    res["w_number"] = cookies().get('w_number').value
     if (res.sender == "admin") {
         await helper.sendEmail(
             res.email, 
             "New Comment on Proposed Schedule", 
-            `Hello! Your Schedule has a New Comment, To view comment click your most recent submission in the Counselors Portal here <a href="${process.env.NEXT_PUBLIC_LINK}">link</a>`
+            `Hello! Your Schedule has a New Comment, To view comment click your most recent submission in the Counselors Portal here <a href="${process.env.NEXT_PUBLIC_LINK}">link</a> MESSAGE: "${res.comment}"`
             )
     }
     

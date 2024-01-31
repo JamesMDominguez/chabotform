@@ -1,12 +1,11 @@
 'use client';
-import { Button, ButtonGroup, Chip, FormControl, InputAdornment, InputLabel, MenuItem, Select, Stack, TextField } from '@mui/material';
+import { Chip, Stack } from '@mui/material';
 import {useState} from 'react';
 import React from 'react';
 import PendingActionsIcon from '@mui/icons-material/PendingActions';
 import AddTaskIcon from '@mui/icons-material/AddTask';
 import AccessAlarmsIcon from '@mui/icons-material/AccessAlarms';
 import ErrorIcon from '@mui/icons-material/Error';
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import Dialog from '../dialogOverLoad';
 import Divider from '@mui/material/Divider';
 
@@ -15,16 +14,9 @@ export default function Schedule({data,getData}: any){
     const [selectedChip, setSelectedChip] = useState<any>();
     const [comments, setComments] = useState([]);
 
-    async function getCommentData(id:any) {
-    const apiUrl = `${process.env.NEXT_PUBLIC_LINK}/api/comments`;
-      const res = await fetch(apiUrl,{method:"GET",headers:{"chipID":id}});
-      const jsonData = await res.json();
-      setComments(jsonData);
-  }
 
     const handleClickOpen = (i:any) => {
       setSelectedChip(i)
-      getCommentData(i._id);
       setOpen(true);
     };
   
@@ -55,7 +47,7 @@ export default function Schedule({data,getData}: any){
           ))}
         </Stack>
 
-      <Dialog selectedChip={selectedChip} handleClose={handleClose} open={open} getData={getData} comments={comments} getCommentData={getCommentData}/>
+      <Dialog selectedChip={selectedChip} handleClose={handleClose} open={open} getData={getData} />
       </>
     )
 }

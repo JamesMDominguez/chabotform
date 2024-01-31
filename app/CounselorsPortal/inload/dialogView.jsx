@@ -3,7 +3,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import {Button,Dialog,AppBar,Toolbar,IconButton,Typography,Slide} from '@mui/material';
 import { useRouter } from 'next/navigation'
 import InloadView from '../../../components/inloadView'
-
+import Comments from '../../../components/comments';
 const Transition = React.forwardRef((props, ref) => <Slide direction="up" ref={ref} {...props} />);
 Transition.displayName = "Transition"
 
@@ -36,6 +36,9 @@ export default function FullScreenDialog4({selectedChip,open,handleClose}) {
       <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}>
         <ViewAppBar/>
         <InloadView selectedChip={selectedChip}/>
+        <div style={{marginBottom:"20px"}}>
+       <Comments selectedChip={selectedChip} sender={'user'}/>
+       </div>
       </Dialog>
   );
 }

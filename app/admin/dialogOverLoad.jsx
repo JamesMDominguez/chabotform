@@ -2,7 +2,6 @@ import * as React from 'react';
 import { useState } from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
-import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -10,7 +9,7 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
-import CommentsChip from "../../components/commentsChip";
+import Comments from "../../components/comments";
 import DialogActions from '@mui/material/DialogActions';
 import SendIcon from '@mui/icons-material/Send';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -20,7 +19,7 @@ import OverloadView from '../../components/overloadView'
 const Transition = React.forwardRef((props, ref) => <Slide direction="up" ref={ref} {...props} />);
 Transition.displayName = "Transition"
 
-export default function FullScreenDialog9({selectedChip,open,handleClose,getData,comments,getCommentData}) {
+export default function FullScreenDialog9({selectedChip,open,handleClose,getData}) {
     const [comment, setComment] = useState('')
     const [approvalState, setApprovalState] = useState(false);
     const [open2, setOpen2] = useState(false);
@@ -34,20 +33,6 @@ export default function FullScreenDialog9({selectedChip,open,handleClose,getData
         setOpen2(false);
     };
 
-    async function sendComment() {
-        const apiUrl = `${process.env.NEXT_PUBLIC_LINK}/api/comments`;
-        const res = await fetch(apiUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ comment: comment, CommentId: selectedChip._id, sender: "admin",email:selectedChip.email }),
-        });
-        if (res.ok) {
-            setComment("")
-            getCommentData(selectedChip._id)
-        }
-    }
 
     const handleConfirmation = async () => {
         setLoading(true)
@@ -94,29 +79,7 @@ return (
       >
         <ViewAppbar/>
         <OverloadView selectedChip={selectedChip}/>
-        <Stack style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <p style={{marginBottom: "0" }}><b>Comments</b></p>
-            <TextField
-                autoFocus
-                multiline
-                value={comment}
-                onChange={(e) => setComment(e.target.value)}
-                margin="dense"
-                sx={{ marginBottom: "25px",maxWidth:"30rem" }}
-                id="name"
-                label="Add a comment...   "
-                type="email"
-                variant='standard'
-                fullWidth
-            />
-            {comment != "" &&
-                <Stack direction={"row"} gap={2} justifyContent="flex-end" sx={{ marginBottom: "10px" }}>
-                    <Button variant="text" onClick={()=> setComment('')} color="secondary" size='small'>Cancel</Button>
-                    <Button variant="contained" color="secondary" size='small' onClick={()=>sendComment()}>Comment</Button>
-                </Stack>
-            }
-            <CommentsChip selecteChip={selectedChip} comments={comments}/>
-        </Stack>
+        <Comments selectedChip={selectedChip} sender={"admin"}/>
 
       <Stack direction={"row"} justifyContent="center" spacing={4} sx={{ mb: 2,mt:2 }}>
             <Button variant="contained" onClick={() => handleClickOpen("Approved")}>Approve</Button>
