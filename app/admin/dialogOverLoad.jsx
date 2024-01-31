@@ -81,9 +81,6 @@ export default function FullScreenDialog9({selectedChip,open,handleClose,getData
       <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
        {selectedChip?.name}
       </Typography>
-      <Button autoFocus color="inherit" onClick={handleClose}>
-        close
-      </Button>
     </Toolbar>
   </AppBar>)
 
@@ -114,14 +111,14 @@ return (
             />
             {comment != "" &&
                 <Stack direction={"row"} gap={2} justifyContent="flex-end" sx={{ marginBottom: "10px" }}>
-                    <Button variant="text" color="secondary" size='small'>Cancel</Button>
+                    <Button variant="text" onClick={()=> setComment('')} color="secondary" size='small'>Cancel</Button>
                     <Button variant="contained" color="secondary" size='small' onClick={()=>sendComment()}>Comment</Button>
                 </Stack>
             }
             <CommentsChip selecteChip={selectedChip} comments={comments}/>
         </Stack>
 
-      <Stack direction={"row"} justifyContent="center" spacing={4} sx={{ mb: 2 }}>
+      <Stack direction={"row"} justifyContent="center" spacing={4} sx={{ mb: 2,mt:2 }}>
             <Button variant="contained" onClick={() => handleClickOpen("Approved")}>Approve</Button>
             <Button color="error" variant="contained" onClick={() => handleClickOpen("PendingResubmission")}>Resubmission</Button>
         </Stack>
