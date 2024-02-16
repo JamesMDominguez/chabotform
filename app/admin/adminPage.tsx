@@ -17,7 +17,7 @@ import LinearProgress from '@mui/material/LinearProgress';
 import Logout from '../serverActions/action'
 import Name from '../CounselorsPortal/name';
 import Fun from '../utils/myFunc'
-const drawerWidth = 240;
+const drawerWidth = 280;
 
 interface MyObject {
   day: string;
@@ -38,21 +38,26 @@ export default function Admin() {
   const [data2, setData2] = useState<any>();
   const [allUsers, setAllUsers] = useState<any>();
   const [selecteTab, setSelectedTab] = useState('In-load Overview');
-
+  const [semester, setSemester] = useState('');
+  const [year, setYear] = useState('');
   async function getData() {
       const apiUrl: string = `${process.env.NEXT_PUBLIC_LINK}/api/overloadSchedule`;
       const apiUrl2: string = `${process.env.NEXT_PUBLIC_LINK}/api/inLoadSchedule`;
+      const apiUrl3: string = `${process.env.NEXT_PUBLIC_LINK}/api/term`;
       const users = await Fun.GetAllUsers();
       const res = await fetch(apiUrl2);
       const res2 = await fetch(apiUrl);
+      const res3 = await fetch(apiUrl3);
       const jsonData = await res.json();
       const jsonData2 = await res2.json();
+      const jsonData3 = await res3.json();
       setAllUsers(users);
       setData(jsonData);
       setData2(jsonData2);
+
+      setYear(jsonData3.Year)
+      setSemester(jsonData3.Semester)
   }
-
-
   useEffect(() => {
     getData();
   }, []);
@@ -69,7 +74,7 @@ export default function Admin() {
         <Toolbar>
 
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Admin Page {selecteTab}
+            {selecteTab}
           </Typography>
           <div style={{ display: "flex", flexDirection: "row" }}>
             <Name />
@@ -99,7 +104,7 @@ export default function Admin() {
             alt="Image Description"
           /></Toolbar>
         <Divider />
-        <SideMenu setSelectedTab={setSelectedTab} selecteTab={selecteTab} />
+        <SideMenu setSelectedTab={setSelectedTab} selecteTab={selecteTab} setSemester={setSemester} semester={semester} setYear={setYear} year={year}/>
       </Drawer>
       <Box
         component="main"
@@ -108,7 +113,13 @@ export default function Admin() {
         <Toolbar />
         {data && (
           <Box>
-            {selecteTab == "In-load Overview" && (<ScheduleOverview data={data} allUsers={allUsers} getData={getData}/>)}
+            {selecteTab == "In-load Overview" && (
+              <ScheduleOverview
+                data={data.filter((item) => item.semester === semester && item.year == year)}
+                allUsers={allUsers}
+                getData={getData}
+              />
+            )}
             {selecteTab == "Over-load Overview" && (<OverloadOverview data={data2} getData={getData} />)}
             {selecteTab == "Contacts" && (<Contacts allUsers={allUsers}/>)}
           </Box>

@@ -146,7 +146,7 @@ export default function Home({handleClose,getData}) {
     const handleSubmitForm = async (val) => {
         console.log(val,checked)
         if (!checked) {
-            alert("Please confirm that overtime hours do not conflict or overlap with inload hours and any adjustments to approved overload schedule requires prior approval.");
+            alert("Please confirm that overload hours do not conflict or overlap with inload hours and any adjustments to approved overload schedule requires prior approval.");
             return;
         }
 
@@ -229,7 +229,7 @@ export default function Home({handleClose,getData}) {
                                 />
                             </FormControl>
                             <FormControl variant="standard">
-                                <FormLabel id="demo-controlled-radio-buttons-group" sx={{ mb: "10px" }}>If applicable what is the FOAP?</FormLabel>
+                                <FormLabel id="demo-controlled-radio-buttons-group" sx={{ mb: "10px" }}>If applicable, what is the FOAP?</FormLabel>
                                 <TextField
                                     id="outlined-multiline-static"
                                     value={FOAP[index]}
@@ -372,7 +372,7 @@ export default function Home({handleClose,getData}) {
             <FormControlLabel
                 sx={{ mt: 2 }}
                 control={<Checkbox checked={checked} onChange={(event) => setChecked(event.target.checked)} />}
-                label={<>Click Here to confirm that overtime hours do not conflict or overlap with inload hours
+                label={<>Click Here to confirm that overload hours do not conflict or overlap with inload hours
                     <br />and any adjustments to approved overload schedule requires prior approval.</>} />
             <LoadingButton
                 variant="contained" sx={{ mt: 2, mb: 3}} fullWidth onClick={() => {

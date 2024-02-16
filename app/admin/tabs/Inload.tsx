@@ -37,27 +37,6 @@ export default function Schedule({ data, getData,allUsers }:any) {
 
   return (
     <>
-      <Stack direction={"row"} spacing={2}>
-        <FormControl fullWidth size='small' sx={{ maxWidth: "200px" }}>
-          <InputLabel id="demo-simple-select-label">Semester</InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            variant="outlined"
-            value={semester}
-            label="Semester"
-            sx={{ mb: "20px" }}
-            onChange={(e) => setSemester(e.target.value)}
-          >
-            <MenuItem value="Summer">Summer ☀️</MenuItem>
-            <MenuItem value="Spring">Spring 🌱</MenuItem>
-            <MenuItem value="Fall">Fall 🍂</MenuItem>
-          </Select>
-        </FormControl>
-        <TextField size='small' value={year} onChange={(e) => setYear(e.target.value)} type="number" id="filled-basic" label="Year" variant="outlined" sx={{ mb: "20px" }}
-          InputProps={{ startAdornment: <InputAdornment position="start"><CalendarMonthIcon /> </InputAdornment> }}
-        />
-      </Stack>
 
       <Stack direction={"column"} spacing={2}>
         {tabsList.map(({ name, icon, label }) => (

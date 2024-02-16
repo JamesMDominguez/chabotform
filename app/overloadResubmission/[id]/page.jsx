@@ -152,7 +152,7 @@ export default function Home({params}) {
     const handleSubmitForm = async (val) => {
 
         if (!checked) {
-            alert("Please confirm that overtime hours do not conflict or overlap with inload hours and any adjustments to approved overload schedule requires prior approval.");
+            alert("Please confirm that overload hours do not conflict or overlap with inload hours and any adjustments to approved overload schedule requires prior approval.");
             return;
         }
 
@@ -394,7 +394,7 @@ export default function Home({params}) {
             <FormControlLabel
                 sx={{ mt: 2 }}
                 control={<Checkbox checked={checked} onChange={(event) => setChecked(event.target.checked)} />}
-                label={<>Click Here to confirm that overtime hours do not conflict or overlap with inload hours
+                label={<>Click Here to confirm that overload hours do not conflict or overlap with inload hours
                     <br />and any adjustments to approved overload schedule requires prior approval.</>} />
             <LoadingButton
                 variant="contained" sx={{ mt: 2, mb: 3, maxWidth: '58%' }} fullWidth onClick={() => {

@@ -18,8 +18,8 @@ function Finished() {
         redirect("/Login");
       }
     return (
-        <>
-            <AppBar position="static" color='transparent'>
+        <div style={{backgroundColor:"#f2f2f2", height:"100vh"}}>
+            <AppBar position="static" color='inherit'>
                 <Toolbar>
                     <img
                         src='https://districtazure.clpccd.org/prmg/files/docs/styles-logos/cc-logo-horizontal-1c.jpg'
@@ -40,7 +40,7 @@ function Finished() {
             </AppBar>
 
             <Portal />
-        </>
+        </div>
     );
 }
 
