@@ -17,10 +17,8 @@ export default function Home() {
     const [open4, setOpen4] = useState(false);
     const [open5, setOpen5] = useState(false);
     const [selectedChip, setSelectedChip] = useState(null);
+    const [emergencyCardSubmited, setEmergencyCardSubmited] = useState(true);
     const [name,setName] = useState('')
-    useEffect(() => {
-        setName(localStorage.getItem('name'))
-    }, [])
 
     const handleClose = () => {
         setOpen(false);
@@ -42,23 +40,32 @@ export default function Home() {
     }
 
     async function getData() {
-        const apiUrl = `${process.env.NEXT_PUBLIC_LINK}/api/counselorPortal`;
-        const res = await fetch(apiUrl);
+        const res = await fetch('/api/counselorPortal');
         const jsonData = await res.json();
         setData(jsonData.Schedule);
         setOverloadData(jsonData.OverloadSchedule);
+        setEmergencyCardSubmited(jsonData.emergencyCardSubmited)
     }
 
     useEffect(() => {
         getData()
+        setName(localStorage.getItem('name'))
     }, [])
-
+    
     return (
         <>
             <Stack direction={"row"} justifyContent={'center'} gap={3} mt={4} mb={2} ml={2}>
                 <Stack direction={"column"} gap={2} sx={{backgroundColor:"white",padding:"30px",borderRadius:"15px", border:"1px solid lightgray"}}>
                     <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" alt="profile" style={{ borderRadius: "50%", width: "300px" }} />
                     <Typography variant="h4" component="div" textAlign={'center'}>{name}</Typography>
+                    {!Boolean(emergencyCardSubmited) &&
+                    <div style={{borderRadius: "20px",borderStyle:'dashed',padding:"15px"}}>
+                    <Typography variant="h6" component="div" >Required Action</Typography>
+                    <Button variant="outlined" fullWidth color='error' onClick={()=>setOpen5(true)}>
+                        Emergency Contact Form
+                    </Button>
+                    </div>
+                    }
                 </Stack>
 
                 <Stack direction={"column"} sx={{backgroundColor:"white",padding:"30px",borderRadius:"15px", border:"1px solid lightgray"}}>
@@ -147,10 +154,7 @@ export default function Home() {
                             )
                         })}
                     </Stack>
-                    {/* <Button variant="outlined" onClick={()=>setOpen5(true)}>
-                        Open simple dialog
-                    </Button> */}
-                    {/* <EmergencyCard open={open5} handleClose={handleClose5} /> */}
+                    <EmergencyCard open={open5} handleClose={handleClose5} setEmergencyCardSubmited={setEmergencyCardSubmited}/>
                     <Dialog selectedChip={selectedChip} handleClose={handleClose} open={open} />
                     <OverloadDialog selectedChip={selectedChip} handleClose={handleClose2} open={open2} />
                     <InloadForm selectedChip={selectedChip} handleClose={handleClose3} open={open3} getData={getData} />

@@ -29,3 +29,12 @@ export async function GET(request) {
     });
   }
 }
+
+export async function PUT(request) {
+  const db = await mongo()
+  const res = await request.json()
+  const mongoData = await db.collection('Users').updateOne({w_number: cookies().get("w_number").value}, {$set: res})
+  return new Response(JSON.stringify(mongoData), {
+    status: 200,
+  });
+}

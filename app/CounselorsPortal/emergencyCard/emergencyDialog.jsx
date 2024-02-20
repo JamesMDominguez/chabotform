@@ -1,8 +1,50 @@
-import React from 'react'
-import { Typography, Stack, TextField, Dialog, DialogContent, DialogTitle } from '@mui/material'
+import React, { useState } from 'react'
+import { Typography, Stack, TextField, Dialog, DialogContent, DialogTitle, Button } from '@mui/material'
 
 
-export default function EmergencyDialog({ open, handleClose }) {
+export default function EmergencyDialog({ open, handleClose,setEmergencyCardSubmited }) {
+    const [birthdate, setBirthdate] = useState("");
+    const [phoneNumber, setPhoneNumber] = useState("");
+    const [street, setStreet] = useState("");
+    const [city, setCity] = useState("");
+    const [zipcode, setZipcode] = useState("");
+    const [medicalConditions, setMedicalConditions] = useState("");
+    const [allergies, setAllergies] = useState("");
+    const [familyHousehold, setFamilyHousehold] = useState("");
+    const [additionalInformation, setAdditionalInformation] = useState("");
+    const [emergencyContact1Name, setEmergencyContact1Name] = useState("");
+    const [emergencyContact1PhoneNumber, setEmergencyContact1PhoneNumber] = useState("");
+    const [emergencyContact2Name, setEmergencyContact2Name] = useState("");
+    const [emergencyContact2PhoneNumber, setEmergencyContact2PhoneNumber] = useState("");
+
+    const handleSubmit = async () => {
+        const res = await fetch('/api/users', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                birthdate,
+                phoneNumber,
+                street,
+                city,
+                zipcode,
+                medicalConditions,
+                allergies,
+                familyHousehold,
+                additionalInformation,
+                emergencyContact1Name,
+                emergencyContact1PhoneNumber,
+                emergencyContact2Name,
+                emergencyContact2PhoneNumber,
+                emergencyCardSubmited: true
+            })
+        })
+        if (res.status === 200){
+            handleClose()
+            setEmergencyCardSubmited(true)
+        }
+    }
 
     return (
         <Dialog onClose={handleClose} open={open} fullWidth maxWidth={'md'}>
@@ -10,42 +52,41 @@ export default function EmergencyDialog({ open, handleClose }) {
                 {"Emergency Contact Information"}
             </DialogTitle>
             <DialogContent>
-                <Stack fullWidth direction={"row"} gap={2} mt={2} mb={2}>
-                    <div>
-                    <TextField label="W-Number" value="W-1234456" />
-                    <TextField label="Birthdate" value="01/01/1990" />
-                    <TextField label="Cell #" value="123-456-7890" />
-                    <TextField label="Address" value="1234 Main St. San Antonio, TX 78201" />
-                        <Typography variant="h7" component="div">
-                            Contact #1
-                        </Typography>
-                        <Stack direction={"row"} gap={2}>
-                            <TextField size="small" label="Name" value="Jane Doe" />
-                            <TextField size="small" label="Phone Number" value="123-456-7890" />
-                        </Stack>
-                        <Typography variant="h7" component="div">
-                            Contact #2
-                        </Typography>
-                        <Stack direction={"row"} gap={2}>
-                            <TextField size="small" label="Name" value="Jane Doe" />
-                            <TextField size="small" label="Phone Number" value="123-456-7890" />
-                        </Stack>
-                        <Stack direction={"row"} gap={2}>
-                            <TextField size="small" label="Medical Insurance" value="Yes" />
-                            <TextField size="small" label="Policy #" value="1234567890" />
-                        </Stack>
-                        <Stack direction={"row"} gap={2}>
-                            <TextField size="small" label="Primary Care Physician" value="Dr. Smith, 123-456-7890" />
-                            <TextField size="small" label="Preferred Hospital" value="Methodist Hospital" />
-                        </Stack>
-                    </div>
-                    <div>
-                        <TextField size="small" label="Medical conditions" value="None" />
-                        <TextField size="small" label="Allergies" value="None" />
-                        <TextField size="small" label="Family/Household" value="Jane Doe, John Doe, 2 kids, 1 dog" />
-                        <TextField size="small" label="Additional Information" value="None" />
-                    </div>
+                <Stack fullWidth direction={"row"} justifyContent={'center'} gap={2} mt={2} mb={2}>
+                    <Stack gap={2} width={"45%"}>
+                        <TextField label="Birthdate" value={birthdate} onChange={(e) => setBirthdate(e.target.value)} />
+                        <TextField label="Phone Number" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} />
+                        <TextField label="Street" value={street} onChange={(e) => setStreet(e.target.value)} />
+                        <TextField label="City" value={city} onChange={(e) => setCity(e.target.value)} />
+                        <TextField label="Zipcode" value={zipcode} onChange={(e) => setZipcode(e.target.value)} />
+                    </Stack>
+                    <Stack gap={2} width={"45%"}>
+                        <TextField label="Medical conditions" value={medicalConditions} onChange={(e) => setMedicalConditions(e.target.value)} />
+                        <TextField label="Allergies" value={allergies} onChange={(e) => setAllergies(e.target.value)} />
+                        <TextField label="Family/Household" value={familyHousehold} onChange={(e) => setFamilyHousehold(e.target.value)} />
+                        <TextField label="Additional Information" multiline rows={4} value={additionalInformation} onChange={(e) => setAdditionalInformation(e.target.value)} />
+                    </Stack>
                 </Stack>
+                <Stack direction={"row"} justifyContent={'center'} gap={2} mt={2} mb={2}>
+                    <Stack width={"45%"} gap={2}>
+                        <Typography variant="h7" component="div">
+                            Emergency Contact #1
+                        </Typography>
+                        <TextField label="Name" value={emergencyContact1Name} onChange={(e) => setEmergencyContact1Name(e.target.value)} />
+                        <TextField label="Phone Number" value={emergencyContact1PhoneNumber} onChange={(e) => setEmergencyContact1PhoneNumber(e.target.value)} />
+                    </Stack>
+                    <Stack width={"45%"} gap={2}>
+                        <Typography variant="h7" component="div">
+                            Emergency Contact #2
+                        </Typography>
+                        <TextField label="Name" value={emergencyContact2Name} onChange={(e) => setEmergencyContact2Name(e.target.value)} />
+                        <TextField label="Phone Number" value={emergencyContact2PhoneNumber} onChange={(e) => setEmergencyContact2PhoneNumber(e.target.value)} />
+                    </Stack>
+                </Stack>
+                <Stack direction={"row"} justifyContent={'flex-end'} gap={2} mt={2} mb={2} mr={4}>
+                    <Button variant="contained" color="primary" onClick={handleSubmit}>Submit</Button>
+                </Stack>            
             </DialogContent>
-        </Dialog>)
+        </Dialog>
+    )
 }
