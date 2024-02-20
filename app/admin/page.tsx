@@ -1,5 +1,5 @@
 import * as React from 'react';
-import isAuth from "../../components/isAuth";
+import isAuth from "../../components/isAdminAuth";
 import AdminPage from './adminPage'
 
 function Finished() {

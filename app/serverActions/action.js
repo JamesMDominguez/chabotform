@@ -7,5 +7,5 @@ export default async function Logout() {
     cookies().delete('name')
     cookies().delete('email')
     cookies().delete('access')
-    redirect("/Login");
+    redirect("/AdminLogin");
   }
