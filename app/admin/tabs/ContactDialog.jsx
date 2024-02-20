@@ -38,6 +38,7 @@ return(<Dialog
     <DialogContent>
                 <Stack fullWidth direction={"row"} justifyContent={'center'} gap={2} mt={2} mb={2}>
                     <Stack gap={2} width={"45%"}>
+                        <TextField label="Name" value={selectedChip?.name} />
                         <TextField label="Birthdate" value={selectedChip?.birthdate} />
                         <TextField label="Phone Number" value={selectedChip?.phoneNumber} />
                         <TextField label="Street" value={selectedChip?.street} />
@@ -45,6 +46,7 @@ return(<Dialog
                         <TextField label="Zipcode" value={selectedChip?.zipcode} />
                     </Stack>
                     <Stack gap={2} width={"45%"}>
+                        <TextField label="Email" value={selectedChip?.email} />
                         <TextField label="Medical conditions" value={selectedChip?.medicalConditions}  />
                         <TextField label="Allergies" value={selectedChip?.allergies} />
                         <TextField label="Family/Household" value={selectedChip?.familyHousehold} />
