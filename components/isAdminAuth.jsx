@@ -7,7 +7,9 @@ export default function isAuth(Component) {
     const cookiesList = cookies()
     const hasCookieAdmin = cookiesList.get('access')
     const hasCookie = cookiesList.has('w_number')
-    if (hasCookieAdmin?.value == "standard" && !hasCookie) {
+    console.log(hasCookie)
+    console.log(hasCookieAdmin)
+    if (hasCookieAdmin?.value == "standard" || !hasCookie) {
       return redirect("/AdminLogin");
     }
     return <Component {...props} />;
