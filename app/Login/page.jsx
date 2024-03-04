@@ -10,9 +10,7 @@ export default function Finished() {
 
   async function handleSubmit() {
     const authUser = await Fun.GetUser(w_number);
-    console.log(authUser)
     if (authUser.userFound){
-      console.log(authUser)
       window.localStorage.setItem('name', authUser.name);
       router.push('/')
     }

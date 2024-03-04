@@ -144,7 +144,6 @@ export default function Home({handleClose,getData}) {
     };
 
     const handleSubmitForm = async (val) => {
-        console.log(val,checked)
         if (!checked) {
             alert("Please confirm that overload hours do not conflict or overlap with inload hours and any adjustments to approved overload schedule requires prior approval.");
             return;

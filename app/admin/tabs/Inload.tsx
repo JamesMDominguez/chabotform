@@ -24,7 +24,6 @@ export default function Schedule({ data, getData,allUsers,employmentType }:any) 
   const handleClose = () => {
     setOpen(false);
   };
-  console.log(data)
 
   const tabsList = [
     { name: 'Pending', label: "Pending Review", icon: <PendingActionsIcon sx={{ marginBottom: "-5px" }} /> },
