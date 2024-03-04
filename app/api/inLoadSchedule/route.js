@@ -113,7 +113,7 @@ const timeRange = [
 
     const adminOptionsPartTime = {
       from: 'jamesdominguez2020@gmail.com',
-      to: ['jamesdominguez2020@gmail.com'],
+      to: ['jamesdominguez2020@gmail.com','sashraf@chabotcollege.edu','cjethi@chabotcollege.edu'],
       subject: `${res.name} Submitted Proposed Schedule`,
       html: `
                 <!DOCTYPE html>
@@ -210,7 +210,7 @@ const timeRange = [
       };
       const adminOptions = {
         from: 'jamesdominguez2020@gmail.com',
-        to: ['jamesdominguez2020@gmail.com'],
+        to: ['jamesdominguez2020@gmail.com','sashraf@chabotcollege.edu','cjethi@chabotcollege.edu'],
         subject: `${res.name} Submitted Proposed Schedule`,
         html: `
                   <!DOCTYPE html>
