@@ -15,6 +15,7 @@ function Finished() {
         cookies().delete('w_number')
         cookies().delete('name')
         cookies().delete('email')
+        cookies().delete('employmentType')
         redirect("/Login");
       }
     return (

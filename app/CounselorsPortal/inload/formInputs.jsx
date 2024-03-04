@@ -24,7 +24,7 @@ import SendIcon from '@mui/icons-material/Send';
 const timeRange = ["8:00am", "8:30am", "9:00am", "9:30am", "10:00am", "10:30am", "11:00am", "11:30am", "12:00pm", "12:30pm", "1:00pm", "1:30pm", "2:00pm", "2:30pm", "3:00pm", "3:30pm", "4:00pm", "4:30pm", "5:00pm", "5:30pm", "6:00pm", "6:30pm", "7:00pm"]
 const days = ["Mon", "Tues", "Wed", "Thurs", "Fri"]
 
-export default function Home({handleClose,getData}) {
+export default function Home({handleClose,getData,employmentType}) {
   const [data, setData] = useState([]);
   const [inputCount, setInputCount] = useState(1);
   const [icaName, setIcaName] = useState(['']);
@@ -138,8 +138,7 @@ export default function Home({handleClose,getData}) {
 
   const handleSubmitForm = async (val) => {
     setLoading(true)
-    const apiUrl = `${process.env.NEXT_PUBLIC_LINK}/api/inLoadSchedule`;
-    const response = await fetch(apiUrl, {
+    const response = await fetch("/api/inLoadSchedule", {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -217,7 +216,7 @@ export default function Home({handleClose,getData}) {
               InputProps={{ startAdornment: <InputAdornment position="start"><CalendarMonthIcon /> </InputAdornment> }}
             />
           </Stack>
-
+          {employmentType == "full-time" && <>
           <p style={{ textAlign: "center" }}>Instruction / Coord / Assign (ICA)</p>
           {icaName.map((value, index) => (
             <Stack
@@ -266,6 +265,7 @@ export default function Home({handleClose,getData}) {
             <Button variant="contained" size='small' onClick={addInputField}>Add Input</Button>
             <Button variant="contained" size='small' color="error" onClick={removeInputField} disabled={icaName.length === 1}>Remove Input</Button>
           </Stack>
+          </>}
 
           <TextField
             id="outlined-multiline-static"
@@ -279,14 +279,15 @@ export default function Home({handleClose,getData}) {
           />
 
           <List>
+            {employmentType == "full-time" && <>
             <ListItem disablePadding>
               <ListItemButton>
                 <ListItemText primary="Total ICA Hours" />
                 <Chip color="primary" label={getTotalHrs() + 0} />
-
               </ListItemButton>
             </ListItem>
             <Divider />
+
             <ListItem disablePadding>
               <ListItemButton component="a" href="#simple-list">
                 <ListItemText primary="Total Direct Weekly Counseling Hours" />
@@ -294,6 +295,7 @@ export default function Home({handleClose,getData}) {
               </ListItemButton>
             </ListItem>
             <Divider />
+
             <ListItem disablePadding>
               <ListItemButton component="a" href="#simple-list">
                 <ListItemText primary="Available Remote Hours (From Total D-Hours)" />
@@ -301,6 +303,8 @@ export default function Home({handleClose,getData}) {
               </ListItemButton>
             </ListItem>
             <Divider />
+            </>}
+
             <ListItem disablePadding>
               <ListItemButton component="a" href="#simple-list">
                 <ListItemText primary="Proactive Follow-up Hours (From Total D-Hours)" />
@@ -310,9 +314,8 @@ export default function Home({handleClose,getData}) {
             <Divider />
             <ListItem disablePadding>
               <ListItemButton>
-                <ListItemText primary="Total Weekly hours (Must Equal 27.5)" />
+                <ListItemText primary={`Total Weekly hours ${employmentType=="full-time"? "(Must Equal 27.5)":""}`} />
                 <Chip color="primary" label={data.length / 2 + getTotalHrs()} />
-
               </ListItemButton>
             </ListItem>
           </List>
@@ -328,16 +331,30 @@ export default function Home({handleClose,getData}) {
           const ica = icaName.map((y, i) => {
             return { name: y, aHours: icaHours[i], dHours: roundToNearestDecimal(icaHours[i] / 0.54545, 1) }
           })
-          let mySchedule = {
-            schedule: data,
-            ica: ica,
-            comments: comments,
-            approval: "Pending",
-            year: year,
-            semester: semester,
-            breaks: breaks,
+          let scheduleData = {}
+          if(employmentType == "full-time"){
+            scheduleData = {
+              schedule: data,
+              ica: ica,
+              comments: comments,
+              approval: "Pending",
+              year: year,
+              semester: semester,
+              breaks: breaks,
+              employmentType: employmentType
+            }
+          }else{
+            scheduleData = {
+              schedule: data,
+              comments: comments,
+              approval: "Pending",
+              year: year,
+              semester: semester,
+              breaks: breaks,
+              employmentType: employmentType
+            }
           }
-          handleSubmitForm(mySchedule)
+          handleSubmitForm(scheduleData)
         }}
         endIcon={<SendIcon />}
         loading={loading}

@@ -7,7 +7,7 @@ import {Button,Dialog,AppBar,Toolbar,IconButton,Typography,Slide} from '@mui/mat
 const Transition = React.forwardRef((props, ref) => <Slide direction="up" ref={ref} {...props} />);
 Transition.displayName = "Transition"
 
-export default function FullScreenDialog5({open,handleClose,getData}) {
+export default function FullScreenDialog5({open,handleClose,getData,employmentType}) {
 
   const FormAppBar = () => (
   <AppBar  sx={{ position: 'fixed',backgroundColor:"gray" }} >
@@ -38,7 +38,7 @@ export default function FullScreenDialog5({open,handleClose,getData}) {
         TransitionComponent={Transition}
       >
         <FormAppBar/>
-        <InLoadPage handleClose={handleClose} getData={getData}/>
+        <InLoadPage handleClose={handleClose} getData={getData} employmentType={employmentType}/>
       </Dialog>
     </>
   );

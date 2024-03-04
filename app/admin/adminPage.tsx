@@ -41,13 +41,10 @@ export default function Admin() {
   const [semester, setSemester] = useState('');
   const [year, setYear] = useState('');
   async function getData() {
-      const apiUrl: string = `${process.env.NEXT_PUBLIC_LINK}/api/overloadSchedule`;
-      const apiUrl2: string = `${process.env.NEXT_PUBLIC_LINK}/api/inLoadSchedule`;
-      const apiUrl3: string = `${process.env.NEXT_PUBLIC_LINK}/api/term`;
       const users = await Fun.GetAllUsers();
-      const res = await fetch(apiUrl2);
-      const res2 = await fetch(apiUrl);
-      const res3 = await fetch(apiUrl3);
+      const res = await fetch("/api/inLoadSchedule");
+      const res2 = await fetch("/api/overloadSchedule");
+      const res3 = await fetch("/api/term");
       const jsonData = await res.json();
       const jsonData2 = await res2.json();
       const jsonData3 = await res3.json();
@@ -118,6 +115,15 @@ export default function Admin() {
                 data={data.filter((item) => item.semester === semester && item.year == year)}
                 allUsers={allUsers}
                 getData={getData}
+                employmentType={"full-time"}
+              />
+            )}
+            {selecteTab == "Part Time In-load Overview" && (
+              <ScheduleOverview
+                data={data.filter((item) => item.semester === semester && item.year == year)}
+                allUsers={allUsers}
+                getData={getData}
+                employmentType={"part-time"}
               />
             )}
             {selecteTab == "Over-load Overview" && (<OverloadOverview data={data2} getData={getData} />)}

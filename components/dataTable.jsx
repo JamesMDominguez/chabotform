@@ -43,7 +43,7 @@ export default function DataTable({ selectedChip }) {
           InputProps={{ startAdornment: <InputAdornment position="start"><CalendarMonthIcon /> </InputAdornment> }}
         />
       </Stack>
-
+      {selectedChip.employmentType == "full-time" && <>
       <p style={{ textAlign: "center" }}>Instruction / Coord / Assign (ICA)</p>
       {selectedChip?.ica?.map((value, index) => {
         TotalICA += value.dHours;
@@ -75,7 +75,10 @@ export default function DataTable({ selectedChip }) {
           </Stack>
         )
       })}
+      </>}
       <List>
+      {selectedChip.employmentType == "full-time" && <>
+
         <ListItem disablePadding>
           <ListItemButton>
             <ListItemText primary="Total ICA Hours" />
@@ -91,9 +94,11 @@ export default function DataTable({ selectedChip }) {
           </ListItemButton>
         </ListItem>
         <Divider />
+      </>}
+
         <ListItem disablePadding>
           <ListItemButton>
-            <ListItemText primary="Total Weekly hours (Must Equal 27.5)" />
+            <ListItemText primary={`Total Weekly hours ${selectedChip.employmentType=="full-time"? "(Must Equal 27.5)":""}`} />
             <Chip color="primary" sx={{ width: "70px" }} label={TotalICA + selectedChip?.schedule?.length / 2} />
           </ListItemButton>
         </ListItem>

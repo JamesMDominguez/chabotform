@@ -25,6 +25,7 @@ const timeRange = [
     const res = await request.json()
     res.name = cookies().get('name').value
     res.email = cookies().get('email').value
+    res.employmentType = cookies().get('employmentType').value
     res["w_number"] = cookies().get('w_number').value
     const mongoData = await db.collection('Schedule').insertOne(res)
     const grayOutBox = Fun.grayOutBox;
@@ -66,7 +67,8 @@ const timeRange = [
         pass: process.env.EMAILPASS,
       },
     });
-    const mailOptions = {
+
+    const mailOptionsPartTime = {
       from: 'jamesdominguez2020@gmail.com',
       to: email,
       subject: `Counseling Proposed Schedule`,
@@ -103,27 +105,13 @@ const timeRange = [
                     </tr>
                     `).join('')}
                 </table>
-            
-                <h1>Instruction / Coord / Assign (ICA)</h1>
-                <table>
-                    <tr>
-                            <th>Name</th>
-                            <th>A-Hour</th>
-                            <th>D-Hour</th>
-                    </tr>
-                    ${res?.ica.map((item) => `
-                    <tr>
-                            <th>${item.name}</th>
-                            <th>${item.aHours}</th>
-                            <th>${item.dHours}</th>
-                    </tr>
-                    `).join('')}
-                </table>
             </body>
             </html>
             `
     };
-    const adminOptions = {
+    //sashraf@chabotcollege.edu
+
+    const adminOptionsPartTime = {
       from: 'jamesdominguez2020@gmail.com',
       to: ['jamesdominguez2020@gmail.com'],
       subject: `${res.name} Submitted Proposed Schedule`,
@@ -158,29 +146,129 @@ const timeRange = [
                     </tr>
                     `).join('')}
                 </table>
-            
-                <h1>Instruction / Coord / Assign (ICA)</h1>
-                <table>
-                    <tr>
-                            <th>Name</th>
-                            <th>A-Hour</th>
-                            <th>D-Hour</th>
-                    </tr>
-                    ${res?.ica.map((item) => `
-                    <tr>
-                            <th>${item.name}</th>
-                            <th>${item.aHours}</th>
-                            <th>${item.dHours}</th>
-                    </tr>
-                    `).join('')}
-                </table>
                 </body>
                 </html>
                 `,
     };
-  
-    await transporter.sendMail(adminOptions);
-    await transporter.sendMail(mailOptions);
+    if (res.employmentType === "full-time") {
+      const mailOptions = {
+        from: 'jamesdominguez2020@gmail.com',
+        to: email,
+        subject: `Counseling Proposed Schedule`,
+        text: `Hello ${res.name}! Your Schedule has been sent`,
+        html: `
+                      <!DOCTYPE html>
+                      <html>
+                      <head>
+                              <style>
+                              table, th, td {
+                                      border: 1px solid;
+                              }
+                              </style>
+                      </head>
+                      <body>
+              
+                      <h1>${res.year} ${res.semester}</h1>
+                      <h1>Proposed Weekly Schedule</h1>
+                      <table>
+                      <tr>
+                      <td>Time</td>
+                      ${days.map((day) => `<td>${day}</td>`).join('')}
+                      </tr>
+                      <tr>
+                      <td>Daily Hours</td>
+                      ${days.map((day) => `<td>${getDailyHours(day)}</td>`).join('')}
+                      </tr>
+                      ${timeRange.map((time, index) => `
+                      <tr>
+                          <td>${time}</td>
+                          ${days.map((day) => `
+                          <td style="background-color:${grayOutBox(day, index) ? '#c3c4c7' : ''}">${findDayTime(day, time)}</td>
+                          `).join('')}
+                      </tr>
+                      `).join('')}
+                  </table>
+              
+                  <h1>Instruction / Coord / Assign (ICA)</h1>
+                  <table>
+                      <tr>
+                              <th>Name</th>
+                              <th>A-Hour</th>
+                              <th>D-Hour</th>
+                      </tr>
+                      ${res?.ica.map((item) => `
+                      <tr>
+                              <th>${item.name}</th>
+                              <th>${item.aHours}</th>
+                              <th>${item.dHours}</th>
+                      </tr>
+                      `).join('')}
+                  </table>
+              </body>
+              </html>
+              `
+      };
+      const adminOptions = {
+        from: 'jamesdominguez2020@gmail.com',
+        to: ['jamesdominguez2020@gmail.com'],
+        subject: `${res.name} Submitted Proposed Schedule`,
+        html: `
+                  <!DOCTYPE html>
+                  <html>
+                  <head>
+                  <style>
+                  table, th, td {
+                          border: 1px solid;
+                  }
+                  </style>
+                  </head>
+                  <body>
+                      <h3>Hello! This is an automatic email notifying you that ${res.name} has submitted their schedule.</h3>
+                      <h1>${res.year} ${res.semester}</h1>
+                      <table>
+                      <tr>
+                      <td>Time</td>
+                      ${days.map((day) => `<td>${day}</td>`).join('')}
+                      </tr>
+                      <tr>
+                      <td>Daily Hours</td>
+                      ${days.map((day) => `<td>${getDailyHours(day)}</td>`).join('')}
+                      </tr>
+                      ${timeRange.map((time, index) => `
+                      <tr>
+                          <td>${time}</td>
+                          ${days.map((day) => `
+                          <td style="background-color:${grayOutBox(day, index) ? '#c3c4c7' : ''}">${findDayTime(day, time)}</td>
+                          `).join('')}
+                      </tr>
+                      `).join('')}
+                  </table>
+              
+                  <h1>Instruction / Coord / Assign (ICA)</h1>
+                  <table>
+                      <tr>
+                              <th>Name</th>
+                              <th>A-Hour</th>
+                              <th>D-Hour</th>
+                      </tr>
+                      ${res?.ica.map((item) => `
+                      <tr>
+                              <th>${item.name}</th>
+                              <th>${item.aHours}</th>
+                              <th>${item.dHours}</th>
+                      </tr>
+                      `).join('')}
+                  </table>
+                  </body>
+                  </html>
+                  `,
+      };
+      await transporter.sendMail(adminOptions);
+      await transporter.sendMail(mailOptions);
+    }else{
+      await transporter.sendMail(adminOptionsPartTime);
+      await transporter.sendMail(mailOptionsPartTime);
+    }
   
     return Response.json(mongoData)
   }

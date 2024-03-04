@@ -62,14 +62,6 @@ export default function ApprovalBtn({setSelectedTab,selecteTab,year,setYear,seme
           </ListItemButton>
         </ListItem>
 
-        <ListItem disablePadding sx={{ backgroundColor: selecteTab == "Part Time Over-load Overview" ? "#D3D3D3" : "" }}>
-          <ListItemButton onClick={() => setSelectedTab("Part Time Over-load Overview")}>
-            <ListItemIcon>
-              <MoreTimeIcon />
-            </ListItemIcon>
-            <ListItemText primary={"Over-load Overview"} />                      
-          </ListItemButton>
-        </ListItem>
         <h4 style={{margin:0,marginLeft:"10px"}}>Information</h4>
         <ListItem disablePadding sx={{ backgroundColor: selecteTab == "Contacts" ? "#D3D3D3" : "" }}>
           <ListItemButton onClick={() => setSelectedTab("Contacts")}>

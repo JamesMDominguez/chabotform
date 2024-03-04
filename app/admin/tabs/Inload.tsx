@@ -7,14 +7,11 @@ import AddTaskIcon from '@mui/icons-material/AddTask';
 import AccessAlarmsIcon from '@mui/icons-material/AccessAlarms';
 import ErrorIcon from '@mui/icons-material/Error';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import Dialog from '../dialogInload';
 import Divider from '@mui/material/Divider';
 
 
-export default function Schedule({ data, getData,allUsers }:any) {
-  const [semester, setSemester] = useState('');
-  const [year, setYear] = useState('');
+export default function Schedule({ data, getData,allUsers,employmentType }:any) {
   const [open, setOpen] = useState(false);
   const [selectedChip, setSelectedChip] = useState<any>();
 
@@ -27,6 +24,7 @@ export default function Schedule({ data, getData,allUsers }:any) {
   const handleClose = () => {
     setOpen(false);
   };
+  console.log(data)
 
   const tabsList = [
     { name: 'Pending', label: "Pending Review", icon: <PendingActionsIcon sx={{ marginBottom: "-5px" }} /> },
@@ -43,7 +41,7 @@ export default function Schedule({ data, getData,allUsers }:any) {
           <Stack key={name} direction={"column"} spacing={2}>
             <h4>{icon} {label}</h4>
             <Stack key={name} direction={"row"} flexWrap="wrap">
-              {data.filter((person: { approval: string; }) => person.approval.toLowerCase() == name.toLowerCase()).map((i: any, index: any) => (
+              {data.filter((person: { approval: string,employmentType:string }) => person.approval.toLowerCase() == name.toLowerCase() && person.employmentType == employmentType).map((i: any, index: any) => (
                 <Chip sx={{ margin: '10px' }} key={i.name + index} label={i.name} onClick={() => { handleClickOpen(i) }} />
               ))}
             </Stack>
@@ -54,7 +52,7 @@ export default function Schedule({ data, getData,allUsers }:any) {
           <h4><HelpOutlineIcon sx={{ marginBottom: "-5px" }}/> Missing</h4>
           <Stack direction={"row"} flexWrap="wrap">
             {allUsers
-              .filter((person:any) => !data.some((item: { email: string; }) => item.email === person.email))
+              .filter((person:any) => person.employmentType == employmentType &&  !data.some((item: { email: string; }) => item.email === person.email))
               .map((person:any, index:any) => (
                 <Chip
                   sx={{ margin: '10px' }}

@@ -20,6 +20,7 @@ export async function GET(request) {
     cookies().set('name', data[0].name)
     cookies().set('email', data[0].email)
     cookies().set('access', data[0].access)
+    cookies().set('employmentType', data[0].employmentType)
     return new Response(JSON.stringify({userFound:true,name:data[0].name.split(' ')[0],accessLevel:data[0].access}), {
       status: 200,
     });
