@@ -61,14 +61,11 @@ export default function Home() {
                 <Stack direction={"column"} gap={2} sx={{ backgroundColor: "white", padding: "30px", borderRadius: "15px", border: "1px solid lightgray" }}>
                     <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" alt="profile" style={{ borderRadius: "50%", width: "300px" }} />
                     <Typography variant="h4" component="div" textAlign={'center'}>{name}</Typography>
-                    {!Boolean(emergencyCardSubmited) &&
-                        <div style={{ borderRadius: "20px", borderStyle: 'dashed', padding: "15px" }}>
-                            <Typography variant="h6" component="div" >Required Action</Typography>
-                            <Button variant="outlined" fullWidth color='error' onClick={() => setOpen5(true)}>
+                    
+                            <Button variant="outlined" fullWidth color='inherit' onClick={() => setOpen5(true)}>
                                 Emergency Contact Form
                             </Button>
-                        </div>
-                    }
+                    
                 </Stack>
 
                 <Stack direction={"column"} sx={{ backgroundColor: "white", padding: "30px", borderRadius: "15px", border: "1px solid lightgray" }}>
