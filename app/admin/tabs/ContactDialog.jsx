@@ -49,8 +49,7 @@ return(<Dialog
                         <TextField label="Email" value={selectedChip?.email} />
                         <TextField label="Medical conditions" value={selectedChip?.medicalConditions}  />
                         <TextField label="Allergies" value={selectedChip?.allergies} />
-                        <TextField label="Family/Household" value={selectedChip?.familyHousehold} />
-                        <TextField label="Additional Information" multiline rows={4} value={selectedChip?.additionalInformation} />
+                        <TextField label="Additional Information" multiline rows={7.3} value={selectedChip?.additionalInformation} />
                     </Stack>
                 </Stack>
                 <Stack direction={"row"} justifyContent={'center'} gap={2} mt={2} mb={2}>
@@ -60,6 +59,7 @@ return(<Dialog
                         </Typography>
                         <TextField label="Name" value={selectedChip?.emergencyContact1Name} />
                         <TextField label="Phone Number" value={selectedChip?.emergencyContact1PhoneNumber} />
+                        <TextField label="Relationship" value={selectedChip?.Relationship1}/>
                     </Stack>
                     <Stack width={"45%"} gap={2}>
                         <Typography variant="h7" component="div">
@@ -67,6 +67,7 @@ return(<Dialog
                         </Typography>
                         <TextField label="Name" value={selectedChip?.emergencyContact2Name} />
                         <TextField label="Phone Number" value={selectedChip?.emergencyContact2PhoneNumber} />
+                        <TextField label="Relationship" value={selectedChip?.Relationship2}/>
                     </Stack>
                 </Stack>       
             </DialogContent>

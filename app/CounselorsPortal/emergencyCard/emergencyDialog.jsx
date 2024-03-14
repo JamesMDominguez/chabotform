@@ -10,7 +10,8 @@ export default function EmergencyDialog({ open, handleClose,setEmergencyCardSubm
     const [zipcode, setZipcode] = useState("");
     const [medicalConditions, setMedicalConditions] = useState("");
     const [allergies, setAllergies] = useState("");
-    const [familyHousehold, setFamilyHousehold] = useState("");
+    const [Relationship1, setRelationship1] = useState("");
+    const [Relationship2, setRelationship2] = useState("");
     const [additionalInformation, setAdditionalInformation] = useState("");
     const [emergencyContact1Name, setEmergencyContact1Name] = useState("");
     const [emergencyContact1PhoneNumber, setEmergencyContact1PhoneNumber] = useState("");
@@ -31,7 +32,8 @@ export default function EmergencyDialog({ open, handleClose,setEmergencyCardSubm
                 zipcode,
                 medicalConditions,
                 allergies,
-                familyHousehold,
+                Relationship1,
+                Relationship2,
                 additionalInformation,
                 emergencyContact1Name,
                 emergencyContact1PhoneNumber,
@@ -63,8 +65,7 @@ export default function EmergencyDialog({ open, handleClose,setEmergencyCardSubm
                     <Stack gap={2} width={"45%"}>
                         <TextField label="Medical conditions" value={medicalConditions} onChange={(e) => setMedicalConditions(e.target.value)} />
                         <TextField label="Allergies" value={allergies} onChange={(e) => setAllergies(e.target.value)} />
-                        <TextField label="Family/Household" value={familyHousehold} onChange={(e) => setFamilyHousehold(e.target.value)} />
-                        <TextField label="Additional Information" multiline rows={4} value={additionalInformation} onChange={(e) => setAdditionalInformation(e.target.value)} />
+                        <TextField label="Additional Information" multiline rows={7.3} value={additionalInformation} onChange={(e) => setAdditionalInformation(e.target.value)} />
                     </Stack>
                 </Stack>
                 <Stack direction={"row"} justifyContent={'center'} gap={2} mt={2} mb={2}>
@@ -74,6 +75,7 @@ export default function EmergencyDialog({ open, handleClose,setEmergencyCardSubm
                         </Typography>
                         <TextField label="Name" value={emergencyContact1Name} onChange={(e) => setEmergencyContact1Name(e.target.value)} />
                         <TextField label="Phone Number" value={emergencyContact1PhoneNumber} onChange={(e) => setEmergencyContact1PhoneNumber(e.target.value)} />
+                        <TextField label="Relationship" value={Relationship1} onChange={(e) => setRelationship1(e.target.value)} />
                     </Stack>
                     <Stack width={"45%"} gap={2}>
                         <Typography variant="h7" component="div">
@@ -81,6 +83,7 @@ export default function EmergencyDialog({ open, handleClose,setEmergencyCardSubm
                         </Typography>
                         <TextField label="Name" value={emergencyContact2Name} onChange={(e) => setEmergencyContact2Name(e.target.value)} />
                         <TextField label="Phone Number" value={emergencyContact2PhoneNumber} onChange={(e) => setEmergencyContact2PhoneNumber(e.target.value)} />
+                        <TextField label="Relationship" value={Relationship2} onChange={(e) => setRelationship2(e.target.value)} />
                     </Stack>
                 </Stack>
                 <Stack direction={"row"} justifyContent={'flex-end'} gap={2} mt={2} mb={2} mr={4}>
