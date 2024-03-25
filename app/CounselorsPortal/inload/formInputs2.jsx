@@ -322,7 +322,7 @@ export default function Home({selectedChip,handleClose,getData,employmentType}) 
           <Schedule data={data} getDailyHours={getDailyHours} handleTimeSelect={handleTimeSelect} breaks={breaks}/>
         </div>
       </Stack>
-
+        {selectedChip.approval !== "Approved" && 
       <LoadingButton
         variant="contained" sx={{ mt: 2, maxWidth: '200px' }} fullWidth onClick={() => {
           const ica = icaName?.map((y, i) => {
@@ -361,7 +361,7 @@ export default function Home({selectedChip,handleClose,getData,employmentType}) 
       >
         <span>Save</span>
       </LoadingButton>
-
+}
     </Stack>
   )
 }
