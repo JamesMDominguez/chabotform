@@ -2,49 +2,34 @@
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
-import React, { useState,useEffect } from 'react';
-import { useRouter } from 'next/navigation'
+import React, { useState, useEffect } from 'react';
 import InputAdornment from '@mui/material/InputAdornment';
-import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import SchoolIcon from '@mui/icons-material/School';
 import Chip from '@mui/material/Chip';
-
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
-
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Schedule from '../../../components/schedule';
+import Schedule from '../../../components/scheduleGrid';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import LoadingButton from '@mui/lab/LoadingButton';
-import SendIcon from '@mui/icons-material/Send';
 
-const timeRange = ["8:00am", "8:30am", "9:00am", "9:30am", "10:00am", "10:30am", "11:00am", "11:30am", "12:00pm", "12:30pm", "1:00pm", "1:30pm", "2:00pm", "2:30pm", "3:00pm", "3:30pm", "4:00pm", "4:30pm", "5:00pm", "5:30pm", "6:00pm", "6:30pm", "7:00pm"]
-const days = ["Mon", "Tues", "Wed", "Thurs", "Fri"]
-
-export default function Page({ params }) {
-  const [data, setData] = useState([]);
-  const [inputCount, setInputCount] = useState(1);
-  const [icaName, setIcaName] = useState(['']);
-  const [icaHours, setIcaHours] = useState(['']);
-  const [comments, setComments] = useState('');
-  const router = useRouter()
-  const [breaks, setBreaks] = useState([]);
-  const [semester, setSemester] = useState('');
-  const [year, setYear] = useState('');
+export default function Home({selectedChip,handleClose,getData,employmentType}) {
+  const [data, setData] = useState(selectedChip.schedule);
+  const [inputCount, setInputCount] = useState(selectedChip.ica?.length);
+  const [icaName, setIcaName] = useState(selectedChip.ica?.map((x) => x.name));
+  const [icaHours, setIcaHours] = useState(selectedChip.ica?.map((x) => x.aHours));
+  const [comments, setComments] = useState(selectedChip.comments);
+  const [breaks, setBreaks] = useState(selectedChip.breaks);
   const [loading, setLoading] = useState(false);
-
+  const [semester, setSemester] = useState(selectedChip.semester);
+  const [year, setYear] = useState(selectedChip.year);
   const updateData = (day, time, value) => {
     let updated = true;
     let myData = data.map((date) => {
@@ -148,9 +133,8 @@ export default function Page({ params }) {
 
   const handleSubmitForm = async (val) => {
     setLoading(true)
-    const apiUrl = `${process.env.NEXT_PUBLIC_LINK}/api/inLoadSchedule`;
-
-    const response = await fetch(apiUrl, {
+    console.log(val)
+    const response = await fetch("/api/inLoadSchedule", {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -158,8 +142,11 @@ export default function Page({ params }) {
       body: JSON.stringify(val),
     });
     if (response.ok) {
-      setLoading(false)
-      router.push('/finished')
+      handleClose()
+      getData()
+    }
+    else {
+      console.log('Request failed');
     }
   }
 
@@ -171,7 +158,7 @@ export default function Page({ params }) {
 
   const getTotalHrs = () => {
     let hrs = 0;
-    icaHours.forEach((val) => {
+    icaHours?.forEach((val) => {
       hrs = hrs + Number(val)
     })
     return roundToNearestDecimal(hrs / 0.54545, 1)
@@ -185,7 +172,7 @@ export default function Page({ params }) {
 
   function getRemoteHours() {
     let hrs = 0;
-    icaHours.forEach((val) => {
+    icaHours?.forEach((val) => {
       hrs = hrs + Number(val)
     })
     hrs = hrs / 0.54545
@@ -200,22 +187,10 @@ export default function Page({ params }) {
       justifyContent="center"
       alignItems="center"
     >
-      <AppBar position="static" color='transparent'>
-        <Toolbar>
-          <img
-            src='https://districtazure.clpccd.org/prmg/files/docs/styles-logos/cc-logo-horizontal-1c.jpg'
-            height={50}
-            alt="Image Description"
-          />
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            In-Load Proposed Schedule Full-Time Counselors Resubmission
-          </Typography>
-        </Toolbar>
-      </AppBar>
-
-      <Stack direction={"row"} gap={2} mt={4} flexWrap="wrap">
+      <Stack direction={"row"} gap={2} mt={10} flexWrap="wrap">
         <div>
           <p style={{ textAlign: "center" }}>Semester and Year</p>
+
           <Stack direction={"row"} gap={2}>
             <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label">Semester</InputLabel>
@@ -231,15 +206,16 @@ export default function Page({ params }) {
                 <MenuItem value="Summer">Summer ☀️</MenuItem>
                 <MenuItem value="Spring">Spring 🌱</MenuItem>
                 <MenuItem value="Fall">Fall 🍂</MenuItem>
+                <MenuItem value="Winter">Winter ❄️</MenuItem>
               </Select>
             </FormControl>
             <TextField value={year} onChange={(e) => setYear(e.target.value)} type="number" id="filled-basic" label="Year" variant="outlined" sx={{ mb: "20px" }}
               InputProps={{ startAdornment: <InputAdornment position="start"><CalendarMonthIcon /> </InputAdornment> }}
             />
           </Stack>
-
+          {employmentType == "full-time" && <>
           <p style={{ textAlign: "center" }}>Instruction / Coord / Assign (ICA)</p>
-          {icaName.map((value, index) => (
+          {icaName?.map((value, index) => (
             <Stack
               key={`input-field-box-${index}`}
               direction={'row'}
@@ -284,8 +260,9 @@ export default function Page({ params }) {
           ))}
           <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} sx={{ mb: 1 }}>
             <Button variant="contained" size='small' onClick={addInputField}>Add Input</Button>
-            <Button variant="contained" size='small' color="error" onClick={removeInputField} disabled={icaName.length === 1}>Remove Input</Button>
+            <Button variant="contained" size='small' color="error" onClick={removeInputField} disabled={icaName?.length === 1}>Remove Input</Button>
           </Stack>
+          </>}
 
           <TextField
             id="outlined-multiline-static"
@@ -299,14 +276,15 @@ export default function Page({ params }) {
           />
 
           <List>
+            {employmentType == "full-time" && <>
             <ListItem disablePadding>
               <ListItemButton>
                 <ListItemText primary="Total ICA Hours" />
                 <Chip color="primary" label={getTotalHrs() + 0} />
-
               </ListItemButton>
             </ListItem>
             <Divider />
+
             <ListItem disablePadding>
               <ListItemButton component="a" href="#simple-list">
                 <ListItemText primary="Total Direct Weekly Counseling Hours" />
@@ -314,6 +292,7 @@ export default function Page({ params }) {
               </ListItemButton>
             </ListItem>
             <Divider />
+
             <ListItem disablePadding>
               <ListItemButton component="a" href="#simple-list">
                 <ListItemText primary="Available Remote Hours (From Total D-Hours)" />
@@ -321,6 +300,8 @@ export default function Page({ params }) {
               </ListItemButton>
             </ListItem>
             <Divider />
+            </>}
+
             <ListItem disablePadding>
               <ListItemButton component="a" href="#simple-list">
                 <ListItemText primary="Proactive Follow-up Hours (From Total D-Hours)" />
@@ -330,47 +311,59 @@ export default function Page({ params }) {
             <Divider />
             <ListItem disablePadding>
               <ListItemButton>
-                <ListItemText primary="Total Weekly hours (Must Equal 27.5)" />
+                <ListItemText primary={`Total Weekly hours ${employmentType=="full-time"? "(Must Equal 27.5)":""}`} />
                 <Chip color="primary" label={data.length / 2 + getTotalHrs()} />
-
               </ListItemButton>
             </ListItem>
           </List>
         </div>
         <div>
           <p style={{ textAlign: "center" }}>Proposed Weekly Schedule</p>
-          <Schedule days={days} getDailyHours={getDailyHours} timeRange={timeRange} handleTimeSelect={handleTimeSelect} />
+          <Schedule data={data} getDailyHours={getDailyHours} handleTimeSelect={handleTimeSelect} breaks={breaks}/>
         </div>
       </Stack>
-
-        <LoadingButton
-          variant="contained" sx={{ mt: 2, maxWidth: '58%' }} fullWidth onClick={() => {
-        const ica = icaName.map((y, i) => {
-          return { name: y, aHours: icaHours[i], dHours: roundToNearestDecimal(icaHours[i] / 0.54545, 1) }
-        })
-        let mySchedule = {
-          id: params.id,
-          data:{
-          schedule: data,
-          ica: ica,
-          comments: comments,
-          approval: "Resubmission",
-          year: year,
-          semester: semester,
-          breaks: breaks
+        {selectedChip.approval !== "Approved" && 
+      <LoadingButton
+        variant="contained" sx={{ mt: 2, maxWidth: '200px' }} fullWidth onClick={() => {
+          const ica = icaName?.map((y, i) => {
+            return { name: y, aHours: icaHours[i], dHours: roundToNearestDecimal(icaHours[i] / 0.54545, 1) }
+          })
+          let scheduleData = {}
+          if(employmentType == "full-time"){
+            scheduleData = {
+              id: selectedChip._id,
+              schedule: data,
+              ica: ica,
+              comments: comments,
+              approval: "Resubmission",
+              year: year,
+              semester: semester,
+              breaks: breaks,
+              employmentType: employmentType
+            }
+            
+          }else{
+            scheduleData = {
+              id: selectedChip._id,
+              schedule: data,
+              comments: comments,
+              approval: "Resubmission",
+              year: year,
+              semester: semester,
+              breaks: breaks,
+              employmentType: employmentType
+            }
+          }
+          handleSubmitForm(scheduleData)
         }}
-        handleSubmitForm(mySchedule)
-      }}
-          endIcon={<SendIcon />}
-          loading={loading}
-          loadingPosition="end"
-        >
-          <span>Submit</span>
-        </LoadingButton>
-
+        loading={loading}
+        loadingPosition="end"
+      >
+        <span>Save</span>
+      </LoadingButton>
+}
     </Stack>
   )
 }
-
 
 

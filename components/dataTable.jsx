@@ -37,6 +37,7 @@ export default function DataTable({ selectedChip }) {
             <MenuItem value="Summer">Summer ☀️</MenuItem>
             <MenuItem value="Spring">Spring 🌱</MenuItem>
             <MenuItem value="Fall">Fall 🍂</MenuItem>
+            <MenuItem value="Winter">Winter ❄️</MenuItem>
           </Select>
         </FormControl>
         <TextField value={selectedChip.year} type="number" id="filled-basic" label="Year" variant="outlined" sx={{ mb: "20px" }}

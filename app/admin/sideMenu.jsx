@@ -10,14 +10,14 @@ import { useState } from 'react';
 import Badge from '@mui/material/Badge';
 import RecentActorsIcon from '@mui/icons-material/RecentActors';
 import MoreTimeIcon from '@mui/icons-material/MoreTime';
-import { FormControl, InputLabel, MenuItem, Select ,Button,Stack} from '@mui/material';
+import { FormControl, InputLabel, MenuItem, Select ,Button,Stack,Typography,Switch} from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import CancelIcon from '@mui/icons-material/Cancel';
 
 export default function ApprovalBtn({setSelectedTab,selecteTab,year,setYear,semester,setSemester}){
-  const currentYear = new Date().getFullYear();
-  const years = Array.from({ length: 6 }, (_, index) => currentYear - index+1);
+  const years = ['2024','2025'];
   const [showDefault, setShowDefault] = useState(false);
+  const [checked, setChecked] = React.useState(true);
 
     async function changeDefault(){
       const apiUrl3 = `${process.env.NEXT_PUBLIC_LINK}/api/term`;
@@ -61,6 +61,15 @@ export default function ApprovalBtn({setSelectedTab,selecteTab,year,setYear,seme
             <ListItemText primary={"In-load Overview"} />                      
           </ListItemButton>
         </ListItem>
+        {/* <h4 style={{margin:0,marginLeft:"10px"}}>Classified</h4>
+        <ListItem disablePadding sx={{ backgroundColor: selecteTab == "Part Time In-load Overview" ? "#D3D3D3" : "" }}>
+          <ListItemButton onClick={() => setSelectedTab("Part Time In-load Overview")}>
+            <ListItemIcon>
+              <PendingActionsIcon />
+            </ListItemIcon>
+            <ListItemText primary={"In-load Overview"} />                      
+          </ListItemButton>
+        </ListItem> */}
 
         <h4 style={{margin:0,marginLeft:"10px"}}>Information</h4>
         <ListItem disablePadding sx={{ backgroundColor: selecteTab == "Contacts" ? "#D3D3D3" : "" }}>
@@ -92,6 +101,7 @@ export default function ApprovalBtn({setSelectedTab,selecteTab,year,setYear,seme
               <MenuItem value="Summer">Summer ☀️</MenuItem>
               <MenuItem value="Spring">Spring 🌱</MenuItem>
               <MenuItem value="Fall">Fall 🍂</MenuItem>
+              <MenuItem value="Winter">Winter ❄️</MenuItem>
             </Select>
           </FormControl>
 
@@ -125,5 +135,11 @@ export default function ApprovalBtn({setSelectedTab,selecteTab,year,setYear,seme
           </Stack>
         )}
         </List>
+        {/* <h4 style={{margin:0,marginLeft:"10px",marginBottom:"10px"}}>Swap Admin Status</h4>
+        <Stack direction="row" spacing={1} alignItems="center" justifyContent={'center'}>
+        <Typography>FullTime</Typography>
+        <Switch checked={checked} onChange={(e)=>setChecked(e.target.checked)}  />
+        <Typography>PartTime</Typography>
+      </Stack> */}
       </List>)
 }

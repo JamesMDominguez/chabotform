@@ -150,7 +150,7 @@ export default function Home() {
                         })}
                     </Stack>
                     <EmergencyCard open={open5} handleClose={handleClose5} setEmergencyCardSubmited={setEmergencyCardSubmited} />
-                    <Dialog selectedChip={selectedChip} handleClose={handleClose} open={open} />
+                    <Dialog selectedChip={selectedChip} getData={getData} handleClose={handleClose} open={open} employmentType={employmentType}/>
                     <OverloadDialog selectedChip={selectedChip} handleClose={handleClose2} open={open2} />
                     <InloadForm selectedChip={selectedChip} handleClose={handleClose3} open={open3} getData={getData} employmentType={employmentType} />
                     <OverloadForm selectedChip={selectedChip} handleClose={handleClose4} open={open4} getData={getData} />

@@ -1,11 +1,12 @@
 import * as React from 'react';
 import { useState } from 'react';
-import {Button,Dialog,TextField,Stack,AppBar,Toolbar,IconButton,Typography,Slide,DialogTitle,DialogActions} from '@mui/material';
+import {Button,Dialog,Stack,AppBar,Toolbar,IconButton,Typography,Slide,DialogTitle,DialogActions} from '@mui/material';
 import Comments from "../../components/comments";
 import InloadView from "../../components/inloadView";
 import CloseIcon from '@mui/icons-material/Close';
 import SendIcon from '@mui/icons-material/Send';
 import LoadingButton from '@mui/lab/LoadingButton';
+import FormInputs2 from '../CounselorsPortal/inload/formInputs2'
 
 const Transition = React.forwardRef((props, ref) => <Slide direction="up" ref={ref} {...props} />);
 Transition.displayName = "Transition";
@@ -66,7 +67,7 @@ return (
         TransitionComponent={Transition}
       >
         <AppbarView/>
-        <InloadView selectedChip={selectedChip}/>
+        <FormInputs2 selectedChip={selectedChip} handleClose={handleClose} getData={getData} employmentType={selectedChip?.employmentType}/>
         <Comments selectedChip={selectedChip} sender={"admin"}/>
       <Stack direction={"row"} justifyContent="center" spacing={4} sx={{ mb: 2,mt:2 }}>
             <Button variant="contained" onClick={() => handleClickOpen("Approved")}>Approve</Button>
@@ -78,7 +79,6 @@ return (
             <DialogTitle>{approvalState} confirmation</DialogTitle>
             <DialogActions>
                 <Button onClick={handleClose2}>Cancel</Button>
-
                 <LoadingButton
                     sx={{ width: '50%' }}
                     variant="contained" fullWidth onClick={handleConfirmation}
