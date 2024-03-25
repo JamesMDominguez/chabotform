@@ -293,8 +293,10 @@ const timeRange = [
 
   export async function PATCH(request) {
     const res = await request.json()
+    // res.name = cookies().get('name').value
+    // res.email = cookies().get('email').value
     const db = await mongo()
-    const email = await helper.sendEmail(res.email, "Proposed Schedule Resubmission","Hello! This is a automated email notifying you that we have received your schedule resubmission. Thank you for making necessary changes.")
+    // const email = await helper.sendEmail(res.email, "Proposed Schedule Resubmission","Hello! This is a automated email notifying you that we have received your schedule resubmission. Thank you for making necessary changes.")
     const data = await db.collection('Schedule').updateOne({_id: new mongoose.Types.ObjectId(res.id)}, {$set: res})
     return Response.json("Schedule Resubmitted")
   }

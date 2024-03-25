@@ -210,6 +210,7 @@ export default function Home({handleClose,getData,employmentType}) {
                 <MenuItem value="Summer">Summer ☀️</MenuItem>
                 <MenuItem value="Spring">Spring 🌱</MenuItem>
                 <MenuItem value="Fall">Fall 🍂</MenuItem>
+                <MenuItem value="Winter">Winter ❄️</MenuItem>
               </Select>
             </FormControl>
             <TextField value={year} onChange={(e) => setYear(e.target.value)} type="number" id="filled-basic" label="Year" variant="outlined" sx={{ mb: "20px" }}

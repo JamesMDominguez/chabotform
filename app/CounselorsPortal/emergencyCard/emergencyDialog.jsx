@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Typography, Stack, TextField, Dialog, DialogContent, DialogTitle, Button } from '@mui/material'
 
 
@@ -17,6 +17,28 @@ export default function EmergencyDialog({ open, handleClose,setEmergencyCardSubm
     const [emergencyContact1PhoneNumber, setEmergencyContact1PhoneNumber] = useState("");
     const [emergencyContact2Name, setEmergencyContact2Name] = useState("");
     const [emergencyContact2PhoneNumber, setEmergencyContact2PhoneNumber] = useState("");
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const res = await fetch('/api/userInfo')
+            const data = await res.json()
+            setBirthdate(data.birthdate)
+            setPhoneNumber(data.phoneNumber)
+            setStreet(data.street)
+            setCity(data.city)
+            setZipcode(data.zipcode)
+            setMedicalConditions(data.medicalConditions)
+            setAllergies(data.allergies)
+            setRelationship1(data.Relationship1)
+            setRelationship2(data.Relationship2)
+            setAdditionalInformation(data.additionalInformation)
+            setEmergencyContact1Name(data.emergencyContact1Name)
+            setEmergencyContact1PhoneNumber(data.emergencyContact1PhoneNumber)
+            setEmergencyContact2Name(data.emergencyContact2Name)
+            setEmergencyContact2PhoneNumber(data.emergencyContact2PhoneNumber)
+        }
+        fetchData()
+    }, [])
 
     const handleSubmit = async () => {
         const res = await fetch('/api/users', {
